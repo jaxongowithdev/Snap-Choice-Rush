@@ -1,3 +1,3 @@
-# Hex Vault
+# Switch Cask
 
-Offline tabletop map. Midnight / copper / plum UI, Cinzel + Source Sans 3. Entertainment App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline mechanical-keyboard map. Navy / mint / coral UI, Oxanium + Inter. Productivity App Store category. Listing copy in `meta-data-apple-store.txt`.

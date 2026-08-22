@@ -1,4 +1,4 @@
-// Dice chest / tabletop kit model
+// Switch tin / keyboard parts cask model
 class ContainerModel {
   final int? id;
   final String name;

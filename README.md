@@ -1,19 +1,19 @@
-# Hex Vault
+# Switch Cask
 
-A private table catalog. Stage chests, log dice, and find any set before game night — fully offline.
+A private switch catalog. Stage tins, log stems, and find any batch before you build — fully offline.
 
-**App Name:** Hex Vault
-**Subtitle:** Map your dice chests
-**Category:** Entertainment
-**Bundle ID:** com.app.hexvault.build
-**Database:** `hex_vault.db`
+**App Name:** Switch Cask
+**Subtitle:** Map your switch tins
+**Category:** Productivity
+**Bundle ID:** com.app.switchcask.build
+**Database:** `switch_cask.db`
 
 ## Navigation
 
-- Table — vault pulse and quick actions
-- Chests — all trays and cases
-- Roll — kind and room snapshot
-- Keep — look and backup
+- Desk — bench pulse and quick actions
+- Casks — all tins and bags
+- Matrix — feel and desk snapshot
+- Bench — look and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

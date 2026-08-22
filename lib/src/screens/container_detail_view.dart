@@ -48,8 +48,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Clear this chest?'),
-        content: const Text('Every piece filed here will be removed.'),
+        title: const Text('Clear this cask?'),
+        content: const Text('Every switch filed here will be removed.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Clear')),
@@ -65,7 +65,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Chest not found')));
+    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Cask not found')));
 
     final count = _items?.length ?? 0;
     final pct = _container!.capacity > 0 ? (count / _container!.capacity * 100).round() : 0;
@@ -76,8 +76,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit chest')),
-              PopupMenuItem(value: 'delete', child: Text('Clear chest')),
+              PopupMenuItem(value: 'edit', child: Text('Edit cask')),
+              PopupMenuItem(value: 'delete', child: Text('Clear cask')),
             ],
             onSelected: (v) {
               if (v == 'edit') {
@@ -95,27 +95,27 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
           padding: const EdgeInsets.all(16),
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(16)),
+              padding: const EdgeInsets.all(18),
+              color: VisualTheme.primaryColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_container!.code, style: GoogleFonts.sourceSans3(color: VisualTheme.secondaryColor, letterSpacing: 1.4, fontWeight: FontWeight.w700)),
+                  Text(_container!.code, style: GoogleFonts.oxanium(color: VisualTheme.secondaryColor, letterSpacing: 1.4, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 6),
-                  Text(_container!.name, style: GoogleFonts.cinzel(fontSize: 26, fontWeight: FontWeight.w700, color: const Color(0xFFF6EFE3))),
+                  Text(_container!.name, style: GoogleFonts.oxanium(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white)),
                   const SizedBox(height: 8),
                   Text('${_container!.room} / ${_container!.shelf}', style: const TextStyle(color: Colors.white70)),
                   const SizedBox(height: 12),
-                  LinearProgressIndicator(value: pct / 100, minHeight: 6, backgroundColor: Colors.white24, color: VisualTheme.secondaryColor, borderRadius: BorderRadius.circular(4)),
+                  LinearProgressIndicator(value: pct / 100, minHeight: 4, backgroundColor: Colors.white24, color: VisualTheme.secondaryColor),
                   const SizedBox(height: 8),
-                  Text('$count / ${_container!.capacity} pieces  ·  $pct% packed', style: const TextStyle(color: Colors.white70)),
+                  Text('$count / ${_container!.capacity} switches  ·  $pct% packed', style: const TextStyle(color: Colors.white70)),
                 ],
               ),
             ),
             const SizedBox(height: 20),
             Row(
               children: [
-                Expanded(child: Text('Pieces ($count)', style: GoogleFonts.cinzel(fontSize: 20, fontWeight: FontWeight.w700))),
+                Expanded(child: Text('Switches ($count)', style: GoogleFonts.oxanium(fontSize: 20, fontWeight: FontWeight.w700))),
                 FilledButton.icon(
                   key: const ValueKey('add_item_button'),
                   onPressed: () async {
@@ -123,7 +123,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                     if (r == true) _loadData();
                   },
                   icon: const Icon(Icons.add),
-                  label: const Text('Piece'),
+                  label: const Text('Switch'),
                 ),
               ],
             ),
@@ -135,7 +135,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Card(
                       child: ListTile(
-                        leading: Icon(Icons.casino, color: VisualTheme.getCategoryColor(item.category)),
+                        leading: Icon(Icons.keyboard_alt_outlined, color: VisualTheme.getCategoryColor(item.category)),
                         title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
                         subtitle: Text('${item.category} · ${item.quantity} · ${item.condition}'),
                         trailing: const Icon(Icons.arrow_forward, size: 18),

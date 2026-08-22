@@ -1,37 +1,37 @@
 APP NAME
-Hex Vault
+Switch Cask
 
 SUBTITLE
-Map your dice chests
+Map your switch tins
 
 KEYWORDS
-dice,rpg,mini,tabletop,chest,hex,vault,token,dungeon,offline
+switch,keyboard,keycap,lube,linear,tactile,desk,cask,mech,offline
 
 PROMOTION
-Stage chests, log dice, and find any set before game night. Private, offline.
+Stage tins, log stems, and find any batch before you build. Private, offline.
 
 DESCRIPTION
-Hex Vault is a table catalog for players who already own more dice than they can keep in their head.
+Switch Cask is a desk catalog for builders who already own more switches than they can keep in their head.
 
-Name every chest in the study — the travel tray, the mini case, the map tube — then file each piece where it actually lives. When you wonder if that galaxy d20 is still in the pouch, search once instead of emptying three boxes.
+Name every tin on the bench — the linear bag, the spare-parts box, the travel pouch — then file each stem where it actually lives. When you wonder if those Oil Kings are still in the drawer, search once instead of emptying three tins.
 
 What you can do
-• Create named chests with a mark, room, and slot or pocket
-• File pieces by kind: dice, minis, cards, maps, tokens, books, bags, terrain, and tools
-• Mark state as New, Inked, Primed, or Worn
-• Attach a table photo from the camera or your album
-• Bookmark the sets you always bring to the next session
-• Move a piece from one chest to another and keep a short note
-• See a vault snapshot: how many chests are in use, which kinds run deepest
+• Create named casks with a mark, desk, and tray or slot
+• File parts by feel: linear, tactile, clicky, plus stabilizers, keycaps, PCBs, cables, lube, and tools
+• Mark state as New, Lubed, Filmed, or Spare
+• Attach a bag photo from the camera or your album
+• Bookmark the switches you want in the next board
+• Move a batch from one cask to another and keep a short note
+• See a desk snapshot: how many casks are in use, which feels run deepest
 • Export or restore the whole list as a JSON file
 
 Why it is different
-Hex Vault is not a character sheet and not a generic storage box. It is a table map. The language, layout, and states are written for players: chests instead of bins, pieces instead of items, session notes instead of packing labels.
+Switch Cask is not a typing test and not a generic storage box. It is a bench map. The language, layout, and states are written for builders: casks instead of bins, stems instead of items, build notes instead of packing labels.
 
 Private by design
-Everything stays on your iPhone. There is no account, no cloud sync, and no marketplace. Open the app at the table with no signal and the same chests are still there.
+Everything stays on your iPhone. There is no account, no cloud sync, and no parts shop. Open the app at the bench with no signal and the same tins are still there.
 
 Who it is for
-New players building a first dice bag, painters with more than one case, anyone tired of buying a third set of the same polyhedrals.
+First-board builders, collectors with more than one drawer, anyone tired of buying a third pack of the same linear.
 
-Hex Vault — know the chest before you roll.
+Switch Cask — know the tin before you build.

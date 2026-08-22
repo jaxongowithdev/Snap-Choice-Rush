@@ -16,10 +16,10 @@ class _WelcomeViewState extends State<WelcomeView> {
   int _currentPage = 0;
 
   final _pages = [
-    {'icon': Icons.casino, 'title': 'Hex Vault', 'description': 'Stage every dice chest before game night. Know which set lives in which tray.'},
-    {'icon': Icons.photo_camera_outlined, 'title': 'Snap the set', 'description': 'Photograph a polyhedral set, a mini, or a map so you remember the exact piece you own.'},
-    {'icon': Icons.search, 'title': 'Find it at the table', 'description': 'Search “d20” or “goblin” and see the chest immediately.'},
-    {'icon': Icons.wifi_off, 'title': 'Works at the table', 'description': 'No account and no signal required. The catalog stays on this phone.'},
+    {'icon': Icons.keyboard_alt_outlined, 'title': 'Switch Cask', 'description': 'Stage every tin before you build. Know which stem lives in which cask.'},
+    {'icon': Icons.photo_camera_outlined, 'title': 'Snap the batch', 'description': 'Photograph a bag, a stem, or a lube note so you remember the exact switch you own.'},
+    {'icon': Icons.search, 'title': 'Find it on the desk', 'description': 'Search “holy panda” or “linear” and see the tin immediately.'},
+    {'icon': Icons.wifi_off, 'title': 'Works at the bench', 'description': 'No account and no signal required. The catalog stays on this phone.'},
   ];
 
   Future<void> _finish() async {
@@ -44,7 +44,7 @@ class _WelcomeViewState extends State<WelcomeView> {
               alignment: Alignment.centerLeft,
               child: TextButton(
                 onPressed: _finish,
-                child: Text('SKIP', style: GoogleFonts.sourceSans3(color: Colors.white54, letterSpacing: 1.4)),
+                child: Text('SKIP', style: GoogleFonts.oxanium(color: Colors.white54, letterSpacing: 1.6)),
               ),
             ),
             Expanded(
@@ -64,13 +64,13 @@ class _WelcomeViewState extends State<WelcomeView> {
                         Text(
                           page['title'] as String,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.cinzel(fontSize: 34, fontWeight: FontWeight.w700, color: const Color(0xFFF6EFE3)),
+                          style: GoogleFonts.oxanium(fontSize: 34, fontWeight: FontWeight.w700, color: Colors.white),
                         ),
                         const SizedBox(height: 14),
                         Text(
                           page['description'] as String,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.sourceSans3(fontSize: 16, height: 1.45, color: Colors.white70),
+                          style: GoogleFonts.inter(fontSize: 16, height: 1.45, color: Colors.white70),
                         ),
                         const Spacer(),
                       ],
@@ -86,13 +86,10 @@ class _WelcomeViewState extends State<WelcomeView> {
                   ...List.generate(
                     _pages.length,
                     (i) => Container(
-                      margin: const EdgeInsets.only(right: 6),
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _currentPage == i ? VisualTheme.secondaryColor : Colors.white24,
-                      ),
+                      margin: const EdgeInsets.only(right: 5),
+                      width: 22,
+                      height: 3,
+                      color: _currentPage == i ? VisualTheme.secondaryColor : Colors.white24,
                     ),
                   ),
                   const Spacer(),
@@ -104,7 +101,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         _pageController.nextPage(duration: const Duration(milliseconds: 260), curve: Curves.easeOut);
                       }
                     },
-                    child: Text(_currentPage == _pages.length - 1 ? 'Take a seat' : 'Next'),
+                    child: Text(_currentPage == _pages.length - 1 ? 'Open the desk' : 'Next'),
                   ),
                 ],
               ),

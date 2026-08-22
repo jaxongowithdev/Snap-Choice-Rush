@@ -46,7 +46,7 @@ class _FavoritesViewState extends State<FavoritesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Session kit')),
+      appBar: AppBar(title: const Text('Next build')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteItems == null || _favoriteItems!.isEmpty
@@ -58,9 +58,9 @@ class _FavoritesViewState extends State<FavoritesView> {
                       children: [
                         const Icon(Icons.bookmark_border, size: 48),
                         const SizedBox(height: 12),
-                        Text('No session kit yet', style: GoogleFonts.cinzel(fontSize: 22, fontWeight: FontWeight.w700)),
+                        Text('No next-build list yet', style: GoogleFonts.oxanium(fontSize: 22, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
-                        const Text('Bookmark the dice and minis you always bring to the table.', textAlign: TextAlign.center),
+                        const Text('Bookmark the switches you want in the next board.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -72,14 +72,14 @@ class _FavoritesViewState extends State<FavoritesView> {
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final chest = _containersCache[item.containerId];
+                      final cask = _containersCache[item.containerId];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Card(
                           child: ListTile(
                             title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                            subtitle: Text('${item.category} · ${item.quantity}${chest != null ? '\n${chest.name} / ${chest.room}' : ''}'),
-                            isThreeLine: chest != null,
+                            subtitle: Text('${item.category} · ${item.quantity}${cask != null ? '\n${cask.name} / ${cask.room}' : ''}'),
+                            isThreeLine: cask != null,
                             trailing: IconButton(
                               key: ValueKey('favorite_toggle_${item.id}'),
                               icon: Icon(item.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: item.isFavorite ? VisualTheme.secondaryColor : null),

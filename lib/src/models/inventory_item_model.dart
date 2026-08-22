@@ -5,7 +5,7 @@ class InventoryItemModel {
   final String name;
   final String category;
   final int quantity;
-  final String condition; // New, Inked, Primed, Worn
+  final String condition; // New, Lubed, Filmed, Spare
   final String? purchaseDate;
   final double? estimatedValue;
   final String? notes;

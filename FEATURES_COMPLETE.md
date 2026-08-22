@@ -1,3 +1,3 @@
-# Hex Vault — feature set
+# Switch Cask — feature set
 
-Table / Chests / Roll / Keep navigation, piece catalog with table photos, search, session-kit pins, reseat history, JSON backup, offline SQLite (`hex_vault.db`).
+Desk / Casks / Matrix / Bench navigation, switch catalog with bag photos, search, next-build pins, reseat history, JSON backup, offline SQLite (`switch_cask.db`).

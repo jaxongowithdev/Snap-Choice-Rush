@@ -29,8 +29,8 @@ class _ItemFormViewState extends State<ItemFormView> {
   String _selectedCondition = 'New';
   String? _photoPath;
   final _imagePicker = ImagePicker();
-  final _conditions = ['New', 'Inked', 'Primed', 'Worn'];
-  final _categories = ['Dice', 'Minis', 'Cards', 'Maps', 'Tokens', 'Books', 'Bags', 'Terrain', 'Tools', 'Other'];
+  final _conditions = ['New', 'Lubed', 'Filmed', 'Spare'];
+  final _categories = ['Linear', 'Tactile', 'Clicky', 'Stabilizers', 'Keycaps', 'PCBs', 'Cables', 'Lube', 'Tools', 'Other'];
 
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _ItemFormViewState extends State<ItemFormView> {
       final photo = await _imagePicker.pickImage(source: source, maxWidth: 1024, maxHeight: 1024, imageQuality: 85);
       if (photo == null) return;
       final appDir = await getApplicationDocumentsDirectory();
-      final fileName = 'piece_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
+      final fileName = 'switch_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
       final savedPath = path_pkg.join(appDir.path, 'photos', fileName);
       await Directory(path_pkg.join(appDir.path, 'photos')).create(recursive: true);
       await File(photo.path).copy(savedPath);
@@ -95,7 +95,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Future<void> _saveItem() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedContainerId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a chest first')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a cask first')));
       return;
     }
     final item = InventoryItemModel(
@@ -121,7 +121,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.item != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit piece' : 'Log piece')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit switch' : 'Log switch')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -133,12 +133,12 @@ class _ItemFormViewState extends State<ItemFormView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Table photo', style: Theme.of(context).textTheme.titleMedium),
+                    Text('Bag photo', style: Theme.of(context).textTheme.titleMedium),
                     const SizedBox(height: 12),
                     if (_photoPath != null)
                       Stack(
                         children: [
-                          ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.file(File(_photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover)),
+                          ClipRRect(borderRadius: BorderRadius.circular(6), child: Image.file(File(_photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover)),
                           Positioned(top: 8, right: 8, child: IconButton(icon: const Icon(Icons.delete, color: Colors.white), style: IconButton.styleFrom(backgroundColor: Colors.red), onPressed: _removePhoto)),
                         ],
                       )
@@ -155,11 +155,11 @@ class _ItemFormViewState extends State<ItemFormView> {
               ),
             ),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Piece name', hintText: 'e.g., Galaxy d20 set', prefixIcon: Icon(Icons.casino_outlined)), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this piece' : null),
+            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Switch name', hintText: 'e.g., Gateron Oil King', prefixIcon: Icon(Icons.keyboard_alt_outlined)), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this switch' : null),
             const SizedBox(height: 12),
-            DropdownButtonFormField<String>(key: const ValueKey('category_dropdown'), value: _categories.contains(_categoryController.text) ? _categoryController.text : null, decoration: const InputDecoration(labelText: 'Kind', prefixIcon: Icon(Icons.category_outlined)), items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) _categoryController.text = v; }, validator: (_) => _categoryController.text.isEmpty ? 'Pick a kind' : null),
+            DropdownButtonFormField<String>(key: const ValueKey('category_dropdown'), value: _categories.contains(_categoryController.text) ? _categoryController.text : null, decoration: const InputDecoration(labelText: 'Feel', prefixIcon: Icon(Icons.category_outlined)), items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) _categoryController.text = v; }, validator: (_) => _categoryController.text.isEmpty ? 'Pick a feel' : null),
             const SizedBox(height: 12),
-            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Chest', prefixIcon: Icon(Icons.inventory_2_outlined)), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a chest' : null),
+            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Cask', prefixIcon: Icon(Icons.inventory_2_outlined)), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a cask' : null),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -171,9 +171,9 @@ class _ItemFormViewState extends State<ItemFormView> {
             const SizedBox(height: 12),
             TextFormField(key: const ValueKey('value_field'), controller: _valueController, decoration: const InputDecoration(labelText: 'Replacement cost (optional)', prefixIcon: Icon(Icons.payments_outlined)), keyboardType: TextInputType.number),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Session note', hintText: 'Campaign, player, or last table', prefixIcon: Icon(Icons.notes)), maxLines: 3),
+            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Build note', hintText: 'Spring, film, or last board', prefixIcon: Icon(Icons.notes)), maxLines: 3),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save piece' : 'File piece')),
+            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save switch' : 'File switch')),
           ],
         ),
       ),

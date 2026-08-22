@@ -1,3 +1,3 @@
 # Listing notes
 
-This project is Hex Vault (`com.app.hexvault.build`), a tabletop dice and mini catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.
+This project is Switch Cask (`com.app.switchcask.build`), a mechanical-keyboard switch catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.

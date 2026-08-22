@@ -26,7 +26,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Hex Vault initialization...');
+      debugPrint('Starting Switch Cask initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -70,7 +70,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Hex Vault',
+      title: 'Switch Cask',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -84,9 +84,9 @@ class _UserScreenState extends State<UserScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.casino, color: VisualTheme.secondaryColor, size: 48),
+                    const Icon(Icons.keyboard_alt_outlined, color: VisualTheme.secondaryColor, size: 48),
                     const SizedBox(height: 14),
-                    const Text('Opening the vault…', style: TextStyle(color: Color(0xFFF6EFE3))),
+                    const Text('Sorting the tins…', style: TextStyle(color: Colors.white)),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

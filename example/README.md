@@ -1,4 +1,4 @@
-# Hex Vault
+# Switch Cask
 
 ```bash
 flutter run
