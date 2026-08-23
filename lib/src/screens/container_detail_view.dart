@@ -48,8 +48,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Clear this cart?'),
-        content: const Text('Every bottle filed here will be removed.'),
+        title: const Text('Clear this tray?'),
+        content: const Text('Every piece filed here will be removed.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Clear')),
@@ -65,7 +65,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Cart not found')));
+    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Tray not found')));
 
     final count = _items?.length ?? 0;
     final pct = _container!.capacity > 0 ? (count / _container!.capacity * 100).round() : 0;
@@ -76,8 +76,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit cart')),
-              PopupMenuItem(value: 'delete', child: Text('Clear cart')),
+              PopupMenuItem(value: 'edit', child: Text('Edit tray')),
+              PopupMenuItem(value: 'delete', child: Text('Clear tray')),
             ],
             onSelected: (v) {
               if (v == 'edit') {
@@ -95,27 +95,27 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
           padding: const EdgeInsets.all(16),
           children: [
             Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.all(22),
+              decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(28)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_container!.code, style: GoogleFonts.sora(color: VisualTheme.secondaryColor, letterSpacing: 1.4, fontWeight: FontWeight.w700)),
+                  Text(_container!.code, style: GoogleFonts.lexend(color: VisualTheme.accentColor, letterSpacing: 1.4, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 6),
-                  Text(_container!.name, style: GoogleFonts.sora(fontSize: 26, fontWeight: FontWeight.w700, color: Colors.white)),
+                  Text(_container!.name, style: GoogleFonts.sourceSerif4(fontSize: 28, fontWeight: FontWeight.w700, color: Colors.white)),
                   const SizedBox(height: 8),
-                  Text('${_container!.room} / ${_container!.shelf}', style: const TextStyle(color: Colors.white70)),
+                  Text('${_container!.room} · ${_container!.shelf}', style: const TextStyle(color: Colors.white70)),
                   const SizedBox(height: 12),
-                  LinearProgressIndicator(value: pct / 100, minHeight: 5, backgroundColor: Colors.white24, color: VisualTheme.secondaryColor),
+                  LinearProgressIndicator(value: pct / 100, minHeight: 6, borderRadius: BorderRadius.circular(6), backgroundColor: Colors.white24, color: VisualTheme.accentColor),
                   const SizedBox(height: 8),
-                  Text('$count / ${_container!.capacity} bottles  ·  $pct% packed', style: const TextStyle(color: Colors.white70)),
+                  Text('$count / ${_container!.capacity} slots  ·  $pct% packed', style: const TextStyle(color: Colors.white70)),
                 ],
               ),
             ),
             const SizedBox(height: 20),
             Row(
               children: [
-                Expanded(child: Text('Bottles ($count)', style: GoogleFonts.sora(fontSize: 20, fontWeight: FontWeight.w700))),
+                Expanded(child: Text('Pieces ($count)', style: GoogleFonts.sourceSerif4(fontSize: 22, fontWeight: FontWeight.w700))),
                 FilledButton.icon(
                   key: const ValueKey('add_item_button'),
                   onPressed: () async {
@@ -123,7 +123,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                     if (r == true) _loadData();
                   },
                   icon: const Icon(Icons.add),
-                  label: const Text('Bottle'),
+                  label: const Text('Piece'),
                 ),
               ],
             ),
@@ -135,7 +135,10 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Card(
                       child: ListTile(
-                        leading: Container(width: 6, height: 36, color: VisualTheme.getCategoryColor(item.category)),
+                        leading: CircleAvatar(
+                          backgroundColor: VisualTheme.getCategoryColor(item.category).withValues(alpha: 0.16),
+                          child: Icon(Icons.menu_book_outlined, color: VisualTheme.getCategoryColor(item.category), size: 18),
+                        ),
                         title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
                         subtitle: Text('${item.category} · ${item.quantity} · ${item.condition}'),
                         trailing: const Icon(Icons.arrow_forward, size: 18),

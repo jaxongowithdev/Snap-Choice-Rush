@@ -1,9 +1,9 @@
-# Ember Rail - Apple App Store Submission Guide
+# Primer Nest - Apple App Store Submission Guide
 
-**App Name**: Ember Rail
-**Subtitle**: Map your bar carts
-**Category**: Food & Drink / Lifestyle
+**App Name**: Primer Nest
+**Subtitle**: Stage lesson kits
+**Category**: Education / Productivity
 **Version**: 1.0.0
-**Bundle ID**: com.app.emberrail.build
+**Bundle ID**: com.app.primernest.build
 
 See `meta-data-apple-store.txt` for the full listing copy.

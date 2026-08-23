@@ -16,11 +16,11 @@ class _WelcomeViewState extends State<WelcomeView> {
   int _currentPage = 0;
 
   final _pages = [
-    {'icon': Icons.local_bar, 'title': 'Ember Rail', 'description': 'Stage every bar cart before guests arrive. Know which bottle lives on which rail.'},
-    {'icon': Icons.liquor_outlined, 'title': 'Twelve kinds of stock', 'description': 'Spirits, amaro, bitters, citrus, glassware — file each pour by how you actually use it.'},
-    {'icon': Icons.photo_camera_outlined, 'title': 'Snap the label', 'description': 'Photograph a bottle, a bitter, or a garnish so you remember the exact brand you own.'},
-    {'icon': Icons.swap_horiz, 'title': 'Keep a pour log', 'description': 'Move a bottle from the cellar to the rail and keep a short note of why it moved.'},
-    {'icon': Icons.wifi_off, 'title': 'Works at the cart', 'description': 'No account and no signal required. The catalog stays on this phone.'},
+    {'icon': Icons.auto_stories, 'title': 'Primer Nest', 'description': 'Stage every lesson tray before the bell. Know which reader lives in which kit.'},
+    {'icon': Icons.category_outlined, 'title': 'Twelve kinds of kit', 'description': 'Readers, flashcards, manipulatives, maps — file each piece the way you actually teach it.'},
+    {'icon': Icons.photo_camera_outlined, 'title': 'Snap the cover', 'description': 'Photograph a workbook, a card deck, or a science tray so you remember the exact edition you own.'},
+    {'icon': Icons.swap_horiz, 'title': 'Keep a lesson trace', 'description': 'Move a set from the cupboard to this week’s tray and leave a short note of why it moved.'},
+    {'icon': Icons.wifi_off, 'title': 'Works at the desk', 'description': 'No account and no signal required. The catalog stays on this phone.'},
   ];
 
   Future<void> _finish() async {
@@ -37,7 +37,7 @@ class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: VisualTheme.primaryColor,
+      backgroundColor: VisualTheme.parchment,
       body: SafeArea(
         child: Column(
           children: [
@@ -45,7 +45,7 @@ class _WelcomeViewState extends State<WelcomeView> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: _finish,
-                child: Text('SKIP', style: GoogleFonts.sora(color: Colors.white54, letterSpacing: 1.4)),
+                child: Text('SKIP', style: GoogleFonts.lexend(color: VisualTheme.ink.withValues(alpha: 0.45), letterSpacing: 1.4)),
               ),
             ),
             Expanded(
@@ -61,25 +61,25 @@ class _WelcomeViewState extends State<WelcomeView> {
                       children: [
                         const Spacer(),
                         Container(
-                          width: 88,
-                          height: 88,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1C2414),
-                            borderRadius: BorderRadius.circular(10),
+                          width: 96,
+                          height: 96,
+                          decoration: const BoxDecoration(
+                            color: VisualTheme.primaryColor,
+                            shape: BoxShape.circle,
                           ),
-                          child: Icon(page['icon'] as IconData, size: 44, color: VisualTheme.secondaryColor),
+                          child: Icon(page['icon'] as IconData, size: 44, color: VisualTheme.accentColor),
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 28),
                         Text(
                           page['title'] as String,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.sora(fontSize: 32, fontWeight: FontWeight.w700, color: Colors.white),
+                          style: GoogleFonts.sourceSerif4(fontSize: 34, fontWeight: FontWeight.w700, color: VisualTheme.ink),
                         ),
                         const SizedBox(height: 14),
                         Text(
                           page['description'] as String,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.plusJakartaSans(fontSize: 16, height: 1.45, color: Colors.white70),
+                          style: GoogleFonts.lexend(fontSize: 16, height: 1.5, color: VisualTheme.ink.withValues(alpha: 0.7)),
                         ),
                         const Spacer(),
                       ],
@@ -95,10 +95,13 @@ class _WelcomeViewState extends State<WelcomeView> {
                   ...List.generate(
                     _pages.length,
                     (i) => Container(
-                      margin: const EdgeInsets.only(right: 5),
-                      width: _currentPage == i ? 22 : 8,
-                      height: 4,
-                      color: _currentPage == i ? VisualTheme.secondaryColor : Colors.white24,
+                      margin: const EdgeInsets.only(right: 6),
+                      width: _currentPage == i ? 24 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: _currentPage == i ? VisualTheme.secondaryColor : VisualTheme.sand,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                   ),
                   const Spacer(),
@@ -110,7 +113,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         _pageController.nextPage(duration: const Duration(milliseconds: 260), curve: Curves.easeOut);
                       }
                     },
-                    child: Text(_currentPage == _pages.length - 1 ? 'Open the rail' : 'Next'),
+                    child: Text(_currentPage == _pages.length - 1 ? 'Open the nest' : 'Next'),
                   ),
                 ],
               ),

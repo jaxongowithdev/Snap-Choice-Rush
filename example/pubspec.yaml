@@ -1,5 +1,5 @@
-name: ember_rail_example
-description: "Ember Rail - Home cocktail bar catalog"
+name: primer_nest_example
+description: "Primer Nest - Classroom and homeschool lesson catalog"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

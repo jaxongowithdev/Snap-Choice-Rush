@@ -1,14 +1,14 @@
 APP NAME
-Ember Rail
+Primer Nest
 
 SUBTITLE
-Map your bar carts
+Stage lesson kits
 
 KEYWORDS
-bar,cocktail,spirit,mixer,bitter,cart,rail,pour,garnish,offline
+lesson,kit,teacher,classroom,homeschool,reader,workbook,tray,study,offline
 
 PROMOTION
-Stage carts, log bottles, and find any pour before guests arrive. Private, offline.
+Stage lesson trays, file readers and workbooks, and find any kit before class. Private, offline.
 
 DESCRIPTION
-Ember Rail is a private offline catalog for home bartenders — map bar carts, log bottles, and find any pour before guests arrive.
+Primer Nest is a private offline catalog for teachers and homeschoolers — stage lesson trays, file readers and workbooks, and find any kit before class.

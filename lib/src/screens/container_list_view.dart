@@ -19,7 +19,7 @@ class _ContainerListViewState extends State<ContainerListView> {
   Map<int, int> _itemCounts = {};
   bool _isLoading = true;
   String _sortBy = 'updated';
-  bool _isGridView = false;
+  bool _isGridView = true;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _ContainerListViewState extends State<ContainerListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Carts'),
+        title: const Text('Trays'),
         actions: [
           IconButton(icon: Icon(_isGridView ? Icons.view_agenda_outlined : Icons.grid_view), onPressed: () => setState(() => _isGridView = !_isGridView)),
           PopupMenuButton<String>(
@@ -77,11 +77,11 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.inventory_2_outlined, size: 48),
+                        const Icon(Icons.inbox_outlined, size: 48, color: VisualTheme.secondaryColor),
                         const SizedBox(height: 12),
-                        Text('No carts staged', style: GoogleFonts.sora(fontSize: 22, fontWeight: FontWeight.w700)),
+                        Text('No trays staged', style: GoogleFonts.sourceSerif4(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
-                        const Text('Start a front rail, a back-bar shelf, or the guest cart.', textAlign: TextAlign.center),
+                        const Text('Start a Monday kit, a reading nook, or the science cupboard.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -94,7 +94,7 @@ class _ContainerListViewState extends State<ContainerListView> {
           if (r == true) _loadContainers();
         },
         icon: const Icon(Icons.add),
-        label: const Text('Cart'),
+        label: const Text('Tray'),
       ),
     );
   }
@@ -102,7 +102,7 @@ class _ContainerListViewState extends State<ContainerListView> {
   Widget _grid() {
     return GridView.builder(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.9, crossAxisSpacing: 10, mainAxisSpacing: 10),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.88, crossAxisSpacing: 10, mainAxisSpacing: 10),
       itemCount: _containers!.length,
       itemBuilder: (_, i) {
         final c = _containers![i];
@@ -110,21 +110,22 @@ class _ContainerListViewState extends State<ContainerListView> {
         final pct = c.capacity > 0 ? (count / c.capacity * 100).round() : 0;
         return Card(
           child: InkWell(
+            borderRadius: BorderRadius.circular(22),
             onTap: () => _open(c),
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(c.code, style: GoogleFonts.sora(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w700, fontSize: 12)),
+                  Text(c.code, style: GoogleFonts.lexend(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w700, fontSize: 11, letterSpacing: 1.1)),
                   const SizedBox(height: 8),
-                  Text(c.name, style: GoogleFonts.sora(fontSize: 18, fontWeight: FontWeight.w700), maxLines: 2),
+                  Text(c.name, style: GoogleFonts.sourceSerif4(fontSize: 18, fontWeight: FontWeight.w700), maxLines: 2),
                   const Spacer(),
-                  Text('${c.room} / ${c.shelf}', maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text('${c.room} · ${c.shelf}', maxLines: 1, overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 8),
-                  LinearProgressIndicator(value: pct / 100, minHeight: 5, backgroundColor: VisualTheme.mist, color: VisualTheme.secondaryColor),
+                  LinearProgressIndicator(value: pct / 100, minHeight: 6, borderRadius: BorderRadius.circular(6), backgroundColor: VisualTheme.sand, color: VisualTheme.primaryColor),
                   const SizedBox(height: 6),
-                  Text('$count / ${c.capacity} bottles'),
+                  Text('$count / ${c.capacity} slots'),
                 ],
               ),
             ),
@@ -146,7 +147,7 @@ class _ContainerListViewState extends State<ContainerListView> {
           child: Card(
             child: ListTile(
               title: Text(c.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: Text('${c.code}  ·  ${c.room} / ${c.shelf}\n$count / ${c.capacity} bottles'),
+              subtitle: Text('${c.code}  ·  ${c.room} · ${c.shelf}\n$count / ${c.capacity} slots'),
               isThreeLine: true,
               trailing: const Icon(Icons.arrow_forward),
               onTap: () => _open(c),

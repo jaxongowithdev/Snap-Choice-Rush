@@ -57,7 +57,7 @@ class _SearchViewState extends State<SearchView> {
           controller: _searchController,
           autofocus: true,
           cursorColor: VisualTheme.secondaryColor,
-          decoration: const InputDecoration(hintText: 'Rye, amaro, coupe…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none, filled: false),
+          decoration: const InputDecoration(hintText: 'Frog and Toad, globe, grade 2…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none, filled: false),
           onChanged: _performSearch,
         ),
         actions: [
@@ -71,22 +71,25 @@ class _SearchViewState extends State<SearchView> {
 
   Widget _buildBody() {
     if (_isSearching) return const Center(child: CircularProgressIndicator());
-    if (_searchController.text.isEmpty) return _hint(Icons.search, 'Locate a pour', 'Search a bottle, kind, or pour note.');
+    if (_searchController.text.isEmpty) return _hint(Icons.search, 'Find a lesson piece', 'Search a reader, kind, or lesson note.');
     if (_results == null || _results!.isEmpty) return _hint(Icons.search_off, 'No match', 'Try a shorter word or another kind.');
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: _results!.length,
       itemBuilder: (_, i) {
         final item = _results![i];
-        final cart = _containersCache[item.containerId];
+        final tray = _containersCache[item.containerId];
         return Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: Card(
             child: ListTile(
-              leading: Container(width: 6, height: 36, color: VisualTheme.getCategoryColor(item.category)),
+              leading: CircleAvatar(
+                backgroundColor: VisualTheme.getCategoryColor(item.category).withValues(alpha: 0.16),
+                child: Icon(Icons.menu_book_outlined, color: VisualTheme.getCategoryColor(item.category), size: 18),
+              ),
               title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: Text('${item.category} · ${item.quantity}${cart != null ? '\n${cart.name} / ${cart.room}' : ''}'),
-              isThreeLine: cart != null,
+              subtitle: Text('${item.category} · ${item.quantity}${tray != null ? '\n${tray.name} · ${tray.room}' : ''}'),
+              isThreeLine: tray != null,
               trailing: const Icon(Icons.arrow_forward, size: 18),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!))).then((_) => _performSearch(_searchController.text));
@@ -107,7 +110,7 @@ class _SearchViewState extends State<SearchView> {
           children: [
             Icon(icon, size: 48, color: VisualTheme.secondaryColor),
             const SizedBox(height: 12),
-            Text(title, style: GoogleFonts.sora(fontSize: 22, fontWeight: FontWeight.w700)),
+            Text(title, style: GoogleFonts.sourceSerif4(fontSize: 24, fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
             Text(subtitle, textAlign: TextAlign.center),
           ],

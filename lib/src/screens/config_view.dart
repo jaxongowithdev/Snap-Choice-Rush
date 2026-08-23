@@ -48,8 +48,8 @@ class _ConfigViewState extends State<ConfigView> {
       final data = await _storage.exportData();
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       await Share.shareXFiles(
-        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'ember_rail_${DateTime.now().millisecondsSinceEpoch}.json')],
-        text: 'Ember Rail catalog',
+        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'primer_nest_${DateTime.now().millisecondsSinceEpoch}.json')],
+        text: 'Primer Nest catalog',
       );
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Catalog exported')));
     } catch (e) {
@@ -62,7 +62,7 @@ class _ConfigViewState extends State<ConfigView> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Restore a catalog?'),
-        content: const Text('The current carts will be replaced by the file you pick.'),
+        content: const Text('The current trays will be replaced by the file you pick.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Restore')),
@@ -84,9 +84,9 @@ class _ConfigViewState extends State<ConfigView> {
   String _themeLabel(String theme) {
     switch (theme) {
       case 'light':
-        return 'Day service';
+        return 'Daylight desk';
       case 'dark':
-        return 'Last call';
+        return 'After hours';
       default:
         return 'Match the phone';
     }
@@ -95,19 +95,19 @@ class _ConfigViewState extends State<ConfigView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Cellar')),
+      appBar: AppBar(title: const Text('Desk')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
         children: [
           Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(12)),
+            padding: const EdgeInsets.all(22),
+            decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(28)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('EMBER RAIL', style: GoogleFonts.sora(color: VisualTheme.secondaryColor, letterSpacing: 1.8, fontSize: 12, fontWeight: FontWeight.w700)),
+                Text('PRIMER NEST', style: GoogleFonts.lexend(color: VisualTheme.accentColor, letterSpacing: 1.8, fontSize: 12, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 8),
-                Text('A private bar list. Nothing leaves this phone.', style: GoogleFonts.sora(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700)),
+                Text('A private lesson list. Nothing leaves this phone.', style: GoogleFonts.sourceSerif4(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700)),
               ],
             ),
           ),
@@ -119,11 +119,11 @@ class _ConfigViewState extends State<ConfigView> {
             onTap: () => showDialog(
               context: context,
               builder: (_) => AlertDialog(
-                title: const Text('Cellar light'),
+                title: const Text('Desk light'),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    for (final e in const [('light', 'Day service'), ('dark', 'Last call'), ('system', 'Match the phone')])
+                    for (final e in const [('light', 'Daylight desk'), ('dark', 'After hours'), ('system', 'Match the phone')])
                       RadioListTile<String>(
                         title: Text(e.$2),
                         value: e.$1,
@@ -137,7 +137,7 @@ class _ConfigViewState extends State<ConfigView> {
           ),
           ListTile(key: const ValueKey('backup_button'), leading: const Icon(Icons.ios_share), title: const Text('Export catalog'), subtitle: const Text('Share a JSON snapshot'), onTap: _exportData),
           ListTile(key: const ValueKey('import_button'), leading: const Icon(Icons.file_open_outlined), title: const Text('Restore catalog'), subtitle: const Text('Replace from a JSON file'), onTap: _importData),
-          const ListTile(leading: Icon(Icons.info_outline), title: Text('Version 1.0.0'), subtitle: Text('Offline home-bar inventory')),
+          const ListTile(leading: Icon(Icons.info_outline), title: Text('Version 1.0.0'), subtitle: Text('Offline classroom inventory')),
           const ListTile(leading: Icon(Icons.lock_outline), title: Text('Privacy'), subtitle: Text('No account. No tracking. Local only.')),
         ],
       ),

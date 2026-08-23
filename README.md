@@ -1,20 +1,20 @@
-# Ember Rail
+# Primer Nest
 
-A private home-bar catalog. Stage carts, log bottles, and find any pour before guests arrive — fully offline.
+A private classroom and homeschool catalog. Stage lesson trays, file readers and workbooks, and find any kit before class — fully offline.
 
-**App Name:** Ember Rail
-**Subtitle:** Map your bar carts
-**Category:** Food & Drink
-**Bundle ID:** com.app.emberrail.build
-**Database:** `ember_rail.db`
+**App Name:** Primer Nest
+**Subtitle:** Stage lesson kits
+**Category:** Education
+**Bundle ID:** com.app.primernest.build
+**Database:** `primer_nest.db`
 
 ## Navigation
 
-- Rail — greeting, stock check, tonight’s pours
-- Carts — all rails and shelves
-- Pour — bottles pinned for rotation
-- Log — every move between carts
-- Cellar — look and backup
+- Nest — greeting, subject chips, this week’s pins
+- Trays — all lesson kits
+- Pin — materials on the teaching desk
+- Trace — every move between trays
+- Desk — look and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 
