@@ -1,37 +1,14 @@
 APP NAME
-Switch Cask
+Nib Ledger
 
 SUBTITLE
-Map your switch tins
+Map your ink wells
 
 KEYWORDS
-switch,keyboard,keycap,lube,linear,tactile,desk,cask,mech,offline
+ink,nib,pen,fountain,well,paper,blot,ledger,bottle,offline
 
 PROMOTION
-Stage tins, log stems, and find any batch before you build. Private, offline.
+Stage wells, log bottles, and find any ink before you write. Private, offline.
 
 DESCRIPTION
-Switch Cask is a desk catalog for builders who already own more switches than they can keep in their head.
-
-Name every tin on the bench — the linear bag, the spare-parts box, the travel pouch — then file each stem where it actually lives. When you wonder if those Oil Kings are still in the drawer, search once instead of emptying three tins.
-
-What you can do
-• Create named casks with a mark, desk, and tray or slot
-• File parts by feel: linear, tactile, clicky, plus stabilizers, keycaps, PCBs, cables, lube, and tools
-• Mark state as New, Lubed, Filmed, or Spare
-• Attach a bag photo from the camera or your album
-• Bookmark the switches you want in the next board
-• Move a batch from one cask to another and keep a short note
-• See a desk snapshot: how many casks are in use, which feels run deepest
-• Export or restore the whole list as a JSON file
-
-Why it is different
-Switch Cask is not a typing test and not a generic storage box. It is a bench map. The language, layout, and states are written for builders: casks instead of bins, stems instead of items, build notes instead of packing labels.
-
-Private by design
-Everything stays on your iPhone. There is no account, no cloud sync, and no parts shop. Open the app at the bench with no signal and the same tins are still there.
-
-Who it is for
-First-board builders, collectors with more than one drawer, anyone tired of buying a third pack of the same linear.
-
-Switch Cask — know the tin before you build.
+Nib Ledger is a private offline catalog for fountain-pen writers — map ink wells, log bottles, and find any shade before you write.

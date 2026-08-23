@@ -1,4 +1,4 @@
-// Switch tin / keyboard parts cask model
+// Ink well / fountain-pen drawer model
 class ContainerModel {
   final int? id;
   final String name;

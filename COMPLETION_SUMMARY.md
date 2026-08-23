@@ -1,3 +1,3 @@
-# Switch Cask
+# Nib Ledger
 
-Offline mechanical-keyboard map. Navy / mint / coral UI, Oxanium + Inter. Productivity App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline fountain-pen map. Indigo / copper / gold UI, Literata + Outfit. Books App Store category. Listing copy in `meta-data-apple-store.txt`.

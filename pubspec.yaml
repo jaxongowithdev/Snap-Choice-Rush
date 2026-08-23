@@ -1,5 +1,5 @@
 name: user_screen
-description: "Switch Cask - Map switch tins, log stems, and find any batch before you build. Completely offline."
+description: "Nib Ledger - Map ink wells, log bottles, and find any ink before you write. Completely offline."
 version: 1.0.0+2
 
 environment:

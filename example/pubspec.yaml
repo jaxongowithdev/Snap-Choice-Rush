@@ -1,5 +1,5 @@
-name: switch_cask_example
-description: "Switch Cask - Mechanical keyboard switch catalog"
+name: nib_ledger_example
+description: "Nib Ledger - Fountain pen and ink catalog"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

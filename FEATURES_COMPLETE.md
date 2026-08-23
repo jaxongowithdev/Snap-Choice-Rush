@@ -1,3 +1,3 @@
-# Switch Cask — feature set
+# Nib Ledger — feature set
 
-Desk / Casks / Matrix / Bench navigation, switch catalog with bag photos, search, next-build pins, reseat history, JSON backup, offline SQLite (`switch_cask.db`).
+Blot / Wells / Folio / Case navigation, ink catalog with label photos, search, daily-ink pins, reseat history, JSON backup, offline SQLite (`nib_ledger.db`).

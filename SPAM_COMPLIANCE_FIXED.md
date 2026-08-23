@@ -1,3 +1,3 @@
 # Listing notes
 
-This project is Switch Cask (`com.app.switchcask.build`), a mechanical-keyboard switch catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.
+This project is Nib Ledger (`com.app.nibledger.build`), a fountain-pen and ink catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.

@@ -48,10 +48,10 @@ class _ConfigViewState extends State<ConfigView> {
       final data = await _storage.exportData();
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       await Share.shareXFiles(
-        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'switch_cask_${DateTime.now().millisecondsSinceEpoch}.json')],
-        text: 'Switch Cask inventory',
+        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'nib_ledger_${DateTime.now().millisecondsSinceEpoch}.json')],
+        text: 'Nib Ledger catalog',
       );
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Inventory exported')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Catalog exported')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not export: $e')));
     }
@@ -61,8 +61,8 @@ class _ConfigViewState extends State<ConfigView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Restore an inventory?'),
-        content: const Text('The current casks will be replaced by the file you pick.'),
+        title: const Text('Restore a catalog?'),
+        content: const Text('The current wells will be replaced by the file you pick.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Restore')),
@@ -75,7 +75,7 @@ class _ConfigViewState extends State<ConfigView> {
       if (result == null || result.files.isEmpty || result.files.first.bytes == null) return;
       final data = jsonDecode(String.fromCharCodes(result.files.first.bytes!)) as Map<String, dynamic>;
       await _storage.importData(data);
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Inventory restored')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Catalog restored')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not restore: $e')));
     }
@@ -84,9 +84,9 @@ class _ConfigViewState extends State<ConfigView> {
   String _themeLabel(String theme) {
     switch (theme) {
       case 'light':
-        return 'Day desk';
+        return 'Paper';
       case 'dark':
-        return 'Night bench';
+        return 'Night ink';
       default:
         return 'Match the phone';
     }
@@ -95,19 +95,19 @@ class _ConfigViewState extends State<ConfigView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Bench')),
+      appBar: AppBar(title: const Text('Case')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
         children: [
           Container(
-            padding: const EdgeInsets.all(18),
-            color: VisualTheme.primaryColor,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(20)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('SWITCH CASK', style: GoogleFonts.oxanium(color: VisualTheme.secondaryColor, letterSpacing: 1.8, fontSize: 12, fontWeight: FontWeight.w700)),
+                Text('NIB LEDGER', style: GoogleFonts.outfit(color: VisualTheme.accentColor, letterSpacing: 1.8, fontSize: 12, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 8),
-                Text('A private switch list. Nothing leaves this phone.', style: GoogleFonts.oxanium(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700)),
+                Text('A private ink list. Nothing leaves this phone.', style: GoogleFonts.literata(color: VisualTheme.cream, fontSize: 24, fontWeight: FontWeight.w600)),
               ],
             ),
           ),
@@ -119,11 +119,11 @@ class _ConfigViewState extends State<ConfigView> {
             onTap: () => showDialog(
               context: context,
               builder: (_) => AlertDialog(
-                title: const Text('Bench light'),
+                title: const Text('Case light'),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    for (final e in const [('light', 'Day desk'), ('dark', 'Night bench'), ('system', 'Match the phone')])
+                    for (final e in const [('light', 'Paper'), ('dark', 'Night ink'), ('system', 'Match the phone')])
                       RadioListTile<String>(
                         title: Text(e.$2),
                         value: e.$1,
@@ -135,9 +135,9 @@ class _ConfigViewState extends State<ConfigView> {
               ),
             ),
           ),
-          ListTile(key: const ValueKey('backup_button'), leading: const Icon(Icons.ios_share), title: const Text('Export inventory'), subtitle: const Text('Share a JSON snapshot'), onTap: _exportData),
-          ListTile(key: const ValueKey('import_button'), leading: const Icon(Icons.file_open_outlined), title: const Text('Restore inventory'), subtitle: const Text('Replace from a JSON file'), onTap: _importData),
-          const ListTile(leading: Icon(Icons.info_outline), title: Text('Version 1.0.0'), subtitle: Text('Offline keyboard inventory')),
+          ListTile(key: const ValueKey('backup_button'), leading: const Icon(Icons.ios_share), title: const Text('Export catalog'), subtitle: const Text('Share a JSON snapshot'), onTap: _exportData),
+          ListTile(key: const ValueKey('import_button'), leading: const Icon(Icons.file_open_outlined), title: const Text('Restore catalog'), subtitle: const Text('Replace from a JSON file'), onTap: _importData),
+          const ListTile(leading: Icon(Icons.info_outline), title: Text('Version 1.0.0'), subtitle: Text('Offline fountain-pen inventory')),
           const ListTile(leading: Icon(Icons.lock_outline), title: Text('Privacy'), subtitle: Text('No account. No tracking. Local only.')),
         ],
       ),

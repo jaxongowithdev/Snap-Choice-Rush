@@ -1,19 +1,19 @@
-# Switch Cask
+# Nib Ledger
 
-A private switch catalog. Stage tins, log stems, and find any batch before you build — fully offline.
+A private ink catalog. Stage wells, log bottles, and find any ink before you write — fully offline.
 
-**App Name:** Switch Cask
-**Subtitle:** Map your switch tins
-**Category:** Productivity
-**Bundle ID:** com.app.switchcask.build
-**Database:** `switch_cask.db`
+**App Name:** Nib Ledger
+**Subtitle:** Map your ink wells
+**Category:** Books
+**Bundle ID:** com.app.nibledger.build
+**Database:** `nib_ledger.db`
 
 ## Navigation
 
-- Desk — bench pulse and quick actions
-- Casks — all tins and bags
-- Matrix — feel and desk snapshot
-- Bench — look and backup
+- Blot — ledger pulse and quick actions
+- Wells — all drawers and cases
+- Folio — kind and room snapshot
+- Case — look and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

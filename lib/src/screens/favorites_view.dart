@@ -46,7 +46,7 @@ class _FavoritesViewState extends State<FavoritesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Next build')),
+      appBar: AppBar(title: const Text('Daily ink')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteItems == null || _favoriteItems!.isEmpty
@@ -58,9 +58,9 @@ class _FavoritesViewState extends State<FavoritesView> {
                       children: [
                         const Icon(Icons.bookmark_border, size: 48),
                         const SizedBox(height: 12),
-                        Text('No next-build list yet', style: GoogleFonts.oxanium(fontSize: 22, fontWeight: FontWeight.w700)),
+                        Text('No daily ink yet', style: GoogleFonts.literata(fontSize: 24, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('Bookmark the switches you want in the next board.', textAlign: TextAlign.center),
+                        const Text('Bookmark the bottles you keep in rotation.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -72,17 +72,17 @@ class _FavoritesViewState extends State<FavoritesView> {
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final cask = _containersCache[item.containerId];
+                      final well = _containersCache[item.containerId];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Card(
                           child: ListTile(
                             title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                            subtitle: Text('${item.category} · ${item.quantity}${cask != null ? '\n${cask.name} / ${cask.room}' : ''}'),
-                            isThreeLine: cask != null,
+                            subtitle: Text('${item.category} · ${item.quantity}${well != null ? '\n${well.name} / ${well.room}' : ''}'),
+                            isThreeLine: well != null,
                             trailing: IconButton(
                               key: ValueKey('favorite_toggle_${item.id}'),
-                              icon: Icon(item.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: item.isFavorite ? VisualTheme.secondaryColor : null),
+                              icon: Icon(item.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: item.isFavorite ? VisualTheme.accentColor : null),
                               onPressed: () async {
                                 await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
                                 _loadFavorites();

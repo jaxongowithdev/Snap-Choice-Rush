@@ -1,9 +1,9 @@
-# Switch Cask - Apple App Store Submission Guide
+# Nib Ledger - Apple App Store Submission Guide
 
-**App Name**: Switch Cask
-**Subtitle**: Map your switch tins
-**Category**: Productivity / Lifestyle
+**App Name**: Nib Ledger
+**Subtitle**: Map your ink wells
+**Category**: Books / Lifestyle
 **Version**: 1.0.0
-**Bundle ID**: com.app.switchcask.build
+**Bundle ID**: com.app.nibledger.build
 
 See `meta-data-apple-store.txt` for the full listing copy.

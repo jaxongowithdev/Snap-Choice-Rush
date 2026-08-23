@@ -13,7 +13,7 @@ class StorageManager {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('switch_cask.db');
+    _database = await _initDB('nib_ledger.db');
     return _database!;
   }
 
@@ -52,7 +52,7 @@ class StorageManager {
         name TEXT NOT NULL,
         category TEXT NOT NULL,
         quantity INTEGER NOT NULL DEFAULT 1,
-        condition TEXT NOT NULL DEFAULT 'New',
+        condition TEXT NOT NULL DEFAULT 'Sealed',
         purchaseDate TEXT,
         estimatedValue REAL,
         notes TEXT,
@@ -85,7 +85,7 @@ class StorageManager {
         theme TEXT NOT NULL DEFAULT 'system',
         language TEXT NOT NULL DEFAULT 'en',
         capacityUnit TEXT NOT NULL DEFAULT 'items',
-        defaultBoxPrefix TEXT NOT NULL DEFAULT 'SW',
+        defaultBoxPrefix TEXT NOT NULL DEFAULT 'NIB',
         showOnboarding INTEGER NOT NULL DEFAULT 1
       )
     ''');

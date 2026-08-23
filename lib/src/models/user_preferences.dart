@@ -9,8 +9,8 @@ class UserPreferences {
   UserPreferences({
     this.theme = 'system',
     this.language = 'en',
-    this.capacityUnit = 'switches',
-    this.defaultBoxPrefix = 'SW',
+    this.capacityUnit = 'bottles',
+    this.defaultBoxPrefix = 'NIB',
     this.showOnboarding = true,
   });
 
@@ -28,8 +28,8 @@ class UserPreferences {
     return UserPreferences(
       theme: map['theme'] as String? ?? 'system',
       language: map['language'] as String? ?? 'en',
-      capacityUnit: map['capacityUnit'] as String? ?? 'switches',
-      defaultBoxPrefix: map['defaultBoxPrefix'] as String? ?? 'SW',
+      capacityUnit: map['capacityUnit'] as String? ?? 'bottles',
+      defaultBoxPrefix: map['defaultBoxPrefix'] as String? ?? 'NIB',
       showOnboarding: (map['showOnboarding'] as int? ?? 1) == 1,
     );
   }

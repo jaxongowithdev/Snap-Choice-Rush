@@ -55,14 +55,14 @@ class _ContainerListViewState extends State<ContainerListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Casks'),
+        title: const Text('Wells'),
         actions: [
           IconButton(icon: Icon(_isGridView ? Icons.view_agenda_outlined : Icons.grid_view), onPressed: () => setState(() => _isGridView = !_isGridView)),
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
             itemBuilder: (_) => const [
               PopupMenuItem(value: 'name', child: Text('By name')),
-              PopupMenuItem(value: 'room', child: Text('By desk')),
+              PopupMenuItem(value: 'room', child: Text('By room')),
               PopupMenuItem(value: 'updated', child: Text('Last opened')),
             ],
           ),
@@ -77,11 +77,11 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.inventory_2_outlined, size: 48),
+                        const Icon(Icons.water_drop_outlined, size: 48),
                         const SizedBox(height: 12),
-                        Text('No casks staged', style: GoogleFonts.oxanium(fontSize: 22, fontWeight: FontWeight.w700)),
+                        Text('No wells staged', style: GoogleFonts.literata(fontSize: 24, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('Start a linear tin, a spare-parts box, or the travel pouch.', textAlign: TextAlign.center),
+                        const Text('Start an ink drawer, a travel case, or the sample tray.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -94,7 +94,7 @@ class _ContainerListViewState extends State<ContainerListView> {
           if (r == true) _loadContainers();
         },
         icon: const Icon(Icons.add),
-        label: const Text('Cask'),
+        label: const Text('Well'),
       ),
     );
   }
@@ -116,15 +116,15 @@ class _ContainerListViewState extends State<ContainerListView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(c.code, style: GoogleFonts.oxanium(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w700, fontSize: 12)),
+                  Text(c.code, style: GoogleFonts.outfit(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w700, fontSize: 12)),
                   const SizedBox(height: 8),
-                  Text(c.name, style: GoogleFonts.oxanium(fontSize: 18, fontWeight: FontWeight.w700), maxLines: 2),
+                  Text(c.name, style: GoogleFonts.literata(fontSize: 20, fontWeight: FontWeight.w600), maxLines: 2),
                   const Spacer(),
                   Text('${c.room} / ${c.shelf}', maxLines: 1, overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 8),
-                  LinearProgressIndicator(value: pct / 100, minHeight: 4, backgroundColor: VisualTheme.mist, color: VisualTheme.secondaryColor),
+                  LinearProgressIndicator(value: pct / 100, minHeight: 6, backgroundColor: VisualTheme.mist, color: VisualTheme.secondaryColor, borderRadius: BorderRadius.circular(4)),
                   const SizedBox(height: 6),
-                  Text('$count / ${c.capacity} switches'),
+                  Text('$count / ${c.capacity} bottles'),
                 ],
               ),
             ),
@@ -146,7 +146,7 @@ class _ContainerListViewState extends State<ContainerListView> {
           child: Card(
             child: ListTile(
               title: Text(c.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: Text('${c.code}  ·  ${c.room} / ${c.shelf}\n$count / ${c.capacity} switches'),
+              subtitle: Text('${c.code}  ·  ${c.room} / ${c.shelf}\n$count / ${c.capacity} bottles'),
               isThreeLine: true,
               trailing: const Icon(Icons.arrow_forward),
               onTap: () => _open(c),

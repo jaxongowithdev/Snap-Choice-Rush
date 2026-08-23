@@ -16,10 +16,10 @@ class _WelcomeViewState extends State<WelcomeView> {
   int _currentPage = 0;
 
   final _pages = [
-    {'icon': Icons.keyboard_alt_outlined, 'title': 'Switch Cask', 'description': 'Stage every tin before you build. Know which stem lives in which cask.'},
-    {'icon': Icons.photo_camera_outlined, 'title': 'Snap the batch', 'description': 'Photograph a bag, a stem, or a lube note so you remember the exact switch you own.'},
-    {'icon': Icons.search, 'title': 'Find it on the desk', 'description': 'Search “holy panda” or “linear” and see the tin immediately.'},
-    {'icon': Icons.wifi_off, 'title': 'Works at the bench', 'description': 'No account and no signal required. The catalog stays on this phone.'},
+    {'icon': Icons.edit, 'title': 'Nib Ledger', 'description': 'Stage every ink well before you write. Know which bottle lives in which drawer.'},
+    {'icon': Icons.photo_camera_outlined, 'title': 'Snap the bottle', 'description': 'Photograph a label, a nib, or a swab so you remember the exact shade you own.'},
+    {'icon': Icons.search, 'title': 'Find it at the desk', 'description': 'Search “Pilot” or “iron gall” and see the well immediately.'},
+    {'icon': Icons.wifi_off, 'title': 'Works at the blotter', 'description': 'No account and no signal required. The catalog stays on this phone.'},
   ];
 
   Future<void> _finish() async {
@@ -44,7 +44,7 @@ class _WelcomeViewState extends State<WelcomeView> {
               alignment: Alignment.centerLeft,
               child: TextButton(
                 onPressed: _finish,
-                child: Text('SKIP', style: GoogleFonts.oxanium(color: Colors.white54, letterSpacing: 1.6)),
+                child: Text('SKIP', style: GoogleFonts.outfit(color: Colors.white54, letterSpacing: 1.4)),
               ),
             ),
             Expanded(
@@ -59,18 +59,18 @@ class _WelcomeViewState extends State<WelcomeView> {
                     child: Column(
                       children: [
                         const Spacer(),
-                        Icon(page['icon'] as IconData, size: 72, color: VisualTheme.secondaryColor),
+                        Icon(page['icon'] as IconData, size: 72, color: VisualTheme.accentColor),
                         const SizedBox(height: 24),
                         Text(
                           page['title'] as String,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.oxanium(fontSize: 34, fontWeight: FontWeight.w700, color: Colors.white),
+                          style: GoogleFonts.literata(fontSize: 36, fontWeight: FontWeight.w600, color: const Color(0xFFF7F1E6)),
                         ),
                         const SizedBox(height: 14),
                         Text(
                           page['description'] as String,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(fontSize: 16, height: 1.45, color: Colors.white70),
+                          style: GoogleFonts.outfit(fontSize: 16, height: 1.45, color: Colors.white70),
                         ),
                         const Spacer(),
                       ],
@@ -86,10 +86,13 @@ class _WelcomeViewState extends State<WelcomeView> {
                   ...List.generate(
                     _pages.length,
                     (i) => Container(
-                      margin: const EdgeInsets.only(right: 5),
-                      width: 22,
-                      height: 3,
-                      color: _currentPage == i ? VisualTheme.secondaryColor : Colors.white24,
+                      margin: const EdgeInsets.only(right: 6),
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _currentPage == i ? VisualTheme.secondaryColor : Colors.white24,
+                      ),
                     ),
                   ),
                   const Spacer(),
@@ -101,7 +104,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         _pageController.nextPage(duration: const Duration(milliseconds: 260), curve: Curves.easeOut);
                       }
                     },
-                    child: Text(_currentPage == _pages.length - 1 ? 'Open the desk' : 'Next'),
+                    child: Text(_currentPage == _pages.length - 1 ? 'Open the blotter' : 'Next'),
                   ),
                 ],
               ),
