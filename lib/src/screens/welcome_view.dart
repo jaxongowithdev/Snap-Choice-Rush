@@ -16,11 +16,11 @@ class _WelcomeViewState extends State<WelcomeView> {
   int _currentPage = 0;
 
   final _pages = [
-    {'tag': 'RUN 00', 'title': 'Beaker Bench', 'body': 'A lab roster for the period. One rack per kit. Know which sensor sits in which well before the bell.'},
-    {'tag': 'RUN 01', 'title': 'Twelve kinds', 'body': 'Glassware, slides, safety, models — file each set the way the bench actually runs.'},
-    {'tag': 'RUN 02', 'title': 'Snap the tray', 'body': 'Photograph a goggle bin, a slide box, or a sensor pack so you remember the exact set you own.'},
-    {'tag': 'RUN 03', 'title': 'Log a transfer', 'body': 'Move a kit from the prep room to Station B and leave a short note of why it moved.'},
-    {'tag': 'RUN 04', 'title': 'Works offline', 'body': 'No account and no signal. The bench stays on this phone.'},
+    {'mv': 'I.', 'title': 'Etude Hall', 'body': 'A recital catalog for the week. One book per studio. Know which score sits in which stand before the concert.'},
+    {'mv': 'II.', 'title': 'Twelve kinds', 'body': 'Scores, etudes, methods, recordings — file each piece the way you actually practice it.'},
+    {'mv': 'III.', 'title': 'Snap the cover', 'body': 'Photograph a method book, a part, or a reed case so you remember the exact edition you own.'},
+    {'mv': 'IV.', 'title': 'Cue a move', 'body': 'Shift an etude from the studio stand to the recital folder and leave a short note of why it moved.'},
+    {'mv': 'V.', 'title': 'Works backstage', 'body': 'No account and no signal. The hall stays on this phone.'},
   ];
 
   Future<void> _finish() async {
@@ -37,10 +37,10 @@ class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: VisualTheme.graphite,
+      backgroundColor: VisualTheme.primaryColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
+          padding: const EdgeInsets.fromLTRB(28, 12, 28, 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -48,7 +48,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: _finish,
-                  child: Text('SKIP', style: GoogleFonts.ibmPlexMono(color: Colors.white38, letterSpacing: 1.4)),
+                  child: Text('SKIP', style: GoogleFonts.workSans(color: VisualTheme.ivory.withValues(alpha: 0.45), letterSpacing: 1.6)),
                 ),
               ),
               Expanded(
@@ -62,13 +62,10 @@ class _WelcomeViewState extends State<WelcomeView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Spacer(),
-                        Container(width: 36, height: 36, decoration: BoxDecoration(border: Border.all(color: VisualTheme.secondaryColor, width: 2))),
-                        const SizedBox(height: 18),
-                        Text(page['tag'] as String, style: GoogleFonts.ibmPlexMono(color: VisualTheme.secondaryColor, letterSpacing: 1.6, fontSize: 12)),
-                        const SizedBox(height: 10),
-                        Text(page['title'] as String, style: GoogleFonts.spaceGrotesk(fontSize: 36, fontWeight: FontWeight.w700, color: Colors.white, height: 1.05)),
-                        const SizedBox(height: 14),
-                        Text(page['body'] as String, style: GoogleFonts.spaceGrotesk(fontSize: 16, height: 1.5, color: Colors.white70)),
+                        Text(page['mv'] as String, style: GoogleFonts.cormorantGaramond(fontSize: 42, fontStyle: FontStyle.italic, color: VisualTheme.secondaryColor)),
+                        Text(page['title'] as String, style: GoogleFonts.cormorantGaramond(fontSize: 40, fontWeight: FontWeight.w600, color: VisualTheme.ivory, height: 1.05)),
+                        const SizedBox(height: 16),
+                        Text(page['body'] as String, style: GoogleFonts.workSans(fontSize: 16, height: 1.5, color: VisualTheme.ivory.withValues(alpha: 0.78))),
                         const Spacer(),
                       ],
                     );
@@ -77,17 +74,17 @@ class _WelcomeViewState extends State<WelcomeView> {
               ),
               Row(
                 children: [
-                  Text('${_currentPage + 1}/5', style: GoogleFonts.ibmPlexMono(color: Colors.white38, fontSize: 12)),
+                  Text('mv. ${_currentPage + 1}', style: GoogleFonts.workSans(color: VisualTheme.ivory.withValues(alpha: 0.45))),
                   const Spacer(),
                   TextButton(
                     onPressed: () {
                       if (_currentPage == _pages.length - 1) {
                         _finish();
                       } else {
-                        _pageController.nextPage(duration: const Duration(milliseconds: 220), curve: Curves.easeOut);
+                        _pageController.nextPage(duration: const Duration(milliseconds: 240), curve: Curves.easeOut);
                       }
                     },
-                    child: Text(_currentPage == _pages.length - 1 ? 'OPEN BENCH' : 'NEXT  ›', style: GoogleFonts.ibmPlexMono(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w600)),
+                    child: Text(_currentPage == _pages.length - 1 ? 'OPEN THE HALL' : 'ATTACCA →', style: GoogleFonts.workSans(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                   ),
                 ],
               ),

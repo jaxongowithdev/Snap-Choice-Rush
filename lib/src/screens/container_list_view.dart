@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/bench_chrome.dart';
+import '../widgets/hall_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -19,7 +19,7 @@ class _ContainerListViewState extends State<ContainerListView> {
   List<ContainerModel>? _containers;
   Map<int, int> _itemCounts = {};
   bool _isLoading = true;
-  String _sortBy = 'updated';
+  String _sortBy = 'name';
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _ContainerListViewState extends State<ContainerListView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('RACKS'),
+        title: const Text('Books'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
@@ -68,33 +68,31 @@ class _ContainerListViewState extends State<ContainerListView> {
           : _containers == null || _containers!.isEmpty
               ? Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(28),
+                    padding: const EdgeInsets.all(32),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(width: 28, height: 28, decoration: BoxDecoration(border: Border.all(color: VisualTheme.secondaryColor, width: 2))),
-                        const SizedBox(height: 12),
-                        Text('No racks staged', style: GoogleFonts.spaceGrotesk(fontSize: 22, fontWeight: FontWeight.w700)),
+                        Text('𝄞', style: GoogleFonts.cormorantGaramond(fontSize: 48, color: VisualTheme.primaryColor)),
+                        Text('No books staged', style: GoogleFonts.cormorantGaramond(fontSize: 28, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('Start Station A, the prep room, or a safety crate.', textAlign: TextAlign.center),
+                        const Text('Start a studio stand, a recital folder, or the jazz fakebook.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
                 )
               : RefreshIndicator(
                   onRefresh: _loadContainers,
-                  child: GridView.builder(
-                    padding: const EdgeInsets.fromLTRB(14, 4, 14, 100),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 1.1, crossAxisSpacing: 8, mainAxisSpacing: 8),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(24, 4, 24, 100),
                     itemCount: _containers!.length,
                     itemBuilder: (_, i) {
                       final c = _containers![i];
                       final count = _itemCounts[c.id] ?? 0;
-                      return WellTile(
-                        code: c.code,
+                      return MeasureRow(
+                        beat: '${i + 1}',
                         title: c.name,
-                        meta: '${c.room}  ·  $count/${c.capacity}',
-                        fill: c.capacity > 0 ? count / c.capacity : 0,
+                        meta: '${c.code}  ·  ${c.room}  ·  $count/${c.capacity}',
+                        accent: VisualTheme.secondaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
                           _loadContainers();

@@ -1,3 +1,3 @@
-# Beaker Bench — feature set
+# Etude Hall — feature set
 
-Left rail navigation, graph-paper chrome, rack grid, Clean/In use/Dirty lanes, twelve STEM kinds, transfer log, photos, search, JSON backup, offline SQLite (`beaker_bench.db`).
+Piano-key five-tab dock, staff-paper chrome, measure rows, twelve music kinds, cue log, cover photos, search, JSON backup, offline SQLite (`etude_hall.db`).

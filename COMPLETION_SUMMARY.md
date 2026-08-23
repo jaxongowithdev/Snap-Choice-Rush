@@ -1,3 +1,3 @@
-# Beaker Bench
+# Etude Hall
 
-Offline STEM lab roster. Teal / safety-orange / graphite UI, Space Grotesk + IBM Plex Mono, left rail, graph paper. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline recital catalog. Wine / gold / ivory UI, Cormorant Garamond + Work Sans, piano dock, staff lines. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

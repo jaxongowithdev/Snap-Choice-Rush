@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Beaker Bench</string>
+	<string>Etude Hall</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Beaker Bench</string>
+	<string>Etude Hall</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,8 +53,8 @@
 		<false/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Beaker Bench uses your photo library so you can save a photo of each kit or tray.</string>
+	<string>Etude Hall uses your photo library so you can save a photo of each score or book.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Beaker Bench uses your camera so you can photograph glassware, sensors, and lab kits.</string>
+	<string>Etude Hall uses your camera so you can photograph method books, parts, and recital folders.</string>
 </dict>
 </plist>

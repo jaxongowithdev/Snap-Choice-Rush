@@ -1,22 +1,22 @@
-# Beaker Bench
+# Etude Hall
 
-A private STEM lab roster. Stage racks, file glassware and sensors, and find any set before the period — fully offline.
+A private recital catalog. Stage practice books, file scores and etudes, and find any piece before the concert — fully offline.
 
-**App Name:** Beaker Bench
-**Subtitle:** Stage lab kits
+**App Name:** Etude Hall
+**Subtitle:** Stage practice books
 **Category:** Education
-**Bundle ID:** com.app.beakerbench.build
-**Database:** `beaker_bench.db`
+**Bundle ID:** com.app.etudehall.build
+**Database:** `etude_hall.db`
 
 ## Navigation
 
-Left station rail — not a bottom or top tab bar.
+Piano-key dock — not a Material tab bar, left rail, or binder tabs.
 
-- BENCH — readout, rack grid, condition lanes
-- RACKS — every lab kit
-- PIN — sets needed this period
-- LOG — transfers between racks
-- LAB — display and backup
+- HALL — this week’s programme
+- BOOKS — every practice book
+- STAR — recital set
+- CUE — moves between books
+- FOYER — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/bench_chrome.dart';
+import '../widgets/hall_chrome.dart';
 
 class MoveItemView extends StatefulWidget {
   final InventoryItemModel item;
@@ -53,7 +53,7 @@ class _MoveItemViewState extends State<MoveItemView> {
 
   Future<void> _moveItem() async {
     if (_selectedContainer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination rack')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination book')));
       return;
     }
     final destCount = _itemCounts[_selectedContainer!.id] ?? 0;
@@ -61,8 +61,8 @@ class _MoveItemViewState extends State<MoveItemView> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('That rack is full'),
-          content: Text('"${_selectedContainer!.name}" has no open wells. File it anyway?'),
+          title: const Text('That book is full'),
+          content: Text('"${_selectedContainer!.name}" has no open bars. File it anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
             FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('File anyway')),
@@ -81,37 +81,36 @@ class _MoveItemViewState extends State<MoveItemView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TRANSFER')),
+      appBar: AppBar(title: const Text('Cue')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
               children: [
-                Text('MOVING', style: GoogleFonts.ibmPlexMono(fontSize: 11, letterSpacing: 1.6, color: VisualTheme.secondaryColor)),
-                const SizedBox(height: 6),
-                Text(widget.item.name, style: GoogleFonts.spaceGrotesk(fontSize: 24, fontWeight: FontWeight.w700)),
-                Text('${widget.item.category}  ·  ${widget.item.quantity}', style: GoogleFonts.ibmPlexMono(fontSize: 12)),
-                const SpecLabel(label: 'NOW IN'),
-                Text(_currentContainer == null ? 'Unknown rack' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
-                const SpecLabel(label: 'MOVE INTO'),
+                Text('moving', style: GoogleFonts.workSans(letterSpacing: 1.6, fontSize: 11, color: VisualTheme.primaryColor)),
+                Text(widget.item.name, style: GoogleFonts.cormorantGaramond(fontSize: 28, fontWeight: FontWeight.w600)),
+                Text('${widget.item.category}  ·  ${widget.item.quantity}'),
+                const MovementLabel(label: 'NOW IN'),
+                Text(_currentContainer == null ? 'Unknown book' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
+                const MovementLabel(label: 'MOVE INTO'),
                 if (_containers == null || _containers!.isEmpty)
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other racks yet'))
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other books yet'))
                 else
                   ..._containers!.map((c) {
                     final count = _itemCounts[c.id] ?? 0;
                     final selected = _selectedContainer?.id == c.id;
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
-                      leading: Icon(selected ? Icons.radio_button_checked : Icons.radio_button_off, color: selected ? VisualTheme.secondaryColor : null, size: 20),
-                      title: Text(c.name, style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700)),
-                      subtitle: Text('${c.room}  ·  ${c.shelf}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}', style: GoogleFonts.ibmPlexMono(fontSize: 11)),
+                      leading: Text(selected ? '●' : '○', style: TextStyle(color: selected ? VisualTheme.primaryColor : null, fontSize: 16)),
+                      title: Text(c.name, style: GoogleFonts.cormorantGaramond(fontSize: 20, fontWeight: FontWeight.w600)),
+                      subtitle: Text('${c.room}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
                       onTap: () => setState(() => _selectedContainer = c),
                     );
                   }),
                 const SizedBox(height: 12),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the transfer?', hintText: 'e.g., Going to Station B'), maxLines: 2),
-                const SizedBox(height: 20),
-                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('TRANSFER SET')),
+                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the cue?', hintText: 'e.g., Going into the recital folder'), maxLines: 2),
+                const SizedBox(height: 22),
+                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Cue the move')),
               ],
             ),
     );

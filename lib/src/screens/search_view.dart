@@ -4,6 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
+import '../widgets/hall_chrome.dart';
 import 'item_detail_view.dart';
 
 class SearchView extends StatefulWidget {
@@ -56,8 +57,8 @@ class _SearchViewState extends State<SearchView> {
           key: const ValueKey('search_field'),
           controller: _searchController,
           autofocus: true,
-          cursorColor: VisualTheme.secondaryColor,
-          decoration: const InputDecoration(hintText: 'Beaker, probe, station A…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none, filled: false),
+          cursorColor: VisualTheme.primaryColor,
+          decoration: const InputDecoration(hintText: 'Czerny, prelude, studio…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none),
           onChanged: _performSearch,
         ),
         actions: [
@@ -71,20 +72,19 @@ class _SearchViewState extends State<SearchView> {
 
   Widget _buildBody() {
     if (_isSearching) return const Center(child: CircularProgressIndicator());
-    if (_searchController.text.isEmpty) return _hint('FIND A SET', 'Search a tray, kind, or lab note.');
-    if (_results == null || _results!.isEmpty) return _hint('NO MATCH', 'Try a shorter word or another kind.');
+    if (_searchController.text.isEmpty) return _hint('find a piece', 'Search a score, kind, or practice note.');
+    if (_results == null || _results!.isEmpty) return _hint('no match', 'Try a shorter word or another kind.');
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
+      padding: const EdgeInsets.fromLTRB(24, 4, 24, 28),
       itemCount: _results!.length,
       itemBuilder: (_, i) {
         final item = _results![i];
-        final rack = _containersCache[item.containerId];
-        return ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: Container(width: 8, height: 8, color: VisualTheme.getCategoryColor(item.category)),
-          title: Text(item.name, style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700)),
-          subtitle: Text('${item.category}  ·  ${item.quantity}${rack != null ? '\n${rack.name}  ·  ${rack.room}' : ''}', style: GoogleFonts.ibmPlexMono(fontSize: 11)),
-          isThreeLine: rack != null,
+        final book = _containersCache[item.containerId];
+        return MeasureRow(
+          beat: '♩',
+          title: item.name,
+          meta: '${item.category}${book != null ? '  ·  ${book.name}' : ''}',
+          accent: VisualTheme.getCategoryColor(item.category),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!))).then((_) => _performSearch(_searchController.text));
           },
@@ -100,7 +100,7 @@ class _SearchViewState extends State<SearchView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title, style: GoogleFonts.ibmPlexMono(letterSpacing: 1.4, fontWeight: FontWeight.w600)),
+            Text(title, style: GoogleFonts.cormorantGaramond(fontSize: 28, fontStyle: FontStyle.italic)),
             const SizedBox(height: 8),
             Text(subtitle, textAlign: TextAlign.center),
           ],

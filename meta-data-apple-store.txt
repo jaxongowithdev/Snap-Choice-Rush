@@ -1,14 +1,14 @@
 APP NAME
-Beaker Bench
+Etude Hall
 
 SUBTITLE
-Stage lab kits
+Stage practice books
 
 KEYWORDS
-lab,science,beaker,kit,experiment,teacher,stem,bench,school,offline
+piano,score,etude,recital,music,lesson,practice,clef,teacher,offline
 
 PROMOTION
-Stage lab kits, file glassware and sensors, and find any set before the period. Private, offline.
+Stage practice books, file scores and etudes, and find any piece before recital. Private, offline.
 
 DESCRIPTION
-Beaker Bench is a private offline lab roster for STEM class — stage racks, file glassware and sensors, and find any set before the period.
+Etude Hall is a private offline recital catalog — stage practice books, file scores and etudes, and find any piece before the concert.

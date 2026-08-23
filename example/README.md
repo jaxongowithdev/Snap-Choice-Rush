@@ -1,4 +1,4 @@
-# Beaker Bench
+# Etude Hall
 
 ```bash
 flutter run

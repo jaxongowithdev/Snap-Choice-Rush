@@ -1,5 +1,5 @@
 name: user_screen
-description: "Beaker Bench - Stage lab kits, file glassware and sensors, and find any set before the period. Completely offline."
+description: "Etude Hall - Stage practice books, file scores and etudes, and find any piece before recital. Completely offline."
 version: 1.0.0+2
 
 environment:

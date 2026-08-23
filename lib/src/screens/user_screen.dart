@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Beaker Bench initialization...');
+      debugPrint('Starting Etude Hall initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Beaker Bench',
+      title: 'Etude Hall',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -80,14 +80,14 @@ class _UserScreenState extends State<UserScreen> {
         builder: (context) {
           if (!_isInitialized || _preferences == null) {
             return Scaffold(
-              backgroundColor: VisualTheme.graphite,
+              backgroundColor: VisualTheme.primaryColor,
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('BEAKER BENCH', style: GoogleFonts.ibmPlexMono(color: VisualTheme.secondaryColor, letterSpacing: 2.4, fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 10),
-                    Text('Calibrating the bench…', style: GoogleFonts.spaceGrotesk(color: Colors.white70)),
+                    Text('Etude Hall', style: GoogleFonts.cormorantGaramond(color: VisualTheme.ivory, fontSize: 36, fontStyle: FontStyle.italic)),
+                    const SizedBox(height: 8),
+                    Text('Tuning the hall…', style: GoogleFonts.workSans(color: VisualTheme.ivory.withValues(alpha: 0.7))),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../widgets/bench_chrome.dart';
+import '../widgets/hall_chrome.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -39,23 +39,23 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('READOUT')),
+      appBar: AppBar(title: const Text('Roll')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 28),
                 children: [
                   if (_stats != null)
-                    Text('n=${_stats!['totalItems']}  racks=${_stats!['totalContainers']}  empty=${_stats!['emptyContainers']}', style: GoogleFonts.ibmPlexMono()),
+                    Text('${_stats!['totalItems']} pieces   ·   ${_stats!['totalContainers']} books', style: GoogleFonts.cormorantGaramond(fontSize: 22)),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
-                    const SpecLabel(label: 'BY KIND'),
-                    ..._categoryStats!.entries.map((e) => Text('${e.key.padRight(14)} ${e.value}', style: GoogleFonts.ibmPlexMono(fontSize: 12))),
+                    const MovementLabel(label: 'BY KIND'),
+                    ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
-                    const SpecLabel(label: 'BY ROOM'),
-                    ..._roomStats!.entries.map((e) => Text('${e.key.padRight(14)} ${e.value}', style: GoogleFonts.ibmPlexMono(fontSize: 12))),
+                    const MovementLabel(label: 'BY STUDIO'),
+                    ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                 ],
               ),

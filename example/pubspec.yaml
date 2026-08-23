@@ -1,5 +1,5 @@
-name: beaker_bench_example
-description: "Beaker Bench - STEM lab catalog"
+name: etude_hall_example
+description: "Etude Hall - Music practice catalog"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

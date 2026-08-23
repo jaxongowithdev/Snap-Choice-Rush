@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class VisualTheme {
-  static const Color primaryColor = Color(0xFF0E7C7B);
-  static const Color secondaryColor = Color(0xFFF26B2B);
-  static const Color accentColor = Color(0xFF0E7C7B);
-  static const Color graphite = Color(0xFF16181D);
-  static const Color grid = Color(0xFFF3F5F4);
-  static const Color night = Color(0xFF0E1014);
-  static const Color deep = Color(0xFF1A1E24);
-  static const Color ink = Color(0xFF16181D);
-  static const Color mist = Color(0xFFD9DEDC);
+  static const Color primaryColor = Color(0xFF7A1F3D);
+  static const Color secondaryColor = Color(0xFFC9A227);
+  static const Color accentColor = Color(0xFFC9A227);
+  static const Color ivory = Color(0xFFF7F1E3);
+  static const Color ink = Color(0xFF1A1814);
+  static const Color night = Color(0xFF120E10);
+  static const Color deep = Color(0xFF1E1618);
+  static const Color mist = Color(0xFFE6DFD0);
 
   static ThemeData get lightTheme {
     final colorScheme = ColorScheme.fromSeed(
@@ -18,28 +17,25 @@ class VisualTheme {
       brightness: Brightness.light,
       primary: primaryColor,
       secondary: secondaryColor,
-      tertiary: primaryColor,
-      surface: grid,
+      tertiary: secondaryColor,
+      surface: ivory,
     );
 
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: grid,
-      dividerColor: const Color(0x2216181D),
-      textTheme: GoogleFonts.spaceGroteskTextTheme(ThemeData.light().textTheme).apply(
+      scaffoldBackgroundColor: ivory,
+      dividerColor: const Color(0x331A1814),
+      textTheme: GoogleFonts.workSansTextTheme(ThemeData.light().textTheme).apply(
         bodyColor: ink,
         displayColor: ink,
       ),
-      cardTheme: CardThemeData(
+      cardTheme: const CardThemeData(
         elevation: 0,
-        color: Colors.white,
+        color: Colors.transparent,
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-          side: const BorderSide(color: Color(0x2216181D)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       ),
       appBarTheme: AppBarTheme(
         centerTitle: false,
@@ -47,29 +43,28 @@ class VisualTheme {
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: ink,
-        titleTextStyle: GoogleFonts.ibmPlexMono(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1.4, color: ink),
+        titleTextStyle: GoogleFonts.cormorantGaramond(fontSize: 24, fontWeight: FontWeight.w600, color: ink),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         elevation: 0,
-        backgroundColor: Color(0xFFF26B2B),
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+        backgroundColor: Color(0xFF7A1F3D),
+        foregroundColor: Color(0xFFF7F1E3),
+        shape: CircleBorder(),
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: const BorderSide(color: Color(0x3316181D))),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: const BorderSide(color: Color(0x3316181D))),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: const BorderSide(color: primaryColor, width: 1.6)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      inputDecorationTheme: const InputDecorationTheme(
+        filled: false,
+        border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0x447A1F3D))),
+        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0x447A1F3D))),
+        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF7A1F3D), width: 1.6)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 2, vertical: 12),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          textStyle: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w600, fontSize: 12, letterSpacing: 0.8),
+          foregroundColor: ivory,
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          shape: const StadiumBorder(),
+          textStyle: GoogleFonts.workSans(fontWeight: FontWeight.w600, letterSpacing: 0.6),
         ),
       ),
     );
@@ -79,9 +74,9 @@ class VisualTheme {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: primaryColor,
       brightness: Brightness.dark,
-      primary: primaryColor,
-      secondary: secondaryColor,
-      tertiary: primaryColor,
+      primary: secondaryColor,
+      secondary: primaryColor,
+      tertiary: secondaryColor,
       surface: deep,
     );
 
@@ -90,46 +85,42 @@ class VisualTheme {
       brightness: Brightness.dark,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: night,
-      dividerColor: const Color(0x22FFFFFF),
-      textTheme: GoogleFonts.spaceGroteskTextTheme(ThemeData.dark().textTheme),
-      cardTheme: CardThemeData(
+      dividerColor: const Color(0x33F7F1E3),
+      textTheme: GoogleFonts.workSansTextTheme(ThemeData.dark().textTheme),
+      cardTheme: const CardThemeData(
         elevation: 0,
-        color: deep,
+        color: Colors.transparent,
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-          side: const BorderSide(color: Color(0x22FFFFFF)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       ),
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
-        titleTextStyle: GoogleFonts.ibmPlexMono(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1.4, color: Colors.white),
+        foregroundColor: ivory,
+        titleTextStyle: GoogleFonts.cormorantGaramond(fontSize: 24, fontWeight: FontWeight.w600, color: ivory),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         elevation: 0,
-        backgroundColor: Color(0xFFF26B2B),
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+        backgroundColor: Color(0xFFC9A227),
+        foregroundColor: Color(0xFF1A1814),
+        shape: CircleBorder(),
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: const Color(0xFF222830),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: BorderSide.none),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: BorderSide.none),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: const BorderSide(color: primaryColor, width: 1.6)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      inputDecorationTheme: const InputDecorationTheme(
+        filled: false,
+        border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0x55F7F1E3))),
+        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0x55F7F1E3))),
+        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFC9A227), width: 1.6)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 2, vertical: 12),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: secondaryColor,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          textStyle: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w600, fontSize: 12),
+          foregroundColor: ink,
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          shape: const StadiumBorder(),
+          textStyle: GoogleFonts.workSans(fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -137,17 +128,17 @@ class VisualTheme {
 
   static Color getCategoryColor(String category) {
     final colors = {
-      'Glassware': const Color(0xFF0E7C7B),
-      'Specimens': const Color(0xFF2F7A5A),
-      'Tools': const Color(0xFF4A5564),
-      'Sensors': const Color(0xFF2F6F8A),
-      'Slides': const Color(0xFF6A4C93),
-      'Models': const Color(0xFFF26B2B),
-      'Worksheets': const Color(0xFFB45309),
-      'Safety': const Color(0xFFD94F3D),
-      'Kits': const Color(0xFF0E7C7B),
-      'Notes': const Color(0xFF5B4B8A),
-      'Devices': const Color(0xFF3D4A5C),
+      'Scores': const Color(0xFF7A1F3D),
+      'Etudes': const Color(0xFFC9A227),
+      'Methods': const Color(0xFF3D5A80),
+      'Recordings': const Color(0xFF5B4B8A),
+      'Duets': const Color(0xFF8A3A5A),
+      'Theory': const Color(0xFF2F6F8A),
+      'Rhythm': const Color(0xFFB45309),
+      'Ensemble': const Color(0xFF2F7A5A),
+      'Reeds': const Color(0xFF7A5A32),
+      'Strings': const Color(0xFF4A5564),
+      'Gear': const Color(0xFF3D4A5C),
       'Other': const Color(0xFF6A6256),
     };
     return colors[category] ?? const Color(0xFF6A6256);
@@ -156,12 +147,12 @@ class VisualTheme {
   static Color getConditionColor(String condition) {
     switch (condition.toLowerCase()) {
       case 'clean':
-        return const Color(0xFF0E7C7B);
-      case 'in use':
-        return const Color(0xFFF26B2B);
-      case 'dirty':
-        return const Color(0xFFD94F3D);
-      case 'stored':
+        return const Color(0xFF2F7A5A);
+      case 'marked':
+        return const Color(0xFFC9A227);
+      case 'torn':
+        return const Color(0xFF7A1F3D);
+      case 'filed':
         return const Color(0xFF6A6256);
       default:
         return const Color(0xFF6A6256);
