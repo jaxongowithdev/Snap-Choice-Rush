@@ -1,20 +1,22 @@
-# Primer Nest
+# Period Slate
 
-A private classroom and homeschool catalog. Stage lesson trays, file readers and workbooks, and find any kit before class — fully offline.
+A private classroom period board. Map each period, file handouts, and find any kit before the bell — fully offline.
 
-**App Name:** Primer Nest
-**Subtitle:** Stage lesson kits
+**App Name:** Period Slate
+**Subtitle:** Map class periods
 **Category:** Education
-**Bundle ID:** com.app.primernest.build
-**Database:** `primer_nest.db`
+**Bundle ID:** com.app.periodslate.build
+**Database:** `period_slate.db`
 
 ## Navigation
 
-- Nest — greeting, subject chips, this week’s pins
-- Trays — all lesson kits
-- Pin — materials on the teaching desk
-- Trace — every move between trays
-- Desk — look and backup
+Custom chalkboard dock — not a Material tab bar.
+
+- Board — today’s timetable
+- Periods — every class block
+- Star — stacks needed before the bell
+- Shift — moves between periods
+- Office — look and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

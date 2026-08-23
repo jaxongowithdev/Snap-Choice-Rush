@@ -5,7 +5,7 @@ class InventoryItemModel {
   final String name;
   final String category;
   final int quantity;
-  final String condition; // Fresh, In use, Worn, Retired
+  final String condition; // Ready, In play, Missing, Filed
   final String? purchaseDate;
   final double? estimatedValue;
   final String? notes;
@@ -21,7 +21,7 @@ class InventoryItemModel {
     required this.name,
     required this.category,
     this.quantity = 1,
-    this.condition = 'Fresh',
+    this.condition = 'Ready',
     this.purchaseDate,
     this.estimatedValue,
     this.notes,
@@ -59,7 +59,7 @@ class InventoryItemModel {
       name: map['name'] as String,
       category: map['category'] as String,
       quantity: map['quantity'] as int? ?? 1,
-      condition: map['condition'] as String? ?? 'Fresh',
+      condition: map['condition'] as String? ?? 'Ready',
       purchaseDate: map['purchaseDate'] as String?,
       estimatedValue: map['estimatedValue'] as double?,
       notes: map['notes'] as String?,

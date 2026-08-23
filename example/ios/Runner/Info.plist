@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Primer Nest</string>
+	<string>Period Slate</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Primer Nest</string>
+	<string>Period Slate</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,8 +53,8 @@
 		<false/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Primer Nest uses your photo library so you can save a photo of each reader or kit.</string>
+	<string>Period Slate uses your photo library so you can save a photo of each handout or kit.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Primer Nest uses your camera so you can photograph workbook covers, flashcards, and lesson trays.</string>
+	<string>Period Slate uses your camera so you can photograph worksheets, lab bins, and class sets.</string>
 </dict>
 </plist>

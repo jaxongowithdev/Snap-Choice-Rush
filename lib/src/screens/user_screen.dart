@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import 'dashboard_view.dart';
 import 'welcome_view.dart';
@@ -26,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Primer Nest initialization...');
+      debugPrint('Starting Period Slate initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -70,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Primer Nest',
+      title: 'Period Slate',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -84,9 +85,9 @@ class _UserScreenState extends State<UserScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.menu_book_rounded, color: VisualTheme.accentColor, size: 48),
-                    const SizedBox(height: 14),
-                    Text('Opening the nest…', style: TextStyle(color: VisualTheme.parchment.withValues(alpha: 0.92))),
+                    Text('PERIOD SLATE', style: GoogleFonts.syne(color: VisualTheme.accentColor, letterSpacing: 3, fontWeight: FontWeight.w800)),
+                    const SizedBox(height: 10),
+                    Text('Wiping the board…', style: GoogleFonts.manrope(color: VisualTheme.chalk.withValues(alpha: 0.7))),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

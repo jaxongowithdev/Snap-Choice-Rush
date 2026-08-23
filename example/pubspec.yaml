@@ -1,5 +1,5 @@
-name: primer_nest_example
-description: "Primer Nest - Classroom and homeschool lesson catalog"
+name: period_slate_example
+description: "Period Slate - Classroom period board"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

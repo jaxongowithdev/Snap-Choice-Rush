@@ -1,3 +1,3 @@
-# Primer Nest
+# Period Slate
 
-Offline classroom and homeschool map. Pine / clay / parchment UI, Source Serif 4 + Lexend. Five-tab bar. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline classroom period board. Chalk / bell-red / gold UI, Syne + Manrope, square edges, timetable rows. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

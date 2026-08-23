@@ -17,7 +17,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   final _storage = StorageManager.instance;
   List<TransferHistoryModel>? _logs;
   final Map<int, String> _itemNames = {};
-  final Map<int, String> _trayNames = {};
+  final Map<int, String> _periodNames = {};
   bool _isLoading = true;
 
   @override
@@ -35,13 +35,13 @@ class _TransferLogViewState extends State<TransferLogView> {
           final item = await _storage.getItem(log.itemId);
           _itemNames[log.itemId] = item?.name ?? 'Unknown piece';
         }
-        if (!_trayNames.containsKey(log.fromContainerId)) {
+        if (!_periodNames.containsKey(log.fromContainerId)) {
           final from = await _storage.getContainer(log.fromContainerId);
-          _trayNames[log.fromContainerId] = from?.name ?? 'Removed tray';
+          _periodNames[log.fromContainerId] = from?.name ?? 'Removed period';
         }
-        if (!_trayNames.containsKey(log.toContainerId)) {
+        if (!_periodNames.containsKey(log.toContainerId)) {
           final to = await _storage.getContainer(log.toContainerId);
-          _trayNames[log.toContainerId] = to?.name ?? 'Removed tray';
+          _periodNames[log.toContainerId] = to?.name ?? 'Removed period';
         }
       }
       setState(() { _logs = logs; _isLoading = false; });
@@ -54,7 +54,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Trace')),
+      appBar: AppBar(title: const Text('Shift')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _logs == null || _logs!.isEmpty
@@ -64,11 +64,10 @@ class _TransferLogViewState extends State<TransferLogView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.history_edu_outlined, size: 48, color: VisualTheme.secondaryColor),
-                        const SizedBox(height: 12),
-                        Text('No lesson trace yet', style: GoogleFonts.sourceSerif4(fontSize: 24, fontWeight: FontWeight.w700)),
+                        Text('—', style: GoogleFonts.syne(fontSize: 48, color: VisualTheme.secondaryColor)),
+                        Text('No shifts yet', style: GoogleFonts.syne(fontSize: 24, fontWeight: FontWeight.w800)),
                         const SizedBox(height: 8),
-                        const Text('When you move a piece between trays, the shift shows up here.', textAlign: TextAlign.center),
+                        const Text('When a piece moves between periods, the line lands here.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -76,26 +75,46 @@ class _TransferLogViewState extends State<TransferLogView> {
               : RefreshIndicator(
                   onRefresh: _load,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
                     itemCount: _logs!.length,
                     itemBuilder: (_, i) {
                       final log = _logs![i];
-                      final when = DateFormat('MMM d · HH:mm').format(log.moveDate);
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Card(
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: const Color(0x1AC4532C),
-                              child: const Icon(Icons.swap_horiz, color: VisualTheme.secondaryColor),
-                            ),
-                            title: Text(_itemNames[log.itemId] ?? 'Piece', style: const TextStyle(fontWeight: FontWeight.w700)),
-                            subtitle: Text('${_trayNames[log.fromContainerId]} → ${_trayNames[log.toContainerId]}\n$when${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}'),
-                            isThreeLine: true,
-                            onTap: () async {
-                              await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: log.itemId)));
-                              _load();
-                            },
+                      final when = DateFormat('MMM d  ·  HH:mm').format(log.moveDate);
+                      return InkWell(
+                        onTap: () async {
+                          await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: log.itemId)));
+                          _load();
+                        },
+                        child: IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              SizedBox(
+                                width: 18,
+                                child: Column(
+                                  children: [
+                                    Container(width: 8, height: 8, color: VisualTheme.secondaryColor),
+                                    Expanded(child: Container(width: 1.4, color: Theme.of(context).dividerColor)),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 22),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(_itemNames[log.itemId] ?? 'Piece', style: GoogleFonts.syne(fontSize: 17, fontWeight: FontWeight.w800)),
+                                      const SizedBox(height: 4),
+                                      Text('${_periodNames[log.fromContainerId]}  →  ${_periodNames[log.toContainerId]}'),
+                                      Text(when, style: GoogleFonts.manrope(fontSize: 12, color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.6))),
+                                      if (log.notes != null && log.notes!.isNotEmpty) Text(log.notes!, style: GoogleFonts.manrope(fontSize: 13)),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );

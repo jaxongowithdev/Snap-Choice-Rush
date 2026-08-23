@@ -1,14 +1,14 @@
 APP NAME
-Primer Nest
+Period Slate
 
 SUBTITLE
-Stage lesson kits
+Map class periods
 
 KEYWORDS
-lesson,kit,teacher,classroom,homeschool,reader,workbook,tray,study,offline
+period,class,lesson,teacher,syllabus,handout,school,slate,study,offline
 
 PROMOTION
-Stage lesson trays, file readers and workbooks, and find any kit before class. Private, offline.
+Map each class period, file handouts, and find any kit before the bell. Private, offline.
 
 DESCRIPTION
-Primer Nest is a private offline catalog for teachers and homeschoolers — stage lesson trays, file readers and workbooks, and find any kit before class.
+Period Slate is a private offline period board for teachers — map class periods, file handouts, and find any kit before the bell.

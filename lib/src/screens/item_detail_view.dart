@@ -5,6 +5,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
+import '../widgets/slate_chrome.dart';
 import 'item_form_view.dart';
 import 'container_detail_view.dart';
 import 'move_item_view.dart';
@@ -56,7 +57,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     setState(() => _item = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Pinned to this week’s desk' : 'Removed from this week’s desk'),
+        content: Text(updated.isFavorite ? 'Starred for the next bell' : 'Removed from the star list'),
         duration: const Duration(seconds: 1),
       ));
     }
@@ -66,11 +67,11 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Retire this piece?'),
-        content: const Text('It will leave the lesson catalog.'),
+        title: const Text('File this piece away?'),
+        content: const Text('It will leave the period board.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Retire')),
+          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('File away')),
         ],
       ),
     );
@@ -87,18 +88,18 @@ class _ItemDetailViewState extends State<ItemDetailView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_item!.name),
+        title: Text(_item!.category.toUpperCase(), style: GoogleFonts.syne(fontSize: 13, letterSpacing: 1.4, fontWeight: FontWeight.w800)),
         actions: [
           IconButton(
             key: const ValueKey('favorite_toggle'),
-            icon: Icon(_item!.isFavorite ? Icons.push_pin : Icons.push_pin_outlined, color: _item!.isFavorite ? VisualTheme.secondaryColor : null),
+            icon: Icon(_item!.isFavorite ? Icons.star : Icons.star_outline, color: _item!.isFavorite ? VisualTheme.accentColor : null),
             onPressed: _toggleFavorite,
           ),
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'move', child: Text('Move to another tray')),
+              PopupMenuItem(value: 'move', child: Text('Shift to another period')),
               PopupMenuItem(value: 'edit', child: Text('Edit piece')),
-              PopupMenuItem(value: 'delete', child: Text('Retire piece')),
+              PopupMenuItem(value: 'delete', child: Text('File away')),
             ],
             onSelected: (v) {
               if (v == 'move') {
@@ -113,64 +114,48 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (_item!.photoPath != null && _item!.photoPath!.isNotEmpty) ...[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.file(
-                        File(_item!.photoPath!),
-                        height: 200,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(height: 140, color: VisualTheme.sand, child: const Center(child: Icon(Icons.broken_image))),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                  ],
-                  Text(_item!.category.toUpperCase(), style: GoogleFonts.lexend(color: VisualTheme.getCategoryColor(_item!.category), letterSpacing: 1.4, fontSize: 11, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 6),
-                  Text(_item!.name, style: GoogleFonts.sourceSerif4(fontSize: 28, fontWeight: FontWeight.w700)),
-                  const SizedBox(height: 12),
-                  _row('Count', _item!.quantity.toString()),
-                  _row('Wear', _item!.condition),
-                  if (_item!.estimatedValue != null) _row('Replace', '\$${_item!.estimatedValue}'),
-                  if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
-                    const SizedBox(height: 10),
-                    const Text('Lesson note', style: TextStyle(fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 4),
-                    Text(_item!.notes!),
-                  ],
-                ],
-              ),
+          if (_item!.photoPath != null && _item!.photoPath!.isNotEmpty) ...[
+            Image.file(
+              File(_item!.photoPath!),
+              height: 200,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.mist, child: const Center(child: Icon(Icons.broken_image))),
             ),
-          ),
-          const SizedBox(height: 12),
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.inbox_outlined),
-              title: Text(_container?.name ?? 'Unknown tray'),
-              subtitle: _container != null ? Text('${_container!.room} · ${_container!.shelf}\nMark: ${_container!.code}') : null,
-              isThreeLine: _container != null,
-              trailing: const Icon(Icons.arrow_forward, size: 18),
-              onTap: _container == null ? null : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),
-            ),
+            const SizedBox(height: 16),
+          ],
+          Text(_item!.name, style: GoogleFonts.syne(fontSize: 32, fontWeight: FontWeight.w800, height: 1.05)),
+          const SizedBox(height: 16),
+          _kv('COUNT', _item!.quantity.toString()),
+          _kv('STATUS', _item!.condition),
+          if (_item!.estimatedValue != null) _kv('REPLACE', '\$${_item!.estimatedValue}'),
+          if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
+            const SlateRule(label: 'BOARD NOTE'),
+            Text(_item!.notes!),
+          ],
+          const SlateRule(label: 'SITS IN'),
+          MaterialLine(
+            accent: VisualTheme.secondaryColor,
+            title: _container?.name ?? 'Unknown period',
+            subtitle: _container != null ? '${_container!.room}  ·  ${_container!.shelf}  ·  ${_container!.code}' : '',
+            onTap: _container == null ? () {} : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),
           ),
         ],
       ),
     );
   }
 
-  Widget _row(String label, String value) {
+  Widget _kv(String k, String v) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Row(children: [SizedBox(width: 90, child: Text(label)), Text(value, style: const TextStyle(fontWeight: FontWeight.w700))]),
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          SizedBox(width: 90, child: Text(k, style: GoogleFonts.syne(fontSize: 11, letterSpacing: 1.2, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor))),
+          Text(v, style: GoogleFonts.manrope(fontWeight: FontWeight.w700)),
+        ],
+      ),
     );
   }
 }

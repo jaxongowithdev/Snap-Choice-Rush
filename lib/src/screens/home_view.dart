@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
+import '../widgets/slate_chrome.dart';
 import 'container_detail_view.dart';
 import 'item_form_view.dart';
 import 'search_view.dart';
@@ -21,17 +23,10 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final _storage = StorageManager.instance;
   Map<String, int>? _stats;
-  Map<String, int> _subjects = {};
-  List<ContainerModel>? _recentContainers;
-  List<InventoryItemModel>? _pins;
-  List<InventoryItemModel> _allItems = [];
-  String? _subjectFilter;
+  List<ContainerModel> _periods = [];
+  Map<int, int> _counts = {};
+  List<InventoryItemModel> _stars = [];
   bool _isLoading = true;
-
-  static const _subjectOrder = [
-    'Readers', 'Workbooks', 'Flashcards', 'Manipulatives', 'Art', 'Science',
-    'Maps', 'Stationery', 'Devices', 'Music', 'Games', 'Other',
-  ];
 
   @override
   void initState() {
@@ -39,27 +34,21 @@ class _HomeViewState extends State<HomeView> {
     _loadData();
   }
 
-  String get _greeting {
-    final h = DateTime.now().hour;
-    if (h < 12) return 'Morning circle';
-    if (h < 16) return 'Lesson block';
-    return 'Evening review';
-  }
-
   Future<void> _loadData() async {
     setState(() => _isLoading = true);
     try {
       final stats = await _storage.getStatistics();
-      final subjects = await _storage.getItemsByCategory();
-      final recentMaps = await _storage.getRecentlyUpdatedContainers(limit: 5);
-      final favorites = await _storage.getFavoriteItems();
-      final items = await _storage.getAllItems();
+      final periods = await _storage.getAllContainers(sortBy: 'name');
+      final counts = <int, int>{};
+      for (final p in periods) {
+        counts[p.id!] = await _storage.getItemCountInContainer(p.id!);
+      }
+      final stars = await _storage.getFavoriteItems();
       setState(() {
         _stats = stats;
-        _subjects = subjects;
-        _recentContainers = recentMaps.map(ContainerModel.fromMap).toList();
-        _pins = favorites.take(8).toList();
-        _allItems = items;
+        _periods = periods;
+        _counts = counts;
+        _stars = stars.take(5).toList();
         _isLoading = false;
       });
     } catch (e) {
@@ -68,26 +57,22 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
-  List<InventoryItemModel> get _filteredItems {
-    if (_subjectFilter == null) return const [];
-    return _allItems.where((i) => i.category == _subjectFilter).take(6).toList();
+  String _periodMark(ContainerModel c, int i) {
+    final digits = RegExp(r'\d+').firstMatch(c.code);
+    if (digits != null) return digits.group(0)!.padLeft(2, '0');
+    return (i + 1).toString().padLeft(2, '0');
   }
 
   @override
   Widget build(BuildContext context) {
+    final today = DateFormat('EEEE · d MMM').format(DateTime.now()).toUpperCase();
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('PRIMER NEST', style: GoogleFonts.lexend(letterSpacing: 2.2, fontSize: 11, fontWeight: FontWeight.w700, color: VisualTheme.secondaryColor)),
-            Text(_greeting, style: GoogleFonts.sourceSerif4(fontSize: 22, fontWeight: FontWeight.w700)),
-          ],
-        ),
+        title: Text(today, style: GoogleFonts.syne(fontSize: 13, letterSpacing: 1.6, fontWeight: FontWeight.w800)),
         actions: [
           IconButton(
             key: const ValueKey('favorites_button'),
-            icon: const Icon(Icons.push_pin_outlined),
+            icon: const Icon(Icons.star_outline),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoritesView())).then((_) => _loadData());
             },
@@ -106,203 +91,82 @@ class _HomeViewState extends State<HomeView> {
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
                 children: [
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(22),
-                    decoration: BoxDecoration(
-                      color: VisualTheme.primaryColor,
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('BEFORE CLASS', style: GoogleFonts.lexend(color: VisualTheme.accentColor, letterSpacing: 1.8, fontSize: 11, fontWeight: FontWeight.w700)),
-                        const SizedBox(height: 10),
-                        Text(
-                          (_stats?['totalItems'] ?? 0) == 0
-                              ? 'The nest is empty. Stage a tray for Monday.'
-                              : '${_stats!['totalItems']} pieces across ${_stats!['totalContainers']} lesson trays.',
-                          style: GoogleFonts.sourceSerif4(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700, height: 1.2),
-                        ),
-                        const SizedBox(height: 10),
-                        Text('Readers, flashcards, science kits — file what you actually teach.', style: GoogleFonts.lexend(color: Colors.white70, fontSize: 13, height: 1.4)),
-                      ],
-                    ),
+                  Text('BOARD', style: GoogleFonts.syne(fontSize: 11, letterSpacing: 2.4, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+                  const SizedBox(height: 4),
+                  Text('Today’s periods', style: GoogleFonts.syne(fontSize: 32, fontWeight: FontWeight.w800, height: 1.05)),
+                  const SizedBox(height: 6),
+                  Text(
+                    (_stats?['totalItems'] ?? 0) == 0
+                        ? 'The slate is blank. Add a period before first bell.'
+                        : '${_stats!['totalItems']} pieces · ${_stats!['totalContainers']} periods · ${(_stats!['totalContainers'] ?? 0) - (_stats!['emptyContainers'] ?? 0)} live',
+                    style: GoogleFonts.manrope(fontSize: 14, height: 1.4),
                   ),
-                  const SizedBox(height: 14),
-                  SizedBox(
-                    height: 40,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        _chip('All', null),
-                        ..._subjectOrder.where((s) => (_subjects[s] ?? 0) > 0 || _subjectFilter == s).map((s) => _chip('$s · ${_subjects[s] ?? 0}', s)),
-                      ],
-                    ),
-                  ),
-                  if (_subjectFilter != null) ...[
-                    const SizedBox(height: 12),
-                    if (_filteredItems.isEmpty)
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(18),
-                          child: Text('No $_subjectFilter filed yet.', style: GoogleFonts.lexend(color: Colors.black54)),
-                        ),
-                      )
-                    else
-                      ..._filteredItems.map((item) => Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Card(
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  backgroundColor: VisualTheme.getCategoryColor(item.category).withValues(alpha: 0.16),
-                                  child: Icon(Icons.menu_book_outlined, color: VisualTheme.getCategoryColor(item.category), size: 18),
-                                ),
-                                title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                                subtitle: Text('${item.category} · ${item.condition}'),
-                                onTap: () async {
-                                  await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
-                                  _loadData();
-                                },
-                              ),
-                            ),
-                          )),
-                  ],
-                  const SizedBox(height: 14),
-                  Row(
-                    children: [
-                      Expanded(child: _cta(key: const ValueKey('add_box_button'), label: 'New tray', onTap: () async {
-                        final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ContainerFormView()));
-                        if (r == true) _loadData();
-                      })),
-                      const SizedBox(width: 10),
-                      Expanded(child: _cta(key: const ValueKey('add_item_button'), label: 'File piece', clay: true, onTap: () async {
-                        final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ItemFormView()));
-                        if (r == true) _loadData();
-                      })),
-                    ],
-                  ),
-                  if (_pins != null && _pins!.isNotEmpty) ...[
-                    const SizedBox(height: 26),
-                    Text('This week’s pin', style: GoogleFonts.sourceSerif4(fontSize: 22, fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 4),
-                    Text('Materials you keep on the teaching desk.', style: GoogleFonts.lexend(color: Colors.black54, fontSize: 13)),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 128,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _pins!.length,
-                        separatorBuilder: (_, __) => const SizedBox(width: 10),
-                        itemBuilder: (_, i) {
-                          final item = _pins![i];
-                          return InkWell(
-                            borderRadius: BorderRadius.circular(22),
-                            onTap: () async {
-                              await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
-                              _loadData();
-                            },
-                            child: Container(
-                              width: 168,
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(22),
-                                border: Border.all(color: const Color(0x22C4532C)),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(width: 28, height: 4, color: VisualTheme.getCategoryColor(item.category)),
-                                  const Spacer(),
-                                  Text(item.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: GoogleFonts.sourceSerif4(fontSize: 16, fontWeight: FontWeight.w700)),
-                                  const SizedBox(height: 4),
-                                  Text(item.category, style: GoogleFonts.lexend(fontSize: 12, color: Colors.black54)),
-                                ],
-                              ),
-                            ),
-                          );
+                  const SlateRule(label: 'TIMETABLE'),
+                  if (_periods.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 28),
+                      child: Text('No periods on the board yet.\nPeriod 1 Reading. Period 2 Lab. Period 5 Study hall.', style: GoogleFonts.manrope(height: 1.5)),
+                    )
+                  else
+                    ..._periods.asMap().entries.map((e) {
+                      final c = e.value;
+                      final count = _counts[c.id] ?? 0;
+                      final progress = c.capacity > 0 ? count / c.capacity : 0.0;
+                      return PeriodRow(
+                        mark: _periodMark(c, e.key),
+                        title: c.name,
+                        meta: '${c.room}  ·  ${c.shelf}',
+                        fill: '$count / ${c.capacity}',
+                        progress: progress,
+                        onTap: () async {
+                          await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
+                          _loadData();
                         },
-                      ),
+                      );
+                    }),
+                  const SizedBox(height: 18),
+                  OutlinedButton(
+                    key: const ValueKey('add_box_button'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: VisualTheme.primaryColor,
+                      side: const BorderSide(color: VisualTheme.primaryColor, width: 1.4),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                     ),
-                  ],
-                  if (_recentContainers != null && _recentContainers!.isNotEmpty) ...[
-                    const SizedBox(height: 26),
-                    Text('Last opened trays', style: GoogleFonts.sourceSerif4(fontSize: 22, fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 12),
-                    ..._recentContainers!.map((c) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Card(
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: VisualTheme.sand,
-                                child: Text(c.code.substring(0, 1), style: GoogleFonts.sourceSerif4(fontWeight: FontWeight.w700, color: VisualTheme.primaryColor)),
-                              ),
-                              title: Text(c.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                              subtitle: Text('${c.room} · ${c.shelf}'),
-                              trailing: const Icon(Icons.arrow_forward, size: 18),
-                              onTap: () async {
-                                await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
-                                _loadData();
-                              },
-                            ),
-                          ),
+                    onPressed: () async {
+                      final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ContainerFormView()));
+                      if (r == true) _loadData();
+                    },
+                    child: Text('ADD A PERIOD', style: GoogleFonts.syne(fontWeight: FontWeight.w800, letterSpacing: 1.2)),
+                  ),
+                  const SizedBox(height: 10),
+                  TextButton(
+                    key: const ValueKey('add_item_button'),
+                    onPressed: () async {
+                      final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ItemFormView()));
+                      if (r == true) _loadData();
+                    },
+                    child: Text('FILE A PIECE →', style: GoogleFonts.syne(fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+                  ),
+                  if (_stars.isNotEmpty) ...[
+                    const SlateRule(label: 'STARRED FOR THE BELL'),
+                    ..._stars.map((item) => MaterialLine(
+                          accent: VisualTheme.getCategoryColor(item.category),
+                          title: item.name,
+                          subtitle: '${item.category}  ·  ${item.condition}',
+                          onTap: () async {
+                            await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
+                            _loadData();
+                          },
                         )),
                   ],
-                  const SizedBox(height: 16),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.lightbulb_outline, color: VisualTheme.accentColor),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text('Mark a workbook Worn when the binding gives out — restock before the next unit.', style: GoogleFonts.lexend(fontSize: 13, height: 1.45)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  const SlateRule(label: 'NOTE'),
+                  Text('Mark a stack Missing when it leaves the room — restock before tomorrow’s first period.', style: GoogleFonts.manrope(fontSize: 13, height: 1.45)),
                 ],
               ),
             ),
-    );
-  }
-
-  Widget _chip(String label, String? value) {
-    final selected = _subjectFilter == value;
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: FilterChip(
-        label: Text(label),
-        selected: selected,
-        showCheckmark: false,
-        labelStyle: GoogleFonts.lexend(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: selected ? Colors.white : VisualTheme.ink,
-        ),
-        onSelected: (_) => setState(() => _subjectFilter = value),
-      ),
-    );
-  }
-
-  Widget _cta({required Key key, required String label, required VoidCallback onTap, bool clay = false}) {
-    return Material(
-      color: clay ? VisualTheme.secondaryColor : VisualTheme.primaryColor,
-      borderRadius: BorderRadius.circular(999),
-      child: InkWell(
-        key: key,
-        borderRadius: BorderRadius.circular(999),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Text(label, textAlign: TextAlign.center, style: GoogleFonts.lexend(color: Colors.white, fontWeight: FontWeight.w700)),
-        ),
-      ),
     );
   }
 }

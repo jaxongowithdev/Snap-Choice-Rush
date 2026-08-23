@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/slate_chrome.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
 import 'favorites_view.dart';
@@ -33,16 +34,9 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(index: _selectedIndex, children: _screens),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (i) => setState(() => _selectedIndex = i),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.auto_stories_outlined), selectedIcon: Icon(Icons.auto_stories), label: 'Nest'),
-          NavigationDestination(icon: Icon(Icons.inbox_outlined), selectedIcon: Icon(Icons.inbox), label: 'Trays'),
-          NavigationDestination(icon: Icon(Icons.push_pin_outlined), selectedIcon: Icon(Icons.push_pin), label: 'Pin'),
-          NavigationDestination(icon: Icon(Icons.history_edu_outlined), selectedIcon: Icon(Icons.history_edu), label: 'Trace'),
-          NavigationDestination(icon: Icon(Icons.school_outlined), selectedIcon: Icon(Icons.school), label: 'Desk'),
-        ],
+      bottomNavigationBar: SlateDock(
+        index: _selectedIndex,
+        onSelect: (i) => setState(() => _selectedIndex = i),
       ),
     );
   }

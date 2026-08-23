@@ -4,6 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
+import '../widgets/slate_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -46,7 +47,7 @@ class _FavoritesViewState extends State<FavoritesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Pin')),
+      appBar: AppBar(title: const Text('Star')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteItems == null || _favoriteItems!.isEmpty
@@ -56,11 +57,11 @@ class _FavoritesViewState extends State<FavoritesView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.push_pin_outlined, size: 48, color: VisualTheme.secondaryColor),
-                        const SizedBox(height: 12),
-                        Text('Nothing on the desk', style: GoogleFonts.sourceSerif4(fontSize: 24, fontWeight: FontWeight.w700)),
+                        Text('★', style: GoogleFonts.syne(fontSize: 42, color: VisualTheme.accentColor)),
                         const SizedBox(height: 8),
-                        const Text('Pin the readers and kits you keep in rotation this week.', textAlign: TextAlign.center),
+                        Text('Nothing starred', style: GoogleFonts.syne(fontSize: 24, fontWeight: FontWeight.w800)),
+                        const SizedBox(height: 8),
+                        const Text('Star the stacks you need before the next bell.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -68,36 +69,27 @@ class _FavoritesViewState extends State<FavoritesView> {
               : RefreshIndicator(
                   onRefresh: _loadFavorites,
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final tray = _containersCache[item.containerId];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Card(
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: VisualTheme.getCategoryColor(item.category).withValues(alpha: 0.16),
-                              child: Icon(Icons.push_pin, color: VisualTheme.getCategoryColor(item.category), size: 18),
-                            ),
-                            title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                            subtitle: Text('${item.category} · ${item.quantity}${tray != null ? '\n${tray.name} · ${tray.room}' : ''}'),
-                            isThreeLine: tray != null,
-                            trailing: IconButton(
-                              key: ValueKey('favorite_toggle_${item.id}'),
-                              icon: Icon(item.isFavorite ? Icons.push_pin : Icons.push_pin_outlined, color: item.isFavorite ? VisualTheme.secondaryColor : null),
-                              onPressed: () async {
-                                await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
-                                _loadFavorites();
-                              },
-                            ),
-                            onTap: () async {
-                              await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
-                              _loadFavorites();
-                            },
-                          ),
+                      final period = _containersCache[item.containerId];
+                      return MaterialLine(
+                        accent: VisualTheme.getCategoryColor(item.category),
+                        title: item.name,
+                        subtitle: '${item.category}  ·  ${item.quantity}${period != null ? '\n${period.name}  ·  ${period.room}' : ''}',
+                        trailing: IconButton(
+                          key: ValueKey('favorite_toggle_${item.id}'),
+                          icon: Icon(item.isFavorite ? Icons.star : Icons.star_outline, color: item.isFavorite ? VisualTheme.accentColor : null),
+                          onPressed: () async {
+                            await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
+                            _loadFavorites();
+                          },
                         ),
+                        onTap: () async {
+                          await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
+                          _loadFavorites();
+                        },
                       );
                     },
                   ),

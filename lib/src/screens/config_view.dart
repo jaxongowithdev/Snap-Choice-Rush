@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import '../database/storage_manager.dart';
 import '../models/user_preferences.dart';
 import '../utils/visual_theme.dart';
+import '../widgets/slate_chrome.dart';
 
 class ConfigView extends StatefulWidget {
   final VoidCallback onSettingsChanged;
@@ -48,10 +49,10 @@ class _ConfigViewState extends State<ConfigView> {
       final data = await _storage.exportData();
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       await Share.shareXFiles(
-        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'primer_nest_${DateTime.now().millisecondsSinceEpoch}.json')],
-        text: 'Primer Nest catalog',
+        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'period_slate_${DateTime.now().millisecondsSinceEpoch}.json')],
+        text: 'Period Slate catalog',
       );
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Catalog exported')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Board exported')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not export: $e')));
     }
@@ -61,8 +62,8 @@ class _ConfigViewState extends State<ConfigView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Restore a catalog?'),
-        content: const Text('The current trays will be replaced by the file you pick.'),
+        title: const Text('Restore a board?'),
+        content: const Text('The current periods will be replaced by the file you pick.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Restore')),
@@ -75,70 +76,44 @@ class _ConfigViewState extends State<ConfigView> {
       if (result == null || result.files.isEmpty || result.files.first.bytes == null) return;
       final data = jsonDecode(String.fromCharCodes(result.files.first.bytes!)) as Map<String, dynamic>;
       await _storage.importData(data);
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Catalog restored')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Board restored')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not restore: $e')));
-    }
-  }
-
-  String _themeLabel(String theme) {
-    switch (theme) {
-      case 'light':
-        return 'Daylight desk';
-      case 'dark':
-        return 'After hours';
-      default:
-        return 'Match the phone';
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Desk')),
+      appBar: AppBar(title: const Text('Office')),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
-          Container(
-            padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(28)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('PRIMER NEST', style: GoogleFonts.lexend(color: VisualTheme.accentColor, letterSpacing: 1.8, fontSize: 12, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 8),
-                Text('A private lesson list. Nothing leaves this phone.', style: GoogleFonts.sourceSerif4(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700)),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          ListTile(
-            leading: const Icon(Icons.palette_outlined),
-            title: const Text('Look'),
-            subtitle: Text(_themeLabel(_preferences?.theme ?? 'system')),
-            onTap: () => showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                title: const Text('Desk light'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
+          Text('PERIOD SLATE', style: GoogleFonts.syne(fontSize: 11, letterSpacing: 2.2, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+          const SizedBox(height: 6),
+          Text('A private period board. Nothing leaves this phone.', style: GoogleFonts.syne(fontSize: 28, fontWeight: FontWeight.w800, height: 1.1)),
+          const SlateRule(label: 'LOOK'),
+          for (final e in const [('light', 'Daylight chalk'), ('dark', 'After last bell'), ('system', 'Match the phone')])
+            InkWell(
+              onTap: () => _updateTheme(e.$1),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Row(
                   children: [
-                    for (final e in const [('light', 'Daylight desk'), ('dark', 'After hours'), ('system', 'Match the phone')])
-                      RadioListTile<String>(
-                        title: Text(e.$2),
-                        value: e.$1,
-                        groupValue: _preferences?.theme ?? 'system',
-                        onChanged: (v) { if (v != null) { _updateTheme(v); Navigator.pop(context); } },
-                      ),
+                    Icon((_preferences?.theme ?? 'system') == e.$1 ? Icons.radio_button_checked : Icons.radio_button_off, size: 20, color: VisualTheme.secondaryColor),
+                    const SizedBox(width: 12),
+                    Text(e.$2, style: GoogleFonts.manrope(fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
             ),
-          ),
-          ListTile(key: const ValueKey('backup_button'), leading: const Icon(Icons.ios_share), title: const Text('Export catalog'), subtitle: const Text('Share a JSON snapshot'), onTap: _exportData),
-          ListTile(key: const ValueKey('import_button'), leading: const Icon(Icons.file_open_outlined), title: const Text('Restore catalog'), subtitle: const Text('Replace from a JSON file'), onTap: _importData),
-          const ListTile(leading: Icon(Icons.info_outline), title: Text('Version 1.0.0'), subtitle: Text('Offline classroom inventory')),
-          const ListTile(leading: Icon(Icons.lock_outline), title: Text('Privacy'), subtitle: Text('No account. No tracking. Local only.')),
+          const SlateRule(label: 'CATALOG'),
+          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export board'), trailing: const Text('JSON →'), onTap: _exportData),
+          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore board'), trailing: const Text('← FILE'), onTap: _importData),
+          const SlateRule(label: 'ABOUT'),
+          Text('Version 1.0.0  ·  Offline period inventory', style: GoogleFonts.manrope(fontSize: 13)),
+          const SizedBox(height: 6),
+          Text('No account. No tracking. Local only.', style: GoogleFonts.manrope(fontSize: 13)),
         ],
       ),
     );

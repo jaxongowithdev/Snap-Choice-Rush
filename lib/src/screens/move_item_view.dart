@@ -4,6 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
+import '../widgets/slate_chrome.dart';
 
 class MoveItemView extends StatefulWidget {
   final InventoryItemModel item;
@@ -52,7 +53,7 @@ class _MoveItemViewState extends State<MoveItemView> {
 
   Future<void> _moveItem() async {
     if (_selectedContainer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination tray')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination period')));
       return;
     }
     final destCount = _itemCounts[_selectedContainer!.id] ?? 0;
@@ -60,8 +61,8 @@ class _MoveItemViewState extends State<MoveItemView> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('That tray is full'),
-          content: Text('"${_selectedContainer!.name}" has no open slots. File it anyway?'),
+          title: const Text('That period is full'),
+          content: Text('"${_selectedContainer!.name}" has no open seats. File it anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
             FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('File anyway')),
@@ -72,7 +73,7 @@ class _MoveItemViewState extends State<MoveItemView> {
     }
     await _storage.moveItem(widget.item.id!, widget.item.containerId, _selectedContainer!.id!, _notesController.text.trim().isEmpty ? null : _notesController.text.trim());
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Moved to ${_selectedContainer!.name}')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Shifted to ${_selectedContainer!.name}')));
       Navigator.pop(context, true);
     }
   }
@@ -80,58 +81,55 @@ class _MoveItemViewState extends State<MoveItemView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Move piece')),
+      appBar: AppBar(title: const Text('Shift')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
               children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('MOVING', style: GoogleFonts.lexend(color: VisualTheme.secondaryColor, letterSpacing: 1.4, fontSize: 11, fontWeight: FontWeight.w700)),
-                        const SizedBox(height: 6),
-                        Text(widget.item.name, style: GoogleFonts.sourceSerif4(fontSize: 24, fontWeight: FontWeight.w700)),
-                        Text('${widget.item.category} · ${widget.item.quantity}'),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(18)),
-                  child: Text('Now in ${_currentContainer?.name ?? 'unknown'}${_currentContainer != null ? ' · ${_currentContainer!.room}' : ''}', style: const TextStyle(color: Colors.white)),
-                ),
-                const SizedBox(height: 20),
-                Text('Move into', style: GoogleFonts.sourceSerif4(fontSize: 22, fontWeight: FontWeight.w700)),
-                const SizedBox(height: 10),
+                Text('SHIFTING', style: GoogleFonts.syne(fontSize: 11, letterSpacing: 1.8, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+                const SizedBox(height: 6),
+                Text(widget.item.name, style: GoogleFonts.syne(fontSize: 28, fontWeight: FontWeight.w800, height: 1.05)),
+                Text('${widget.item.category}  ·  ${widget.item.quantity}'),
+                const SlateRule(label: 'NOW IN'),
+                Text(_currentContainer == null ? 'Unknown period' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
+                const SlateRule(label: 'MOVE INTO'),
                 if (_containers == null || _containers!.isEmpty)
-                  const Card(child: Padding(padding: EdgeInsets.all(28), child: Center(child: Text('No other trays yet'))))
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('No other periods yet'))
                 else
                   ..._containers!.map((c) {
                     final count = _itemCounts[c.id] ?? 0;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Card(
-                        color: _selectedContainer?.id == c.id ? VisualTheme.sand : null,
-                        child: RadioListTile<int>(
-                          value: c.id!,
-                          groupValue: _selectedContainer?.id,
-                          onChanged: (_) => setState(() => _selectedContainer = c),
-                          title: Text(c.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                          subtitle: Text('${c.room} · ${c.shelf}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
+                    final selected = _selectedContainer?.id == c.id;
+                    return InkWell(
+                      onTap: () => setState(() => _selectedContainer = c),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor)),
+                          color: selected ? VisualTheme.secondaryColor.withValues(alpha: 0.08) : null,
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        child: Row(
+                          children: [
+                            Icon(selected ? Icons.radio_button_checked : Icons.radio_button_off, size: 20, color: selected ? VisualTheme.secondaryColor : null),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(c.name, style: GoogleFonts.syne(fontWeight: FontWeight.w700, fontSize: 16)),
+                                  Text('${c.room}  ·  ${c.shelf}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
                   }),
                 const SizedBox(height: 16),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going into the Monday kit', prefixIcon: Icon(Icons.notes)), maxLines: 2),
+                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the shift?', hintText: 'e.g., Going into Period 5'), maxLines: 2),
                 const SizedBox(height: 22),
-                FilledButton.icon(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, icon: const Icon(Icons.swap_horiz), label: const Text('Move piece')),
+                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Shift piece')),
               ],
             ),
     );
