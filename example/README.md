@@ -1,4 +1,4 @@
-# Period Slate
+# Cram Binder
 
 ```bash
 flutter run

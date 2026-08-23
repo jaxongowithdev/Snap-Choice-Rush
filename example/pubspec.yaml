@@ -1,5 +1,5 @@
-name: period_slate_example
-description: "Period Slate - Classroom period board"
+name: cram_binder_example
+description: "Cram Binder - Exam prep catalog"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

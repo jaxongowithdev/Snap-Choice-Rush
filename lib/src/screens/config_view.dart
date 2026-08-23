@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import '../database/storage_manager.dart';
 import '../models/user_preferences.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/slate_chrome.dart';
+import '../widgets/binder_chrome.dart';
 
 class ConfigView extends StatefulWidget {
   final VoidCallback onSettingsChanged;
@@ -49,10 +49,10 @@ class _ConfigViewState extends State<ConfigView> {
       final data = await _storage.exportData();
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       await Share.shareXFiles(
-        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'period_slate_${DateTime.now().millisecondsSinceEpoch}.json')],
-        text: 'Period Slate catalog',
+        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'cram_binder_${DateTime.now().millisecondsSinceEpoch}.json')],
+        text: 'Cram Binder catalog',
       );
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Board exported')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Binder exported')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not export: $e')));
     }
@@ -62,8 +62,8 @@ class _ConfigViewState extends State<ConfigView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Restore a board?'),
-        content: const Text('The current periods will be replaced by the file you pick.'),
+        title: const Text('Restore a binder?'),
+        content: const Text('The current spines will be replaced by the file you pick.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Restore')),
@@ -76,7 +76,7 @@ class _ConfigViewState extends State<ConfigView> {
       if (result == null || result.files.isEmpty || result.files.first.bytes == null) return;
       final data = jsonDecode(String.fromCharCodes(result.files.first.bytes!)) as Map<String, dynamic>;
       await _storage.importData(data);
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Board restored')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Binder restored')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not restore: $e')));
     }
@@ -85,35 +85,36 @@ class _ConfigViewState extends State<ConfigView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Office')),
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(backgroundColor: Colors.transparent, title: const Text('Cover')),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        padding: const EdgeInsets.fromLTRB(28, 8, 20, 32),
         children: [
-          Text('PERIOD SLATE', style: GoogleFonts.syne(fontSize: 11, letterSpacing: 2.2, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+          Text('CRAM BINDER', style: GoogleFonts.ibmPlexMono(fontSize: 11, letterSpacing: 2.2, color: VisualTheme.primaryColor)),
           const SizedBox(height: 6),
-          Text('A private period board. Nothing leaves this phone.', style: GoogleFonts.syne(fontSize: 28, fontWeight: FontWeight.w800, height: 1.1)),
-          const SlateRule(label: 'LOOK'),
-          for (final e in const [('light', 'Daylight chalk'), ('dark', 'After last bell'), ('system', 'Match the phone')])
+          Text('A private exam index. Nothing leaves this phone.', style: GoogleFonts.libreBaskerville(fontSize: 26, fontWeight: FontWeight.w700, height: 1.15)),
+          const Colophon(label: 'PAPER'),
+          for (final e in const [('light', 'Daylight paper'), ('dark', 'After lights-out'), ('system', 'Match the phone')])
             InkWell(
               onTap: () => _updateTheme(e.$1),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: [
-                    Icon((_preferences?.theme ?? 'system') == e.$1 ? Icons.radio_button_checked : Icons.radio_button_off, size: 20, color: VisualTheme.secondaryColor),
+                    Text((_preferences?.theme ?? 'system') == e.$1 ? '●' : '○', style: const TextStyle(color: VisualTheme.primaryColor)),
                     const SizedBox(width: 12),
-                    Text(e.$2, style: GoogleFonts.manrope(fontWeight: FontWeight.w600)),
+                    Text(e.$2, style: GoogleFonts.ibmPlexSans()),
                   ],
                 ),
               ),
             ),
-          const SlateRule(label: 'CATALOG'),
-          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export board'), trailing: const Text('JSON →'), onTap: _exportData),
-          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore board'), trailing: const Text('← FILE'), onTap: _importData),
-          const SlateRule(label: 'ABOUT'),
-          Text('Version 1.0.0  ·  Offline period inventory', style: GoogleFonts.manrope(fontSize: 13)),
+          const Colophon(label: 'CATALOG'),
+          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export binder'), trailing: Text('JSON →', style: GoogleFonts.ibmPlexMono(fontSize: 12)), onTap: _exportData),
+          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore binder'), trailing: Text('← FILE', style: GoogleFonts.ibmPlexMono(fontSize: 12)), onTap: _importData),
+          const Colophon(label: 'COLOPHON'),
+          Text('Version 1.0.0  ·  Offline exam inventory', style: GoogleFonts.ibmPlexMono(fontSize: 12)),
           const SizedBox(height: 6),
-          Text('No account. No tracking. Local only.', style: GoogleFonts.manrope(fontSize: 13)),
+          Text('No account. No tracking. Local only.', style: GoogleFonts.ibmPlexMono(fontSize: 12)),
         ],
       ),
     );

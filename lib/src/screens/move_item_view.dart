@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/slate_chrome.dart';
+import '../widgets/binder_chrome.dart';
 
 class MoveItemView extends StatefulWidget {
   final InventoryItemModel item;
@@ -53,7 +53,7 @@ class _MoveItemViewState extends State<MoveItemView> {
 
   Future<void> _moveItem() async {
     if (_selectedContainer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination period')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination spine')));
       return;
     }
     final destCount = _itemCounts[_selectedContainer!.id] ?? 0;
@@ -61,8 +61,8 @@ class _MoveItemViewState extends State<MoveItemView> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('That period is full'),
-          content: Text('"${_selectedContainer!.name}" has no open seats. File it anyway?'),
+          title: const Text('That spine is full'),
+          content: Text('"${_selectedContainer!.name}" has no open pages. File it anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
             FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('File anyway')),
@@ -73,7 +73,7 @@ class _MoveItemViewState extends State<MoveItemView> {
     }
     await _storage.moveItem(widget.item.id!, widget.item.containerId, _selectedContainer!.id!, _notesController.text.trim().isEmpty ? null : _notesController.text.trim());
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Shifted to ${_selectedContainer!.name}')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Moved to ${_selectedContainer!.name}')));
       Navigator.pop(context, true);
     }
   }
@@ -81,43 +81,40 @@ class _MoveItemViewState extends State<MoveItemView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Shift')),
+      appBar: AppBar(title: const Text('Move')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
               children: [
-                Text('SHIFTING', style: GoogleFonts.syne(fontSize: 11, letterSpacing: 1.8, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+                Text('REFILE', style: GoogleFonts.ibmPlexMono(fontSize: 11, letterSpacing: 1.8, color: VisualTheme.primaryColor)),
                 const SizedBox(height: 6),
-                Text(widget.item.name, style: GoogleFonts.syne(fontSize: 28, fontWeight: FontWeight.w800, height: 1.05)),
+                Text(widget.item.name, style: GoogleFonts.libreBaskerville(fontSize: 26, fontWeight: FontWeight.w700)),
                 Text('${widget.item.category}  ·  ${widget.item.quantity}'),
-                const SlateRule(label: 'NOW IN'),
-                Text(_currentContainer == null ? 'Unknown period' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
-                const SlateRule(label: 'MOVE INTO'),
+                const Colophon(label: 'NOW IN'),
+                Text(_currentContainer == null ? 'Unknown spine' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
+                const Colophon(label: 'MOVE INTO'),
                 if (_containers == null || _containers!.isEmpty)
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('No other periods yet'))
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('No other spines yet'))
                 else
-                  ..._containers!.map((c) {
+                  ..._containers!.asMap().entries.map((e) {
+                    final c = e.value;
                     final count = _itemCounts[c.id] ?? 0;
                     final selected = _selectedContainer?.id == c.id;
                     return InkWell(
                       onTap: () => setState(() => _selectedContainer = c),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor)),
-                          color: selected ? VisualTheme.secondaryColor.withValues(alpha: 0.08) : null,
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Row(
                           children: [
-                            Icon(selected ? Icons.radio_button_checked : Icons.radio_button_off, size: 20, color: selected ? VisualTheme.secondaryColor : null),
+                            Text(selected ? '●' : '○', style: TextStyle(color: selected ? VisualTheme.primaryColor : null, fontSize: 16)),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(c.name, style: GoogleFonts.syne(fontWeight: FontWeight.w700, fontSize: 16)),
-                                  Text('${c.room}  ·  ${c.shelf}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
+                                  Text(c.name, style: GoogleFonts.libreBaskerville(fontWeight: FontWeight.w700, fontSize: 16)),
+                                  Text('${c.room}  ·  ${c.shelf}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}', style: GoogleFonts.ibmPlexMono(fontSize: 11)),
                                 ],
                               ),
                             ),
@@ -127,9 +124,9 @@ class _MoveItemViewState extends State<MoveItemView> {
                     );
                   }),
                 const SizedBox(height: 16),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the shift?', hintText: 'e.g., Going into Period 5'), maxLines: 2),
+                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going into Friday mock'), maxLines: 2),
                 const SizedBox(height: 22),
-                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Shift piece')),
+                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Move drill')),
               ],
             ),
     );

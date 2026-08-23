@@ -1,3 +1,3 @@
-# Period Slate
+# Cram Binder
 
-Offline classroom period board. Chalk / bell-red / gold UI, Syne + Manrope, square edges, timetable rows. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline exam index. Crimson / navy / paper UI, Libre Baskerville + IBM Plex Mono, ruled pages, table of contents. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Period Slate initialization...');
+      debugPrint('Starting Cram Binder initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Period Slate',
+      title: 'Cram Binder',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -80,14 +80,14 @@ class _UserScreenState extends State<UserScreen> {
         builder: (context) {
           if (!_isInitialized || _preferences == null) {
             return Scaffold(
-              backgroundColor: VisualTheme.primaryColor,
+              backgroundColor: VisualTheme.paper,
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('PERIOD SLATE', style: GoogleFonts.syne(color: VisualTheme.accentColor, letterSpacing: 3, fontWeight: FontWeight.w800)),
+                    Text('CRAM BINDER', style: GoogleFonts.ibmPlexMono(color: VisualTheme.primaryColor, letterSpacing: 3, fontWeight: FontWeight.w600)),
                     const SizedBox(height: 10),
-                    Text('Wiping the board…', style: GoogleFonts.manrope(color: VisualTheme.chalk.withValues(alpha: 0.7))),
+                    Text('Opening the rings…', style: GoogleFonts.libreBaskerville(color: VisualTheme.ink)),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

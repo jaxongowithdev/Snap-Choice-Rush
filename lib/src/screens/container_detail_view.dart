@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/slate_chrome.dart';
+import '../widgets/binder_chrome.dart';
 import 'container_form_view.dart';
 import 'item_form_view.dart';
 import 'item_detail_view.dart';
@@ -49,8 +49,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Clear this period?'),
-        content: const Text('Every piece filed here will be removed.'),
+        title: const Text('Clear this spine?'),
+        content: const Text('Every drill filed here will be removed.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Clear')),
@@ -66,19 +66,19 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Period not found')));
+    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Spine not found')));
 
     final count = _items?.length ?? 0;
-    final pct = _container!.capacity > 0 ? count / _container!.capacity : 0.0;
+    final pct = _container!.capacity > 0 ? (count / _container!.capacity * 100).round() : 0;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_container!.code),
+        title: Text(_container!.code, style: GoogleFonts.ibmPlexMono(fontSize: 14, fontWeight: FontWeight.w600)),
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit period')),
-              PopupMenuItem(value: 'delete', child: Text('Clear period')),
+              PopupMenuItem(value: 'edit', child: Text('Edit spine')),
+              PopupMenuItem(value: 'delete', child: Text('Clear spine')),
             ],
             onSelected: (v) {
               if (v == 'edit') {
@@ -93,16 +93,12 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
           children: [
-            Text(_container!.name, style: GoogleFonts.syne(fontSize: 34, fontWeight: FontWeight.w800, height: 1.05)),
+            Text(_container!.name, style: GoogleFonts.libreBaskerville(fontSize: 32, fontWeight: FontWeight.w700, height: 1.1)),
             const SizedBox(height: 6),
-            Text('${_container!.room}  ·  ${_container!.shelf}', style: GoogleFonts.manrope(fontSize: 14)),
-            const SizedBox(height: 16),
-            LinearProgressIndicator(value: pct.clamp(0, 1), minHeight: 3, backgroundColor: Theme.of(context).dividerColor, color: VisualTheme.secondaryColor),
-            const SizedBox(height: 8),
-            Text('$count / ${_container!.capacity} seats  ·  ${(pct * 100).round()}% packed', style: GoogleFonts.manrope(fontSize: 12)),
-            SlateRule(label: 'ROSTER  ·  $count'),
+            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count/${_container!.capacity} pages  ·  $pct%', style: GoogleFonts.ibmPlexMono(fontSize: 12)),
+            Colophon(label: 'DRILLS  ·  $count'),
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
@@ -111,13 +107,13 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                   final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemFormView(preselectedContainerId: widget.containerId)));
                   if (r == true) _loadData();
                 },
-                child: Text('+ FILE A PIECE', style: GoogleFonts.syne(fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+                child: Text('+ FILE A DRILL', style: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w600, color: VisualTheme.primaryColor)),
               ),
             ),
             if (_items == null || _items!.isEmpty)
-              const Padding(padding: EdgeInsets.symmetric(vertical: 24), child: Text('Nothing filed in this period yet'))
+              const Padding(padding: EdgeInsets.symmetric(vertical: 24), child: Text('Nothing filed in this spine yet'))
             else
-              ..._items!.map((item) => MaterialLine(
+              ..._items!.map((item) => FlagLine(
                     accent: VisualTheme.getCategoryColor(item.category),
                     title: item.name,
                     subtitle: '${item.category}  ·  ${item.quantity}  ·  ${item.condition}',

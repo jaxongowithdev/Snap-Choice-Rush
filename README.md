@@ -1,22 +1,22 @@
-# Period Slate
+# Cram Binder
 
-A private classroom period board. Map each period, file handouts, and find any kit before the bell — fully offline.
+A private exam index. Stage subject spines, file past papers and flash decks, and find any drill before the test — fully offline.
 
-**App Name:** Period Slate
-**Subtitle:** Map class periods
+**App Name:** Cram Binder
+**Subtitle:** Stage exam stacks
 **Category:** Education
-**Bundle ID:** com.app.periodslate.build
-**Database:** `period_slate.db`
+**Bundle ID:** com.app.crambinder.build
+**Database:** `cram_binder.db`
 
 ## Navigation
 
-Custom chalkboard dock — not a Material tab bar.
+Top binder tabs — not a bottom bar.
 
-- Board — today’s timetable
-- Periods — every class block
-- Star — stacks needed before the bell
-- Shift — moves between periods
-- Office — look and backup
+- INDEX — table of contents
+- SPINES — every subject
+- FLAGS — tonight’s drill list
+- MOVES — refiles between spines
+- COVER — paper look and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

@@ -1,5 +1,5 @@
 name: user_screen
-description: "Period Slate - Map class periods, file handouts, and find any kit before the bell. Completely offline."
+description: "Cram Binder - Stage exam stacks, file past papers and flash decks, and find any drill before the test. Completely offline."
 version: 1.0.0+2
 
 environment:

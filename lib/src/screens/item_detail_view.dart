@@ -5,7 +5,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/slate_chrome.dart';
+import '../widgets/binder_chrome.dart';
 import 'item_form_view.dart';
 import 'container_detail_view.dart';
 import 'move_item_view.dart';
@@ -57,7 +57,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     setState(() => _item = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Starred for the next bell' : 'Removed from the star list'),
+        content: Text(updated.isFavorite ? 'Flagged for tonight' : 'Removed from tonight’s flags'),
         duration: const Duration(seconds: 1),
       ));
     }
@@ -67,11 +67,11 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('File this piece away?'),
-        content: const Text('It will leave the period board.'),
+        title: const Text('Shelve this drill?'),
+        content: const Text('It will leave the binder.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('File away')),
+          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Shelve')),
         ],
       ),
     );
@@ -84,22 +84,22 @@ class _ItemDetailViewState extends State<ItemDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Piece not found')));
+    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Drill not found')));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_item!.category.toUpperCase(), style: GoogleFonts.syne(fontSize: 13, letterSpacing: 1.4, fontWeight: FontWeight.w800)),
+        title: Text(_item!.category.toUpperCase(), style: GoogleFonts.ibmPlexMono(fontSize: 12, letterSpacing: 1.2, fontWeight: FontWeight.w600)),
         actions: [
           IconButton(
             key: const ValueKey('favorite_toggle'),
-            icon: Icon(_item!.isFavorite ? Icons.star : Icons.star_outline, color: _item!.isFavorite ? VisualTheme.accentColor : null),
+            icon: Icon(_item!.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: _item!.isFavorite ? VisualTheme.primaryColor : null),
             onPressed: _toggleFavorite,
           ),
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'move', child: Text('Shift to another period')),
-              PopupMenuItem(value: 'edit', child: Text('Edit piece')),
-              PopupMenuItem(value: 'delete', child: Text('File away')),
+              PopupMenuItem(value: 'move', child: Text('Move to another spine')),
+              PopupMenuItem(value: 'edit', child: Text('Edit drill')),
+              PopupMenuItem(value: 'delete', child: Text('Shelve drill')),
             ],
             onSelected: (v) {
               if (v == 'move') {
@@ -114,7 +114,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
         children: [
           if (_item!.photoPath != null && _item!.photoPath!.isNotEmpty) ...[
             Image.file(
@@ -126,19 +126,19 @@ class _ItemDetailViewState extends State<ItemDetailView> {
             ),
             const SizedBox(height: 16),
           ],
-          Text(_item!.name, style: GoogleFonts.syne(fontSize: 32, fontWeight: FontWeight.w800, height: 1.05)),
+          Text(_item!.name, style: GoogleFonts.libreBaskerville(fontSize: 30, fontWeight: FontWeight.w700, height: 1.1)),
           const SizedBox(height: 16),
           _kv('COUNT', _item!.quantity.toString()),
-          _kv('STATUS', _item!.condition),
+          _kv('WEAR', _item!.condition),
           if (_item!.estimatedValue != null) _kv('REPLACE', '\$${_item!.estimatedValue}'),
           if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
-            const SlateRule(label: 'BOARD NOTE'),
-            Text(_item!.notes!),
+            const Colophon(label: 'STUDY NOTE'),
+            Text(_item!.notes!, style: GoogleFonts.libreBaskerville(fontStyle: FontStyle.italic)),
           ],
-          const SlateRule(label: 'SITS IN'),
-          MaterialLine(
-            accent: VisualTheme.secondaryColor,
-            title: _container?.name ?? 'Unknown period',
+          const Colophon(label: 'FILED UNDER'),
+          FlagLine(
+            accent: VisualTheme.primaryColor,
+            title: _container?.name ?? 'Unknown spine',
             subtitle: _container != null ? '${_container!.room}  ·  ${_container!.shelf}  ·  ${_container!.code}' : '',
             onTap: _container == null ? () {} : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),
           ),
@@ -152,8 +152,8 @@ class _ItemDetailViewState extends State<ItemDetailView> {
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          SizedBox(width: 90, child: Text(k, style: GoogleFonts.syne(fontSize: 11, letterSpacing: 1.2, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor))),
-          Text(v, style: GoogleFonts.manrope(fontWeight: FontWeight.w700)),
+          SizedBox(width: 90, child: Text(k, style: GoogleFonts.ibmPlexMono(fontSize: 11, letterSpacing: 1.1, color: VisualTheme.primaryColor))),
+          Text(v, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w600)),
         ],
       ),
     );

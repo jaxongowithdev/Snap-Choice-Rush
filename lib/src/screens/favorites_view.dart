@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/slate_chrome.dart';
+import '../widgets/binder_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -47,7 +47,8 @@ class _FavoritesViewState extends State<FavoritesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Star')),
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(backgroundColor: Colors.transparent, title: const Text('Flags')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteItems == null || _favoriteItems!.isEmpty
@@ -57,11 +58,10 @@ class _FavoritesViewState extends State<FavoritesView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('★', style: GoogleFonts.syne(fontSize: 42, color: VisualTheme.accentColor)),
+                        Text('¶', style: GoogleFonts.libreBaskerville(fontSize: 42, color: VisualTheme.primaryColor)),
+                        Text('No flags tonight', style: GoogleFonts.libreBaskerville(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
-                        Text('Nothing starred', style: GoogleFonts.syne(fontSize: 24, fontWeight: FontWeight.w800)),
-                        const SizedBox(height: 8),
-                        const Text('Star the stacks you need before the next bell.', textAlign: TextAlign.center),
+                        const Text('Bookmark the papers and decks you will drill before bed.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -69,18 +69,18 @@ class _FavoritesViewState extends State<FavoritesView> {
               : RefreshIndicator(
                   onRefresh: _loadFavorites,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+                    padding: const EdgeInsets.fromLTRB(28, 4, 20, 28),
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final period = _containersCache[item.containerId];
-                      return MaterialLine(
+                      final spine = _containersCache[item.containerId];
+                      return FlagLine(
                         accent: VisualTheme.getCategoryColor(item.category),
                         title: item.name,
-                        subtitle: '${item.category}  ·  ${item.quantity}${period != null ? '\n${period.name}  ·  ${period.room}' : ''}',
+                        subtitle: '${item.category}  ·  ${item.quantity}${spine != null ? '\n${spine.name}  ·  ${spine.room}' : ''}',
                         trailing: IconButton(
                           key: ValueKey('favorite_toggle_${item.id}'),
-                          icon: Icon(item.isFavorite ? Icons.star : Icons.star_outline, color: item.isFavorite ? VisualTheme.accentColor : null),
+                          icon: Icon(item.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: item.isFavorite ? VisualTheme.primaryColor : null),
                           onPressed: () async {
                             await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
                             _loadFavorites();

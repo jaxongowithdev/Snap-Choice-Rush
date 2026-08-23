@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/slate_chrome.dart';
+import '../widgets/binder_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -46,17 +46,13 @@ class _ContainerListViewState extends State<ContainerListView> {
     }
   }
 
-  String _mark(ContainerModel c, int i) {
-    final digits = RegExp(r'\d+').firstMatch(c.code);
-    if (digits != null) return digits.group(0)!.padLeft(2, '0');
-    return (i + 1).toString().padLeft(2, '0');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Periods'),
+        backgroundColor: Colors.transparent,
+        title: const Text('Spines'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
@@ -77,11 +73,10 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('00', style: GoogleFonts.syne(fontSize: 56, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+                        Text('//', style: GoogleFonts.libreBaskerville(fontSize: 42, color: VisualTheme.primaryColor)),
+                        Text('No spines yet', style: GoogleFonts.libreBaskerville(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
-                        Text('No periods staged', style: GoogleFonts.syne(fontSize: 24, fontWeight: FontWeight.w800)),
-                        const SizedBox(height: 8),
-                        const Text('Start Period 1 Reading, a lab block, or study hall.', textAlign: TextAlign.center),
+                        const Text('Start SAT Math, a chemistry mock, or the vocab deck.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -89,17 +84,15 @@ class _ContainerListViewState extends State<ContainerListView> {
               : RefreshIndicator(
                   onRefresh: _loadContainers,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 100),
+                    padding: const EdgeInsets.fromLTRB(28, 4, 20, 100),
                     itemCount: _containers!.length,
                     itemBuilder: (_, i) {
                       final c = _containers![i];
                       final count = _itemCounts[c.id] ?? 0;
-                      return PeriodRow(
-                        mark: _mark(c, i),
+                      return TocRow(
+                        indexLabel: (i + 1).toString().padLeft(2, '0'),
                         title: c.name,
-                        meta: '${c.code}  ·  ${c.room}  ·  ${c.shelf}',
-                        fill: '$count / ${c.capacity}',
-                        progress: c.capacity > 0 ? count / c.capacity : 0,
+                        meta: '${c.code}   ${c.room} · ${c.shelf}   $count/${c.capacity} pages',
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
                           _loadContainers();

@@ -1,3 +1,3 @@
-# Period Slate — feature set
+# Cram Binder — feature set
 
-Chalkboard timetable, custom five-item dock (Board / Periods / Star / Shift / Office), twelve material kinds, shift timeline, cover photos, search, JSON backup, offline SQLite (`period_slate.db`).
+Three-ring binder chrome, top five tabs (INDEX / SPINES / FLAGS / MOVES / COVER), twelve drill kinds, citation-style move log, cover photos, search, JSON backup, offline SQLite (`cram_binder.db`).

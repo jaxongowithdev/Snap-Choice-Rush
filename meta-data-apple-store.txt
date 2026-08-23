@@ -1,14 +1,14 @@
 APP NAME
-Period Slate
+Cram Binder
 
 SUBTITLE
-Map class periods
+Stage exam stacks
 
 KEYWORDS
-period,class,lesson,teacher,syllabus,handout,school,slate,study,offline
+exam,quiz,study,flash,notes,binder,cram,paper,school,offline
 
 PROMOTION
-Map each class period, file handouts, and find any kit before the bell. Private, offline.
+Stage exam stacks, file past papers and flash decks, and find any drill before the test. Private, offline.
 
 DESCRIPTION
-Period Slate is a private offline period board for teachers — map class periods, file handouts, and find any kit before the bell.
+Cram Binder is a private offline exam index — stage subject spines, file past papers and flash decks, and find any drill before the test.

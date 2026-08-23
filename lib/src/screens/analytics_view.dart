@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/slate_chrome.dart';
+import '../widgets/binder_chrome.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -40,21 +40,21 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Roll')),
+      appBar: AppBar(title: const Text('Index')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 28),
                 children: [
                   _overview(),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
-                    const SlateRule(label: 'BY KIND'),
+                    const Colophon(label: 'BY KIND'),
                     _chart(_categoryStats!, true),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
-                    const SlateRule(label: 'BY ROOM'),
+                    const Colophon(label: 'BY DESK'),
                     _chart(_roomStats!, false),
                   ],
                 ],
@@ -65,35 +65,16 @@ class _AnalyticsViewState extends State<AnalyticsView> {
 
   Widget _overview() {
     if (_stats == null) return const SizedBox.shrink();
-    final periods = _stats!['totalContainers'] ?? 0;
+    final spines = _stats!['totalContainers'] ?? 0;
     final items = _stats!['totalItems'] ?? 0;
     final empty = _stats!['emptyContainers'] ?? 0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('ROLL CALL', style: GoogleFonts.syne(color: VisualTheme.secondaryColor, letterSpacing: 1.8, fontSize: 11, fontWeight: FontWeight.w800)),
+        Text('TALLY', style: GoogleFonts.ibmPlexMono(color: VisualTheme.primaryColor, letterSpacing: 1.8, fontSize: 11)),
         const SizedBox(height: 12),
-        Row(
-          children: [
-            _cell('PERIODS', periods.toString()),
-            _cell('PIECES', items.toString()),
-            _cell('LIVE', (periods - empty).toString()),
-            _cell('EMPTY', empty.toString()),
-          ],
-        ),
+        Text('$spines spines   ·   $items drills   ·   ${spines - empty} live', style: GoogleFonts.libreBaskerville(fontSize: 18)),
       ],
-    );
-  }
-
-  Widget _cell(String label, String value) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(value, style: GoogleFonts.syne(fontSize: 22, fontWeight: FontWeight.w800)),
-          Text(label, style: GoogleFonts.syne(fontSize: 10, letterSpacing: 1.1, fontWeight: FontWeight.w800)),
-        ],
-      ),
     );
   }
 
@@ -104,13 +85,11 @@ class _AnalyticsViewState extends State<AnalyticsView> {
       children: sorted.map((e) {
         final pct = (e.value / total * 100).round();
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(
             children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(e.key, style: GoogleFonts.syne(fontWeight: FontWeight.w700)), Text('${e.value}  ·  $pct%')]),
-              const SizedBox(height: 5),
-              LinearProgressIndicator(value: e.value / total, minHeight: 3, backgroundColor: Theme.of(context).dividerColor, color: klass ? VisualTheme.getCategoryColor(e.key) : VisualTheme.secondaryColor),
+              Expanded(child: Text(e.key, style: GoogleFonts.libreBaskerville())),
+              Text('${e.value}  $pct%', style: GoogleFonts.ibmPlexMono(fontSize: 11, color: klass ? VisualTheme.getCategoryColor(e.key) : VisualTheme.primaryColor)),
             ],
           ),
         );

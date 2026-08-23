@@ -26,11 +26,11 @@ class _ItemFormViewState extends State<ItemFormView> {
   late TextEditingController _valueController;
   List<ContainerModel>? _containers;
   int? _selectedContainerId;
-  String _selectedCondition = 'Ready';
+  String _selectedCondition = 'Fresh';
   String? _photoPath;
   final _imagePicker = ImagePicker();
-  final _conditions = ['Ready', 'In play', 'Missing', 'Filed'];
-  final _categories = ['Handouts', 'Texts', 'Worksheets', 'Slides', 'Labs', 'Props', 'Assessments', 'Devices', 'Notes', 'Passes', 'Supplies', 'Other'];
+  final _conditions = ['Fresh', 'Drilling', 'Worn', 'Shelved'];
+  final _categories = ['Past papers', 'Flash decks', 'Notes', 'Formulae', 'Audio', 'Essays', 'Labs', 'Maps', 'Vocab', 'Rubrics', 'Devices', 'Other'];
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _ItemFormViewState extends State<ItemFormView> {
     _quantityController = TextEditingController(text: widget.item?.quantity.toString() ?? '1');
     _notesController = TextEditingController(text: widget.item?.notes);
     _valueController = TextEditingController(text: widget.item?.estimatedValue?.toString());
-    _selectedCondition = widget.item?.condition ?? 'Ready';
+    _selectedCondition = widget.item?.condition ?? 'Fresh';
     _selectedContainerId = widget.item?.containerId ?? widget.preselectedContainerId;
     _photoPath = widget.item?.photoPath;
     _loadContainers();
@@ -70,7 +70,7 @@ class _ItemFormViewState extends State<ItemFormView> {
       final photo = await _imagePicker.pickImage(source: source, maxWidth: 1024, maxHeight: 1024, imageQuality: 85);
       if (photo == null) return;
       final appDir = await getApplicationDocumentsDirectory();
-      final fileName = 'period_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
+      final fileName = 'cram_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
       final savedPath = path_pkg.join(appDir.path, 'photos', fileName);
       await Directory(path_pkg.join(appDir.path, 'photos')).create(recursive: true);
       await File(photo.path).copy(savedPath);
@@ -95,7 +95,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Future<void> _saveItem() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedContainerId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a period first')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a spine first')));
       return;
     }
     final item = InventoryItemModel(
@@ -121,11 +121,11 @@ class _ItemFormViewState extends State<ItemFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.item != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit piece' : 'File a piece')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit drill' : 'File a drill')),
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
           children: [
             if (_photoPath != null)
               Stack(
@@ -143,25 +143,25 @@ class _ItemFormViewState extends State<ItemFormView> {
                 ],
               ),
             const SizedBox(height: 16),
-            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Material name', hintText: 'e.g., Chapter 4 set, Lab goggles'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this piece' : null),
+            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Drill name', hintText: 'e.g., 2023 mock, Anki deck'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this drill' : null),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(key: const ValueKey('category_dropdown'), value: _categories.contains(_categoryController.text) ? _categoryController.text : null, decoration: const InputDecoration(labelText: 'Kind'), items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) _categoryController.text = v; }, validator: (_) => _categoryController.text.isEmpty ? 'Pick a kind' : null),
             const SizedBox(height: 12),
-            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Period'), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a period' : null),
+            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Spine'), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a spine' : null),
             const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(child: TextFormField(key: const ValueKey('quantity_field'), controller: _quantityController, decoration: const InputDecoration(labelText: 'Count'), keyboardType: TextInputType.number, validator: (v) => int.tryParse(v?.trim() ?? '') == null ? 'Invalid' : null)),
                 const SizedBox(width: 12),
-                Expanded(child: DropdownButtonFormField<String>(key: const ValueKey('condition_dropdown'), value: _selectedCondition, decoration: const InputDecoration(labelText: 'Status'), items: _conditions.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) setState(() => _selectedCondition = v); })),
+                Expanded(child: DropdownButtonFormField<String>(key: const ValueKey('condition_dropdown'), value: _selectedCondition, decoration: const InputDecoration(labelText: 'Wear'), items: _conditions.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) setState(() => _selectedCondition = v); })),
               ],
             ),
             const SizedBox(height: 12),
             TextFormField(key: const ValueKey('value_field'), controller: _valueController, decoration: const InputDecoration(labelText: 'Replacement cost (optional)'), keyboardType: TextInputType.number),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Board note', hintText: 'Unit, class set, or last used'), maxLines: 3),
+            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Study note', hintText: 'Score, weak topic, or last pass'), maxLines: 3),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save piece' : 'File piece')),
+            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save drill' : 'File drill')),
           ],
         ),
       ),

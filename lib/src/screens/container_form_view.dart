@@ -26,7 +26,7 @@ class _ContainerFormViewState extends State<ContainerFormView> {
     _codeController = TextEditingController(text: widget.container?.code);
     _roomController = TextEditingController(text: widget.container?.room);
     _shelfController = TextEditingController(text: widget.container?.shelf);
-    _capacityController = TextEditingController(text: widget.container?.capacity.toString() ?? '24');
+    _capacityController = TextEditingController(text: widget.container?.capacity.toString() ?? '32');
   }
 
   @override
@@ -61,23 +61,23 @@ class _ContainerFormViewState extends State<ContainerFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.container != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit period' : 'New period')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit spine' : 'New spine')),
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
           children: [
-            TextFormField(key: const ValueKey('name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Period name', hintText: 'e.g., Period 1 Reading, Lab block'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this period' : null),
+            TextFormField(key: const ValueKey('name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Spine name', hintText: 'e.g., SAT Math, AP Bio'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this spine' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('code_field'), controller: _codeController, decoration: const InputDecoration(labelText: 'Period mark', hintText: 'e.g., PER-01, P5'), textCapitalization: TextCapitalization.characters, validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a period mark' : null),
+            TextFormField(key: const ValueKey('code_field'), controller: _codeController, decoration: const InputDecoration(labelText: 'Tab mark', hintText: 'e.g., CRAM-01, SAT'), textCapitalization: TextCapitalization.characters, validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a tab mark' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('room_field'), controller: _roomController, decoration: const InputDecoration(labelText: 'Room', hintText: 'e.g., 214, Gym, Media'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Where does this period meet?' : null),
+            TextFormField(key: const ValueKey('room_field'), controller: _roomController, decoration: const InputDecoration(labelText: 'Desk / bag', hintText: 'e.g., Desk, Backpack, Locker'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Where does this spine live?' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('shelf_field'), controller: _shelfController, decoration: const InputDecoration(labelText: 'Bell / block', hintText: 'e.g., 8:15, Block A'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a bell or block' : null),
+            TextFormField(key: const ValueKey('shelf_field'), controller: _shelfController, decoration: const InputDecoration(labelText: 'Exam date / unit', hintText: 'e.g., May 4, Unit 6'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Add an exam date or unit' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('capacity_field'), controller: _capacityController, decoration: const InputDecoration(labelText: 'Seat / slot count'), keyboardType: TextInputType.number, validator: (v) { final n = int.tryParse(v?.trim() ?? ''); return (n == null || n <= 0) ? 'Use a positive number' : null; }),
+            TextFormField(key: const ValueKey('capacity_field'), controller: _capacityController, decoration: const InputDecoration(labelText: 'Page slots'), keyboardType: TextInputType.number, validator: (v) { final n = int.tryParse(v?.trim() ?? ''); return (n == null || n <= 0) ? 'Use a positive number' : null; }),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_button'), onPressed: _saveContainer, child: Text(isEditing ? 'Save period' : 'Put on the board')),
+            FilledButton(key: const ValueKey('save_button'), onPressed: _saveContainer, child: Text(isEditing ? 'Save spine' : 'Add spine')),
           ],
         ),
       ),
