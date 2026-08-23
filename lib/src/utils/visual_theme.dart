@@ -2,71 +2,74 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class VisualTheme {
-  static const Color primaryColor = Color(0xFF9E1B12);
-  static const Color secondaryColor = Color(0xFF15233B);
-  static const Color accentColor = Color(0xFFB8923A);
-  static const Color paper = Color(0xFFF4EFE4);
-  static const Color rule = Color(0x3315233B);
-  static const Color night = Color(0xFF0E1522);
-  static const Color deep = Color(0xFF162033);
-  static const Color ink = Color(0xFF15233B);
-  static const Color mist = Color(0xFFE4DCCB);
+  static const Color primaryColor = Color(0xFF0E7C7B);
+  static const Color secondaryColor = Color(0xFFF26B2B);
+  static const Color accentColor = Color(0xFF0E7C7B);
+  static const Color graphite = Color(0xFF16181D);
+  static const Color grid = Color(0xFFF3F5F4);
+  static const Color night = Color(0xFF0E1014);
+  static const Color deep = Color(0xFF1A1E24);
+  static const Color ink = Color(0xFF16181D);
+  static const Color mist = Color(0xFFD9DEDC);
 
   static ThemeData get lightTheme {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: secondaryColor,
+      seedColor: primaryColor,
       brightness: Brightness.light,
-      primary: secondaryColor,
-      secondary: primaryColor,
-      tertiary: accentColor,
-      surface: paper,
+      primary: primaryColor,
+      secondary: secondaryColor,
+      tertiary: primaryColor,
+      surface: grid,
     );
 
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: paper,
-      dividerColor: rule,
-      textTheme: GoogleFonts.ibmPlexSansTextTheme(ThemeData.light().textTheme).apply(
+      scaffoldBackgroundColor: grid,
+      dividerColor: const Color(0x2216181D),
+      textTheme: GoogleFonts.spaceGroteskTextTheme(ThemeData.light().textTheme).apply(
         bodyColor: ink,
         displayColor: ink,
       ),
-      cardTheme: const CardThemeData(
+      cardTheme: CardThemeData(
         elevation: 0,
-        color: Colors.transparent,
+        color: Colors.white,
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+          side: const BorderSide(color: Color(0x2216181D)),
+        ),
       ),
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: paper,
+        backgroundColor: Colors.transparent,
         foregroundColor: ink,
-        titleTextStyle: GoogleFonts.libreBaskerville(fontSize: 20, fontWeight: FontWeight.w700, color: ink),
+        titleTextStyle: GoogleFonts.ibmPlexMono(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1.4, color: ink),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         elevation: 0,
-        backgroundColor: Color(0xFF9E1B12),
-        foregroundColor: Color(0xFFF4EFE4),
-        shape: CircleBorder(),
+        backgroundColor: Color(0xFFF26B2B),
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0x66FFFFFF),
-        border: const UnderlineInputBorder(borderSide: BorderSide(color: Color(0x4415233B))),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Color(0x4415233B))),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: primaryColor, width: 1.6)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+        fillColor: Colors.white,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: const BorderSide(color: Color(0x3316181D))),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: const BorderSide(color: Color(0x3316181D))),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: const BorderSide(color: primaryColor, width: 1.6)),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: secondaryColor,
-          foregroundColor: paper,
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          textStyle: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w600, fontSize: 13, letterSpacing: 0.6),
+          backgroundColor: primaryColor,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          textStyle: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w600, fontSize: 12, letterSpacing: 0.8),
         ),
       ),
     );
@@ -74,11 +77,11 @@ class VisualTheme {
 
   static ThemeData get darkTheme {
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: secondaryColor,
+      seedColor: primaryColor,
       brightness: Brightness.dark,
-      primary: accentColor,
-      secondary: primaryColor,
-      tertiary: accentColor,
+      primary: primaryColor,
+      secondary: secondaryColor,
+      tertiary: primaryColor,
       surface: deep,
     );
 
@@ -87,42 +90,46 @@ class VisualTheme {
       brightness: Brightness.dark,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: night,
-      dividerColor: const Color(0x33F4EFE4),
-      textTheme: GoogleFonts.ibmPlexSansTextTheme(ThemeData.dark().textTheme),
-      cardTheme: const CardThemeData(
+      dividerColor: const Color(0x22FFFFFF),
+      textTheme: GoogleFonts.spaceGroteskTextTheme(ThemeData.dark().textTheme),
+      cardTheme: CardThemeData(
         elevation: 0,
-        color: Colors.transparent,
+        color: deep,
         margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+          side: const BorderSide(color: Color(0x22FFFFFF)),
+        ),
       ),
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: night,
-        foregroundColor: paper,
-        titleTextStyle: GoogleFonts.libreBaskerville(fontSize: 20, fontWeight: FontWeight.w700, color: paper),
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        titleTextStyle: GoogleFonts.ibmPlexMono(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1.4, color: Colors.white),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         elevation: 0,
-        backgroundColor: Color(0xFF9E1B12),
-        foregroundColor: Color(0xFFF4EFE4),
-        shape: CircleBorder(),
+        backgroundColor: Color(0xFFF26B2B),
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        filled: false,
-        border: const UnderlineInputBorder(borderSide: BorderSide(color: Color(0x55F4EFE4))),
-        enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: Color(0x55F4EFE4))),
-        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: accentColor, width: 1.6)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+        filled: true,
+        fillColor: const Color(0xFF222830),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: BorderSide.none),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(4), borderSide: const BorderSide(color: primaryColor, width: 1.6)),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: primaryColor,
-          foregroundColor: paper,
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          textStyle: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w600, fontSize: 13),
+          backgroundColor: secondaryColor,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          textStyle: GoogleFonts.ibmPlexMono(fontWeight: FontWeight.w600, fontSize: 12),
         ),
       ),
     );
@@ -130,17 +137,17 @@ class VisualTheme {
 
   static Color getCategoryColor(String category) {
     final colors = {
-      'Past papers': const Color(0xFF9E1B12),
-      'Flash decks': const Color(0xFFB8923A),
-      'Notes': const Color(0xFF15233B),
-      'Formulae': const Color(0xFF2F6F8A),
-      'Audio': const Color(0xFF6A4C93),
-      'Essays': const Color(0xFF7A4A2A),
-      'Labs': const Color(0xFF2F7A5A),
-      'Maps': const Color(0xFF3D5A80),
-      'Vocab': const Color(0xFF8A3A5A),
-      'Rubrics': const Color(0xFFB45309),
-      'Devices': const Color(0xFF4A5564),
+      'Glassware': const Color(0xFF0E7C7B),
+      'Specimens': const Color(0xFF2F7A5A),
+      'Tools': const Color(0xFF4A5564),
+      'Sensors': const Color(0xFF2F6F8A),
+      'Slides': const Color(0xFF6A4C93),
+      'Models': const Color(0xFFF26B2B),
+      'Worksheets': const Color(0xFFB45309),
+      'Safety': const Color(0xFFD94F3D),
+      'Kits': const Color(0xFF0E7C7B),
+      'Notes': const Color(0xFF5B4B8A),
+      'Devices': const Color(0xFF3D4A5C),
       'Other': const Color(0xFF6A6256),
     };
     return colors[category] ?? const Color(0xFF6A6256);
@@ -148,13 +155,13 @@ class VisualTheme {
 
   static Color getConditionColor(String condition) {
     switch (condition.toLowerCase()) {
-      case 'fresh':
-        return const Color(0xFF2F7A5A);
-      case 'drilling':
-        return const Color(0xFFB8923A);
-      case 'worn':
-        return const Color(0xFF9E1B12);
-      case 'shelved':
+      case 'clean':
+        return const Color(0xFF0E7C7B);
+      case 'in use':
+        return const Color(0xFFF26B2B);
+      case 'dirty':
+        return const Color(0xFFD94F3D);
+      case 'stored':
         return const Color(0xFF6A6256);
       default:
         return const Color(0xFF6A6256);

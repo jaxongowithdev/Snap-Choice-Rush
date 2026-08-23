@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/binder_chrome.dart';
+import '../widgets/bench_chrome.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
 import 'favorites_view.dart';
@@ -33,16 +33,15 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BinderShell(
-        child: Column(
-          children: [
-            BinderTabs(
-              index: _selectedIndex,
-              onSelect: (i) => setState(() => _selectedIndex = i),
+      body: Row(
+        children: [
+          BenchRail(index: _selectedIndex, onSelect: (i) => setState(() => _selectedIndex = i)),
+          Expanded(
+            child: GraphPaper(
+              child: IndexedStack(index: _selectedIndex, children: _screens),
             ),
-            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

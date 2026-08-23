@@ -5,7 +5,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/binder_chrome.dart';
+import '../widgets/bench_chrome.dart';
 import 'item_form_view.dart';
 import 'container_detail_view.dart';
 import 'move_item_view.dart';
@@ -57,7 +57,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     setState(() => _item = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Flagged for tonight' : 'Removed from tonight’s flags'),
+        content: Text(updated.isFavorite ? 'Pinned for this period' : 'Removed from the pin list'),
         duration: const Duration(seconds: 1),
       ));
     }
@@ -67,11 +67,11 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Shelve this drill?'),
-        content: const Text('It will leave the binder.'),
+        title: const Text('Store this set?'),
+        content: const Text('It will leave the bench catalog.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Shelve')),
+          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Store')),
         ],
       ),
     );
@@ -84,22 +84,22 @@ class _ItemDetailViewState extends State<ItemDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Drill not found')));
+    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Set not found')));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_item!.category.toUpperCase(), style: GoogleFonts.ibmPlexMono(fontSize: 12, letterSpacing: 1.2, fontWeight: FontWeight.w600)),
+        title: Text(_item!.category.toUpperCase()),
         actions: [
           IconButton(
             key: const ValueKey('favorite_toggle'),
-            icon: Icon(_item!.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: _item!.isFavorite ? VisualTheme.primaryColor : null),
+            icon: Icon(_item!.isFavorite ? Icons.push_pin : Icons.push_pin_outlined, color: _item!.isFavorite ? VisualTheme.secondaryColor : null),
             onPressed: _toggleFavorite,
           ),
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'move', child: Text('Move to another spine')),
-              PopupMenuItem(value: 'edit', child: Text('Edit drill')),
-              PopupMenuItem(value: 'delete', child: Text('Shelve drill')),
+              PopupMenuItem(value: 'move', child: Text('Move to another rack')),
+              PopupMenuItem(value: 'edit', child: Text('Edit set')),
+              PopupMenuItem(value: 'delete', child: Text('Store set')),
             ],
             onSelected: (v) {
               if (v == 'move') {
@@ -114,33 +114,27 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
           if (_item!.photoPath != null && _item!.photoPath!.isNotEmpty) ...[
-            Image.file(
-              File(_item!.photoPath!),
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.mist, child: const Center(child: Icon(Icons.broken_image))),
-            ),
-            const SizedBox(height: 16),
+            Image.file(File(_item!.photoPath!), height: 190, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 110, color: VisualTheme.mist, child: const Center(child: Icon(Icons.broken_image)))),
+            const SizedBox(height: 14),
           ],
-          Text(_item!.name, style: GoogleFonts.libreBaskerville(fontSize: 30, fontWeight: FontWeight.w700, height: 1.1)),
-          const SizedBox(height: 16),
+          Text(_item!.name, style: GoogleFonts.spaceGrotesk(fontSize: 28, fontWeight: FontWeight.w700, height: 1.05)),
+          const SizedBox(height: 14),
           _kv('COUNT', _item!.quantity.toString()),
-          _kv('WEAR', _item!.condition),
+          _kv('STATE', _item!.condition),
           if (_item!.estimatedValue != null) _kv('REPLACE', '\$${_item!.estimatedValue}'),
           if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
-            const Colophon(label: 'STUDY NOTE'),
-            Text(_item!.notes!, style: GoogleFonts.libreBaskerville(fontStyle: FontStyle.italic)),
+            const SpecLabel(label: 'LAB NOTE'),
+            Text(_item!.notes!),
           ],
-          const Colophon(label: 'FILED UNDER'),
-          FlagLine(
-            accent: VisualTheme.primaryColor,
-            title: _container?.name ?? 'Unknown spine',
-            subtitle: _container != null ? '${_container!.room}  ·  ${_container!.shelf}  ·  ${_container!.code}' : '',
-            onTap: _container == null ? () {} : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),
+          const SpecLabel(label: 'SITS IN'),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(_container?.name ?? 'Unknown rack', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700)),
+            subtitle: Text(_container != null ? '${_container!.room}  ·  ${_container!.shelf}  ·  ${_container!.code}' : '', style: GoogleFonts.ibmPlexMono(fontSize: 11)),
+            onTap: _container == null ? null : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),
           ),
         ],
       ),
@@ -152,8 +146,8 @@ class _ItemDetailViewState extends State<ItemDetailView> {
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          SizedBox(width: 90, child: Text(k, style: GoogleFonts.ibmPlexMono(fontSize: 11, letterSpacing: 1.1, color: VisualTheme.primaryColor))),
-          Text(v, style: GoogleFonts.ibmPlexSans(fontWeight: FontWeight.w600)),
+          SizedBox(width: 88, child: Text(k, style: GoogleFonts.ibmPlexMono(fontSize: 11, color: VisualTheme.primaryColor))),
+          Text(v, style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700)),
         ],
       ),
     );

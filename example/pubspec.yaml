@@ -1,5 +1,5 @@
-name: cram_binder_example
-description: "Cram Binder - Exam prep catalog"
+name: beaker_bench_example
+description: "Beaker Bench - STEM lab catalog"
 publish_to: 'none'
 version: 1.0.0+1
 environment:
@@ -8,7 +8,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   user_screen:
     path: ../
 

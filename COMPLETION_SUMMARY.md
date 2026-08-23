@@ -1,3 +1,3 @@
-# Cram Binder
+# Beaker Bench
 
-Offline exam index. Crimson / navy / paper UI, Libre Baskerville + IBM Plex Mono, ruled pages, table of contents. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline STEM lab roster. Teal / safety-orange / graphite UI, Space Grotesk + IBM Plex Mono, left rail, graph paper. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

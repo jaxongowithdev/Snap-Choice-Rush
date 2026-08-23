@@ -1,4 +1,4 @@
-# Cram Binder
+# Beaker Bench
 
 ```bash
 flutter run

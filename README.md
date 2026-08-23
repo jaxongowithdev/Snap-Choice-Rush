@@ -1,22 +1,22 @@
-# Cram Binder
+# Beaker Bench
 
-A private exam index. Stage subject spines, file past papers and flash decks, and find any drill before the test — fully offline.
+A private STEM lab roster. Stage racks, file glassware and sensors, and find any set before the period — fully offline.
 
-**App Name:** Cram Binder
-**Subtitle:** Stage exam stacks
+**App Name:** Beaker Bench
+**Subtitle:** Stage lab kits
 **Category:** Education
-**Bundle ID:** com.app.crambinder.build
-**Database:** `cram_binder.db`
+**Bundle ID:** com.app.beakerbench.build
+**Database:** `beaker_bench.db`
 
 ## Navigation
 
-Top binder tabs — not a bottom bar.
+Left station rail — not a bottom or top tab bar.
 
-- INDEX — table of contents
-- SPINES — every subject
-- FLAGS — tonight’s drill list
-- MOVES — refiles between spines
-- COVER — paper look and backup
+- BENCH — readout, rack grid, condition lanes
+- RACKS — every lab kit
+- PIN — sets needed this period
+- LOG — transfers between racks
+- LAB — display and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

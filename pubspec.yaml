@@ -1,5 +1,5 @@
 name: user_screen
-description: "Cram Binder - Stage exam stacks, file past papers and flash decks, and find any drill before the test. Completely offline."
+description: "Beaker Bench - Stage lab kits, file glassware and sensors, and find any set before the period. Completely offline."
 version: 1.0.0+2
 
 environment:
@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   google_fonts: ^6.1.0
   sqflite: ^2.3.0
   path_provider: ^2.1.1

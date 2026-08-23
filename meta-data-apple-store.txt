@@ -1,14 +1,14 @@
 APP NAME
-Cram Binder
+Beaker Bench
 
 SUBTITLE
-Stage exam stacks
+Stage lab kits
 
 KEYWORDS
-exam,quiz,study,flash,notes,binder,cram,paper,school,offline
+lab,science,beaker,kit,experiment,teacher,stem,bench,school,offline
 
 PROMOTION
-Stage exam stacks, file past papers and flash decks, and find any drill before the test. Private, offline.
+Stage lab kits, file glassware and sensors, and find any set before the period. Private, offline.
 
 DESCRIPTION
-Cram Binder is a private offline exam index — stage subject spines, file past papers and flash decks, and find any drill before the test.
+Beaker Bench is a private offline lab roster for STEM class — stage racks, file glassware and sensors, and find any set before the period.

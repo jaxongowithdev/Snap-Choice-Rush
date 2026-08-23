@@ -1,3 +1,3 @@
-# Cram Binder — feature set
+# Beaker Bench — feature set
 
-Three-ring binder chrome, top five tabs (INDEX / SPINES / FLAGS / MOVES / COVER), twelve drill kinds, citation-style move log, cover photos, search, JSON backup, offline SQLite (`cram_binder.db`).
+Left rail navigation, graph-paper chrome, rack grid, Clean/In use/Dirty lanes, twelve STEM kinds, transfer log, photos, search, JSON backup, offline SQLite (`beaker_bench.db`).

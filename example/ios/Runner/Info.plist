@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Cram Binder</string>
+	<string>Beaker Bench</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Cram Binder</string>
+	<string>Beaker Bench</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,8 +53,8 @@
 		<false/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Cram Binder uses your photo library so you can save a photo of each paper or deck.</string>
+	<string>Beaker Bench uses your photo library so you can save a photo of each kit or tray.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Cram Binder uses your camera so you can photograph past papers, flash decks, and formula sheets.</string>
+	<string>Beaker Bench uses your camera so you can photograph glassware, sensors, and lab kits.</string>
 </dict>
 </plist>
