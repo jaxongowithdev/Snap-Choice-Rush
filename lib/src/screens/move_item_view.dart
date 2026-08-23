@@ -52,7 +52,7 @@ class _MoveItemViewState extends State<MoveItemView> {
 
   Future<void> _moveItem() async {
     if (_selectedContainer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination well')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination cart')));
       return;
     }
     final destCount = _itemCounts[_selectedContainer!.id] ?? 0;
@@ -60,7 +60,7 @@ class _MoveItemViewState extends State<MoveItemView> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('That well is full'),
+          title: const Text('That cart is full'),
           content: Text('"${_selectedContainer!.name}" has no open slots. File it anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
@@ -80,7 +80,7 @@ class _MoveItemViewState extends State<MoveItemView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Reseat')),
+      appBar: AppBar(title: const Text('Move pour')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
@@ -92,9 +92,9 @@ class _MoveItemViewState extends State<MoveItemView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('RESEATING', style: GoogleFonts.outfit(color: VisualTheme.secondaryColor, letterSpacing: 1.4, fontSize: 11, fontWeight: FontWeight.w700)),
+                        Text('MOVING', style: GoogleFonts.sora(color: VisualTheme.secondaryColor, letterSpacing: 1.4, fontSize: 11, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 6),
-                        Text(widget.item.name, style: GoogleFonts.literata(fontSize: 24, fontWeight: FontWeight.w600)),
+                        Text(widget.item.name, style: GoogleFonts.sora(fontSize: 22, fontWeight: FontWeight.w700)),
                         Text('${widget.item.category} · ${widget.item.quantity}'),
                       ],
                     ),
@@ -103,14 +103,14 @@ class _MoveItemViewState extends State<MoveItemView> {
                 const SizedBox(height: 10),
                 Container(
                   padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(16)),
-                  child: Text('Now in ${_currentContainer?.name ?? 'unknown'}${_currentContainer != null ? ' / ${_currentContainer!.room}' : ''}', style: const TextStyle(color: Color(0xFFF7F1E6))),
+                  decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(10)),
+                  child: Text('Now in ${_currentContainer?.name ?? 'unknown'}${_currentContainer != null ? ' / ${_currentContainer!.room}' : ''}', style: const TextStyle(color: Colors.white)),
                 ),
                 const SizedBox(height: 20),
-                Text('Move into', style: GoogleFonts.literata(fontSize: 22, fontWeight: FontWeight.w600)),
+                Text('Move into', style: GoogleFonts.sora(fontSize: 20, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 10),
                 if (_containers == null || _containers!.isEmpty)
-                  const Card(child: Padding(padding: EdgeInsets.all(28), child: Center(child: Text('No other wells yet'))))
+                  const Card(child: Padding(padding: EdgeInsets.all(28), child: Center(child: Text('No other carts yet'))))
                 else
                   ..._containers!.map((c) {
                     final count = _itemCounts[c.id] ?? 0;
@@ -129,9 +129,9 @@ class _MoveItemViewState extends State<MoveItemView> {
                     );
                   }),
                 const SizedBox(height: 16),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going in the travel case', prefixIcon: Icon(Icons.notes)), maxLines: 2),
+                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going on the guest cart', prefixIcon: Icon(Icons.notes)), maxLines: 2),
                 const SizedBox(height: 22),
-                FilledButton.icon(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, icon: const Icon(Icons.swap_horiz), label: const Text('Reseat bottle')),
+                FilledButton.icon(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, icon: const Icon(Icons.swap_horiz), label: const Text('Move bottle')),
               ],
             ),
     );

@@ -46,7 +46,7 @@ class _FavoritesViewState extends State<FavoritesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Daily ink')),
+      appBar: AppBar(title: const Text('Pour')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteItems == null || _favoriteItems!.isEmpty
@@ -56,11 +56,11 @@ class _FavoritesViewState extends State<FavoritesView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.bookmark_border, size: 48),
+                        const Icon(Icons.local_drink_outlined, size: 48),
                         const SizedBox(height: 12),
-                        Text('No daily ink yet', style: GoogleFonts.literata(fontSize: 24, fontWeight: FontWeight.w600)),
+                        Text('Nothing on the rail', style: GoogleFonts.sora(fontSize: 22, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
-                        const Text('Bookmark the bottles you keep in rotation.', textAlign: TextAlign.center),
+                        const Text('Pin the bottles you keep in rotation for tonight’s pours.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -72,17 +72,18 @@ class _FavoritesViewState extends State<FavoritesView> {
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final well = _containersCache[item.containerId];
+                      final cart = _containersCache[item.containerId];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Card(
                           child: ListTile(
+                            leading: Container(width: 6, height: 36, color: VisualTheme.getCategoryColor(item.category)),
                             title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                            subtitle: Text('${item.category} · ${item.quantity}${well != null ? '\n${well.name} / ${well.room}' : ''}'),
-                            isThreeLine: well != null,
+                            subtitle: Text('${item.category} · ${item.quantity}${cart != null ? '\n${cart.name} / ${cart.room}' : ''}'),
+                            isThreeLine: cart != null,
                             trailing: IconButton(
                               key: ValueKey('favorite_toggle_${item.id}'),
-                              icon: Icon(item.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: item.isFavorite ? VisualTheme.accentColor : null),
+                              icon: Icon(item.isFavorite ? Icons.local_drink : Icons.local_drink_outlined, color: item.isFavorite ? VisualTheme.secondaryColor : null),
                               onPressed: () async {
                                 await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
                                 _loadFavorites();

@@ -5,7 +5,7 @@ class InventoryItemModel {
   final String name;
   final String category;
   final int quantity;
-  final String condition; // Sealed, Opened, Diluted, Dry
+  final String condition; // Sealed, Opened, Low, Empty
   final String? purchaseDate;
   final double? estimatedValue;
   final String? notes;

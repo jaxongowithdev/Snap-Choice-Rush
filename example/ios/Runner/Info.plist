@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Nib Ledger</string>
+	<string>Ember Rail</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Nib Ledger</string>
+	<string>Ember Rail</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,8 +53,8 @@
 		<false/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Nib Ledger uses your photo library so you can save a photo of each ink bottle or nib.</string>
+	<string>Ember Rail uses your photo library so you can save a photo of each bottle or garnish.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Nib Ledger uses your camera so you can photograph ink labels, swabs, and fountain pens.</string>
+	<string>Ember Rail uses your camera so you can photograph bottle labels, bitters, and glassware.</string>
 </dict>
 </plist>

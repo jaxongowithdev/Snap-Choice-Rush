@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
-import 'analytics_view.dart';
+import 'favorites_view.dart';
+import 'transfer_log_view.dart';
 import 'config_view.dart';
 
 class DashboardView extends StatefulWidget {
@@ -22,7 +23,8 @@ class _DashboardViewState extends State<DashboardView> {
     _screens = [
       const HomeView(),
       const ContainerListView(),
-      const AnalyticsView(),
+      const FavoritesView(),
+      const TransferLogView(),
       ConfigView(onSettingsChanged: widget.onSettingsChanged),
     ];
   }
@@ -35,10 +37,11 @@ class _DashboardViewState extends State<DashboardView> {
         selectedIndex: _selectedIndex,
         onDestinationSelected: (i) => setState(() => _selectedIndex = i),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.auto_stories_outlined), selectedIcon: Icon(Icons.auto_stories), label: 'Blot'),
-          NavigationDestination(icon: Icon(Icons.water_drop_outlined), selectedIcon: Icon(Icons.water_drop), label: 'Wells'),
-          NavigationDestination(icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book), label: 'Folio'),
-          NavigationDestination(icon: Icon(Icons.cases_outlined), selectedIcon: Icon(Icons.cases), label: 'Case'),
+          NavigationDestination(icon: Icon(Icons.local_bar_outlined), selectedIcon: Icon(Icons.local_bar), label: 'Rail'),
+          NavigationDestination(icon: Icon(Icons.inventory_2_outlined), selectedIcon: Icon(Icons.inventory_2), label: 'Carts'),
+          NavigationDestination(icon: Icon(Icons.local_drink_outlined), selectedIcon: Icon(Icons.local_drink), label: 'Pour'),
+          NavigationDestination(icon: Icon(Icons.receipt_long_outlined), selectedIcon: Icon(Icons.receipt_long), label: 'Log'),
+          NavigationDestination(icon: Icon(Icons.wine_bar_outlined), selectedIcon: Icon(Icons.wine_bar), label: 'Cellar'),
         ],
       ),
     );

@@ -1,3 +1,3 @@
-# Nib Ledger
+# Ember Rail
 
-Offline fountain-pen map. Indigo / copper / gold UI, Literata + Outfit. Books App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline home-bar map. Charcoal / lime / amber UI, Sora + Plus Jakarta Sans. Five-tab bar. Food & Drink App Store category. Listing copy in `meta-data-apple-store.txt`.

@@ -1,5 +1,5 @@
-name: nib_ledger_example
-description: "Nib Ledger - Fountain pen and ink catalog"
+name: ember_rail_example
+description: "Ember Rail - Home cocktail bar catalog"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

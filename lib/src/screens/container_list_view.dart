@@ -55,7 +55,7 @@ class _ContainerListViewState extends State<ContainerListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wells'),
+        title: const Text('Carts'),
         actions: [
           IconButton(icon: Icon(_isGridView ? Icons.view_agenda_outlined : Icons.grid_view), onPressed: () => setState(() => _isGridView = !_isGridView)),
           PopupMenuButton<String>(
@@ -77,11 +77,11 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.water_drop_outlined, size: 48),
+                        const Icon(Icons.inventory_2_outlined, size: 48),
                         const SizedBox(height: 12),
-                        Text('No wells staged', style: GoogleFonts.literata(fontSize: 24, fontWeight: FontWeight.w600)),
+                        Text('No carts staged', style: GoogleFonts.sora(fontSize: 22, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
-                        const Text('Start an ink drawer, a travel case, or the sample tray.', textAlign: TextAlign.center),
+                        const Text('Start a front rail, a back-bar shelf, or the guest cart.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -94,7 +94,7 @@ class _ContainerListViewState extends State<ContainerListView> {
           if (r == true) _loadContainers();
         },
         icon: const Icon(Icons.add),
-        label: const Text('Well'),
+        label: const Text('Cart'),
       ),
     );
   }
@@ -116,13 +116,13 @@ class _ContainerListViewState extends State<ContainerListView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(c.code, style: GoogleFonts.outfit(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w700, fontSize: 12)),
+                  Text(c.code, style: GoogleFonts.sora(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w700, fontSize: 12)),
                   const SizedBox(height: 8),
-                  Text(c.name, style: GoogleFonts.literata(fontSize: 20, fontWeight: FontWeight.w600), maxLines: 2),
+                  Text(c.name, style: GoogleFonts.sora(fontSize: 18, fontWeight: FontWeight.w700), maxLines: 2),
                   const Spacer(),
                   Text('${c.room} / ${c.shelf}', maxLines: 1, overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 8),
-                  LinearProgressIndicator(value: pct / 100, minHeight: 6, backgroundColor: VisualTheme.mist, color: VisualTheme.secondaryColor, borderRadius: BorderRadius.circular(4)),
+                  LinearProgressIndicator(value: pct / 100, minHeight: 5, backgroundColor: VisualTheme.mist, color: VisualTheme.secondaryColor),
                   const SizedBox(height: 6),
                   Text('$count / ${c.capacity} bottles'),
                 ],

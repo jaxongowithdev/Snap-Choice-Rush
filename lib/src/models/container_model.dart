@@ -1,4 +1,4 @@
-// Ink well / fountain-pen drawer model
+// Bar cart / home-rail bottle model
 class ContainerModel {
   final int? id;
   final String name;

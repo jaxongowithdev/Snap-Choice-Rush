@@ -56,7 +56,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     setState(() => _item = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Pinned to the daily ink' : 'Removed from the daily ink'),
+        content: Text(updated.isFavorite ? 'Pinned to tonight’s rail' : 'Removed from tonight’s rail'),
         duration: const Duration(seconds: 1),
       ));
     }
@@ -67,7 +67,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Drop this bottle?'),
-        content: const Text('It will leave the ledger catalog.'),
+        content: const Text('It will leave the rail catalog.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Drop')),
@@ -91,12 +91,12 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         actions: [
           IconButton(
             key: const ValueKey('favorite_toggle'),
-            icon: Icon(_item!.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: _item!.isFavorite ? VisualTheme.accentColor : null),
+            icon: Icon(_item!.isFavorite ? Icons.local_drink : Icons.local_drink_outlined, color: _item!.isFavorite ? VisualTheme.secondaryColor : null),
             onPressed: _toggleFavorite,
           ),
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'move', child: Text('Move to another well')),
+              PopupMenuItem(value: 'move', child: Text('Move to another cart')),
               PopupMenuItem(value: 'edit', child: Text('Edit bottle')),
               PopupMenuItem(value: 'delete', child: Text('Drop bottle')),
             ],
@@ -123,7 +123,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
                 children: [
                   if (_item!.photoPath != null && _item!.photoPath!.isNotEmpty) ...[
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(10),
                       child: Image.file(
                         File(_item!.photoPath!),
                         height: 200,
@@ -134,16 +134,16 @@ class _ItemDetailViewState extends State<ItemDetailView> {
                     ),
                     const SizedBox(height: 12),
                   ],
-                  Text(_item!.category.toUpperCase(), style: GoogleFonts.outfit(color: VisualTheme.getCategoryColor(_item!.category), letterSpacing: 1.4, fontSize: 11, fontWeight: FontWeight.w700)),
+                  Text(_item!.category.toUpperCase(), style: GoogleFonts.sora(color: VisualTheme.getCategoryColor(_item!.category), letterSpacing: 1.4, fontSize: 11, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 6),
-                  Text(_item!.name, style: GoogleFonts.literata(fontSize: 28, fontWeight: FontWeight.w600)),
+                  Text(_item!.name, style: GoogleFonts.sora(fontSize: 26, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 12),
                   _row('Count', _item!.quantity.toString()),
-                  _row('State', _item!.condition),
+                  _row('Level', _item!.condition),
                   if (_item!.estimatedValue != null) _row('Replace', '\$${_item!.estimatedValue}'),
                   if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
                     const SizedBox(height: 10),
-                    const Text('Swab note', style: TextStyle(fontWeight: FontWeight.w700)),
+                    const Text('Pour note', style: TextStyle(fontWeight: FontWeight.w700)),
                     const SizedBox(height: 4),
                     Text(_item!.notes!),
                   ],
@@ -154,8 +154,8 @@ class _ItemDetailViewState extends State<ItemDetailView> {
           const SizedBox(height: 12),
           Card(
             child: ListTile(
-              leading: const Icon(Icons.water_drop_outlined),
-              title: Text(_container?.name ?? 'Unknown well'),
+              leading: const Icon(Icons.inventory_2_outlined),
+              title: Text(_container?.name ?? 'Unknown cart'),
               subtitle: _container != null ? Text('${_container!.room} / ${_container!.shelf}\nMark: ${_container!.code}') : null,
               isThreeLine: _container != null,
               trailing: const Icon(Icons.arrow_forward, size: 18),

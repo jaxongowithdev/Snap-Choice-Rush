@@ -39,7 +39,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Folio')),
+      appBar: AppBar(title: const Text('Mix')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -50,13 +50,13 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                   _overview(),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
                     const SizedBox(height: 22),
-                    Text('By kind', style: GoogleFonts.literata(fontSize: 22, fontWeight: FontWeight.w600)),
+                    Text('By kind', style: GoogleFonts.sora(fontSize: 20, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 10),
                     _chart(_categoryStats!, true),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
                     const SizedBox(height: 22),
-                    Text('By room', style: GoogleFonts.literata(fontSize: 22, fontWeight: FontWeight.w600)),
+                    Text('By room', style: GoogleFonts.sora(fontSize: 20, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 10),
                     _chart(_roomStats!, false),
                   ],
@@ -68,22 +68,22 @@ class _AnalyticsViewState extends State<AnalyticsView> {
 
   Widget _overview() {
     if (_stats == null) return const SizedBox.shrink();
-    final wells = _stats!['totalContainers'] ?? 0;
+    final carts = _stats!['totalContainers'] ?? 0;
     final items = _stats!['totalItems'] ?? 0;
     final empty = _stats!['emptyContainers'] ?? 0;
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(20)),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(color: VisualTheme.primaryColor, borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('LEDGER SNAPSHOT', style: GoogleFonts.outfit(color: VisualTheme.accentColor, letterSpacing: 1.6, fontSize: 11, fontWeight: FontWeight.w700)),
+          Text('RAIL SNAPSHOT', style: GoogleFonts.sora(color: VisualTheme.secondaryColor, letterSpacing: 1.6, fontSize: 11, fontWeight: FontWeight.w700)),
           const SizedBox(height: 14),
           Row(
             children: [
-              _cell('Wells', wells.toString()),
+              _cell('Carts', carts.toString()),
               _cell('Bottles', items.toString()),
-              _cell('In use', (wells - empty).toString()),
+              _cell('In use', (carts - empty).toString()),
               _cell('Empty', empty.toString()),
             ],
           ),
@@ -96,7 +96,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     return Expanded(
       child: Column(
         children: [
-          Text(value, style: GoogleFonts.literata(color: VisualTheme.cream, fontSize: 24, fontWeight: FontWeight.w600)),
+          Text(value, style: GoogleFonts.sora(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700)),
           Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
         ],
       ),
@@ -119,7 +119,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                 children: [
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(e.key, style: const TextStyle(fontWeight: FontWeight.w700)), Text('${e.value} · $pct%')]),
                   const SizedBox(height: 5),
-                  LinearProgressIndicator(value: e.value / total, minHeight: 6, backgroundColor: VisualTheme.mist, color: klass ? VisualTheme.getCategoryColor(e.key) : VisualTheme.secondaryColor, borderRadius: BorderRadius.circular(4)),
+                  LinearProgressIndicator(value: e.value / total, minHeight: 5, backgroundColor: VisualTheme.mist, color: klass ? VisualTheme.getCategoryColor(e.key) : VisualTheme.secondaryColor),
                 ],
               ),
             );

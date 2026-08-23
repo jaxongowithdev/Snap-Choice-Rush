@@ -1,19 +1,20 @@
-# Nib Ledger
+# Ember Rail
 
-A private ink catalog. Stage wells, log bottles, and find any ink before you write — fully offline.
+A private home-bar catalog. Stage carts, log bottles, and find any pour before guests arrive — fully offline.
 
-**App Name:** Nib Ledger
-**Subtitle:** Map your ink wells
-**Category:** Books
-**Bundle ID:** com.app.nibledger.build
-**Database:** `nib_ledger.db`
+**App Name:** Ember Rail
+**Subtitle:** Map your bar carts
+**Category:** Food & Drink
+**Bundle ID:** com.app.emberrail.build
+**Database:** `ember_rail.db`
 
 ## Navigation
 
-- Blot — ledger pulse and quick actions
-- Wells — all drawers and cases
-- Folio — kind and room snapshot
-- Case — look and backup
+- Rail — greeting, stock check, tonight’s pours
+- Carts — all rails and shelves
+- Pour — bottles pinned for rotation
+- Log — every move between carts
+- Cellar — look and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

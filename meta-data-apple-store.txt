@@ -1,14 +1,14 @@
 APP NAME
-Nib Ledger
+Ember Rail
 
 SUBTITLE
-Map your ink wells
+Map your bar carts
 
 KEYWORDS
-ink,nib,pen,fountain,well,paper,blot,ledger,bottle,offline
+bar,cocktail,spirit,mixer,bitter,cart,rail,pour,garnish,offline
 
 PROMOTION
-Stage wells, log bottles, and find any ink before you write. Private, offline.
+Stage carts, log bottles, and find any pour before guests arrive. Private, offline.
 
 DESCRIPTION
-Nib Ledger is a private offline catalog for fountain-pen writers — map ink wells, log bottles, and find any shade before you write.
+Ember Rail is a private offline catalog for home bartenders — map bar carts, log bottles, and find any pour before guests arrive.
