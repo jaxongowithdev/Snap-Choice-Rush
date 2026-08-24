@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/dewey_chrome.dart';
+import '../widgets/yard_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -51,13 +51,13 @@ class _ContainerListViewState extends State<ContainerListView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Bins'),
+        title: const Text('Cages'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
             itemBuilder: (_) => const [
               PopupMenuItem(value: 'name', child: Text('By name')),
-              PopupMenuItem(value: 'room', child: Text('By room')),
+              PopupMenuItem(value: 'room', child: Text('By gym')),
               PopupMenuItem(value: 'updated', child: Text('Last opened')),
             ],
           ),
@@ -72,11 +72,11 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.menu_book_outlined, size: 48, color: VisualTheme.primaryColor),
+                        Icon(Icons.sports_outlined, size: 48, color: VisualTheme.secondaryColor),
                         const SizedBox(height: 8),
-                        Text('No bins labeled', style: GoogleFonts.libreBaskerville(fontSize: 24, fontStyle: FontStyle.italic)),
+                        Text('No cages labeled', style: GoogleFonts.oswald(fontSize: 24)),
                         const SizedBox(height: 8),
-                        const Text('Start a chapter crate, a picture tub, or the teacher shelf.', textAlign: TextAlign.center),
+                        const Text('Start a ball cage, a cone cart, or the pinnie hook.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -84,15 +84,15 @@ class _ContainerListViewState extends State<ContainerListView> {
               : RefreshIndicator(
                   onRefresh: _loadContainers,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 12, 88),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 88),
                     itemCount: _containers!.length,
                     itemBuilder: (_, i) {
                       final c = _containers![i];
                       final count = _itemCounts[c.id] ?? 0;
-                      return CheckoutCard(
+                      return ClipboardCard(
                         kind: c.code,
                         title: c.name,
-                        meta: '${c.room}  ·  $count/${c.capacity} titles',
+                        meta: '${c.room}  ·  $count/${c.capacity} pieces',
                         accent: VisualTheme.primaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));

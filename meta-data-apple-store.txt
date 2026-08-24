@@ -1,14 +1,14 @@
 APP NAME
-Dewey Nook
+Cone Yard
 
 SUBTITLE
-Reading workshop log
+Gym class log
 
 KEYWORDS
-reading,library,lesson,class,book,teacher,shelf,workshop,offline,nook
+gym,pe,lesson,class,sport,teacher,cone,station,offline,kit
 
 PROMOTION
-File classroom shelves, reading bins, and book kits, then find any title before independent reading. Private, offline.
+File gym cages, station kits, and PE gear, then find any piece before the period. Private, offline.
 
 DESCRIPTION
-Dewey Nook is a private offline reading journal — file classroom shelves, reading bins, and book kits, then find any title before independent reading.
+Cone Yard is a private offline PE journal — file gym cages, station kits, and PE gear, then find any piece before the period.

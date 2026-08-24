@@ -5,7 +5,7 @@ class InventoryItemModel {
   final String name;
   final String category;
   final int quantity;
-  final String condition; // New, Loaned, Worn, Filed
+  final String condition; // New, Out, Worn, Stored
   final String? purchaseDate;
   final double? estimatedValue;
   final String? notes;

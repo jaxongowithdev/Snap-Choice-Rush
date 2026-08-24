@@ -1,3 +1,3 @@
-# Dewey Nook — feature set
+# Cone Yard — feature set
 
-Right-side wooden catalog drawers, oak slat wall, book-spine home, manila checkout cards, twelve reading kinds, checkout log, cover photos, search, JSON backup, offline SQLite (`dewey_nook.db`).
+Bottom running-track lanes, maple gym floor with court lines, traffic-cone home, clipboard cards, twelve PE kinds, checkout log, cover photos, search, JSON backup, offline SQLite (`cone_yard.db`).

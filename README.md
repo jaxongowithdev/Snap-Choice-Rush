@@ -1,21 +1,21 @@
-# Dewey Nook
+# Cone Yard
 
-A private reading journal. File classroom shelves, reading bins, and book kits, then find any title before independent reading — fully offline.
+A private PE journal. File gym cages, station kits, and PE gear, then find any piece before the period — fully offline.
 
-**App Name:** Dewey Nook
-**Subtitle:** Reading workshop log
+**App Name:** Cone Yard
+**Subtitle:** Gym class log
 **Category:** Education
-**Bundle ID:** com.app.deweynook.build
-**Database:** `dewey_nook.db`
+**Bundle ID:** com.app.coneyard.build
+**Database:** `cone_yard.db`
 
 ## Navigation
 
-Five stacked wooden catalog drawers on the right — not a Material tab bar, drafting tools, or hanging ribbons. The selected drawer slides open.
+A painted running track at the bottom — five lanes with starting blocks — not a Material tab bar, catalog drawers, or drafting tools.
 
-- NOOK — this week’s bin
-- BINS — every crate and shelf
-- FLAG — titles for workshop
-- LOG — checkouts between bins
+- YARD — this period’s station
+- CAGES — every cart and hook
+- STAR — kits for the period
+- LOG — checkouts between cages
 - DESK — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../widgets/dewey_chrome.dart';
+import '../widgets/yard_chrome.dart';
 import '../utils/visual_theme.dart';
 
 class AnalyticsView extends StatefulWidget {
@@ -49,13 +49,13 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
                 children: [
                   if (_stats != null)
-                    Text('${_stats!['totalItems']} titles   ·   ${_stats!['totalContainers']} bins', style: GoogleFonts.libreBaskerville(fontSize: 22, fontStyle: FontStyle.italic)),
+                    Text('${_stats!['totalItems']} pieces   ·   ${_stats!['totalContainers']} cages', style: GoogleFonts.oswald(fontSize: 22)),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
-                    const PocketLabel(label: 'BY KIND'),
+                    const LaneStamp(label: 'BY KIND'),
                     ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
-                    const PocketLabel(label: 'BY ROOM'),
+                    const LaneStamp(label: 'BY GYM'),
                     ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                 ],

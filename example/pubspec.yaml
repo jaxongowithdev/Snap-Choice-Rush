@@ -1,5 +1,5 @@
-name: dewey_nook_example
-description: "Dewey Nook - Reading workshop log"
+name: cone_yard_example
+description: "Cone Yard - Gym class log"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

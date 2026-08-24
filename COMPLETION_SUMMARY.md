@@ -1,3 +1,3 @@
-# Dewey Nook
+# Cone Yard
 
-Offline classroom-library journal. Hunter green / stamp red / manila UI, Libre Baskerville + Outfit, catalog drawers, book spines. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline PE journal. Navy / cone orange / track red UI, Oswald + Karla, running-track lanes, gym floor, traffic cones. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

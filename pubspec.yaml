@@ -1,5 +1,5 @@
 name: user_screen
-description: "Dewey Nook - File classroom shelves, reading bins, and book kits, then find any title before independent reading. Completely offline."
+description: "Cone Yard - File gym cages, station kits, and PE gear, then find any piece before the period. Completely offline."
 version: 1.0.0+2
 
 environment:

@@ -1,4 +1,4 @@
-// Classroom library bin / reading crate
+// Gym cage / PE station cart
 class ContainerModel {
   final int? id;
   final String name;

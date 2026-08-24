@@ -5,7 +5,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/dewey_chrome.dart';
+import '../widgets/yard_chrome.dart';
 import 'item_form_view.dart';
 import 'container_detail_view.dart';
 import 'move_item_view.dart';
@@ -57,7 +57,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     setState(() => _item = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Flagged for workshop' : 'Flag lifted'),
+        content: Text(updated.isFavorite ? 'Starred for the period' : 'Star lifted'),
         duration: const Duration(seconds: 1),
       ));
     }
@@ -67,8 +67,8 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Unfile this title?'),
-        content: const Text('It will leave the classroom catalog.'),
+        title: const Text('Unfile this piece?'),
+        content: const Text('It will leave the gym catalog.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Unfile')),
@@ -84,7 +84,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor)));
-    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Title not found')));
+    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Piece not found')));
 
     return Scaffold(
       appBar: AppBar(
@@ -92,13 +92,13 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         actions: [
           IconButton(
             key: const ValueKey('favorite_toggle'),
-            icon: Icon(_item!.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: _item!.isFavorite ? VisualTheme.secondaryColor : null),
+            icon: Icon(_item!.isFavorite ? Icons.flag : Icons.flag_outlined, color: _item!.isFavorite ? VisualTheme.secondaryColor : null),
             onPressed: _toggleFavorite,
           ),
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'move', child: Text('Move to another bin')),
-              PopupMenuItem(value: 'edit', child: Text('Edit title')),
+              PopupMenuItem(value: 'move', child: Text('Move to another cage')),
+              PopupMenuItem(value: 'edit', child: Text('Edit piece')),
               PopupMenuItem(value: 'delete', child: Text('Unfile')),
             ],
             onSelected: (v) {
@@ -120,18 +120,18 @@ class _ItemDetailViewState extends State<ItemDetailView> {
             Image.file(File(_item!.photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.mist, child: const Center(child: Icon(Icons.broken_image)))),
             const SizedBox(height: 16),
           ],
-          Text(_item!.name, style: GoogleFonts.libreBaskerville(fontSize: 32, fontWeight: FontWeight.w700, fontStyle: FontStyle.italic, height: 1.1)),
+          Text(_item!.name, style: GoogleFonts.oswald(fontSize: 32, height: 1.05)),
           const SizedBox(height: 14),
-          Text('COUNT  ${_item!.quantity}     WEAR  ${_item!.condition}', style: GoogleFonts.outfit(fontSize: 13, letterSpacing: 0.6, fontWeight: FontWeight.w600)),
-          if (_item!.estimatedValue != null) Text('REPLACE  \$${_item!.estimatedValue}', style: GoogleFonts.outfit(fontSize: 13)),
+          Text('COUNT  ${_item!.quantity}     WEAR  ${_item!.condition}', style: GoogleFonts.oswald(fontSize: 14, letterSpacing: 1)),
+          if (_item!.estimatedValue != null) Text('REPLACE  \$${_item!.estimatedValue}', style: GoogleFonts.oswald(fontSize: 14)),
           if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
-            const PocketLabel(label: 'LIBRARIAN NOTE'),
-            Text(_item!.notes!, style: GoogleFonts.libreBaskerville(fontSize: 18, fontStyle: FontStyle.italic)),
+            const LaneStamp(label: 'COACH NOTE'),
+            Text(_item!.notes!, style: GoogleFonts.karla(fontSize: 18, fontStyle: FontStyle.italic)),
           ],
-          const PocketLabel(label: 'SITS IN'),
-          CheckoutCard(
+          const LaneStamp(label: 'SITS IN'),
+          ClipboardCard(
             kind: _container?.code ?? '—',
-            title: _container?.name ?? 'Unknown bin',
+            title: _container?.name ?? 'Unknown cage',
             meta: _container != null ? '${_container!.room}  ·  ${_container!.shelf}' : '',
             accent: VisualTheme.primaryColor,
             onTap: _container == null ? () {} : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),

@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/dewey_chrome.dart';
+import '../widgets/yard_chrome.dart';
 
 class MoveItemView extends StatefulWidget {
   final InventoryItemModel item;
@@ -53,7 +53,7 @@ class _MoveItemViewState extends State<MoveItemView> {
 
   Future<void> _moveItem() async {
     if (_selectedContainer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination bin')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination cage')));
       return;
     }
     final destCount = _itemCounts[_selectedContainer!.id] ?? 0;
@@ -61,8 +61,8 @@ class _MoveItemViewState extends State<MoveItemView> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('That bin is full'),
-          content: Text('"${_selectedContainer!.name}" has no open title slots. File it anyway?'),
+          title: const Text('That cage is full'),
+          content: Text('"${_selectedContainer!.name}" has no open slots. File it anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
             FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('File anyway')),
@@ -87,28 +87,28 @@ class _MoveItemViewState extends State<MoveItemView> {
           : ListView(
               padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
               children: [
-                Text('MOVING', style: GoogleFonts.outfit(letterSpacing: 2, fontSize: 12, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
-                Text(widget.item.name, style: GoogleFonts.libreBaskerville(fontSize: 26, fontWeight: FontWeight.w700, fontStyle: FontStyle.italic)),
+                Text('MOVING', style: GoogleFonts.oswald(letterSpacing: 2, fontSize: 12, color: VisualTheme.secondaryColor)),
+                Text(widget.item.name, style: GoogleFonts.oswald(fontSize: 26)),
                 Text('${widget.item.category}  ·  ${widget.item.quantity}'),
-                const PocketLabel(label: 'NOW IN'),
-                Text(_currentContainer == null ? 'Unknown bin' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
-                const PocketLabel(label: 'MOVE INTO'),
+                const LaneStamp(label: 'NOW IN'),
+                Text(_currentContainer == null ? 'Unknown cage' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
+                const LaneStamp(label: 'MOVE INTO'),
                 if (_containers == null || _containers!.isEmpty)
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other bins yet'))
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other cages yet'))
                 else
                   ..._containers!.map((c) {
                     final count = _itemCounts[c.id] ?? 0;
                     final selected = _selectedContainer?.id == c.id;
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
-                      leading: Text(selected ? '●' : '○', style: TextStyle(color: selected ? VisualTheme.primaryColor : null, fontSize: 16)),
-                      title: Text(c.name, style: GoogleFonts.libreBaskerville(fontSize: 18, fontWeight: FontWeight.w700)),
+                      leading: Text(selected ? '●' : '○', style: TextStyle(color: selected ? VisualTheme.secondaryColor : null, fontSize: 16)),
+                      title: Text(c.name, style: GoogleFonts.oswald(fontSize: 18)),
                       subtitle: Text('${c.room}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
                       onTap: () => setState(() => _selectedContainer = c),
                     );
                   }),
                 const SizedBox(height: 12),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going into the teacher crate'), maxLines: 2),
+                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going to station three'), maxLines: 2),
                 const SizedBox(height: 22),
                 FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Log the checkout')),
               ],

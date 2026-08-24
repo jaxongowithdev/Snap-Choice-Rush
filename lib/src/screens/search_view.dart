@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/dewey_chrome.dart';
+import '../widgets/yard_chrome.dart';
 import 'item_detail_view.dart';
 
 class SearchView extends StatefulWidget {
@@ -58,7 +58,7 @@ class _SearchViewState extends State<SearchView> {
           controller: _searchController,
           autofocus: true,
           cursorColor: VisualTheme.primaryColor,
-          decoration: const InputDecoration(hintText: 'title, bin, note…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none),
+          decoration: const InputDecoration(hintText: 'piece, cage, note…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none),
           onChanged: _performSearch,
         ),
         actions: [
@@ -72,18 +72,18 @@ class _SearchViewState extends State<SearchView> {
 
   Widget _buildBody() {
     if (_isSearching) return const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor));
-    if (_searchController.text.isEmpty) return _hint('find a title', 'Search a book, kind, or librarian note.');
+    if (_searchController.text.isEmpty) return _hint('find a piece', 'Search a kit, kind, or coach note.');
     if (_results == null || _results!.isEmpty) return _hint('no match', 'Try a shorter word or another kind.');
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
       itemCount: _results!.length,
       itemBuilder: (_, i) {
         final item = _results![i];
-        final bin = _containersCache[item.containerId];
-        return CheckoutCard(
+        final cage = _containersCache[item.containerId];
+        return ClipboardCard(
           kind: item.category,
           title: item.name,
-          meta: bin != null ? bin.name : '',
+          meta: cage != null ? cage.name : '',
           accent: VisualTheme.getCategoryColor(item.category),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!))).then((_) => _performSearch(_searchController.text));
@@ -100,7 +100,7 @@ class _SearchViewState extends State<SearchView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title, style: GoogleFonts.libreBaskerville(fontSize: 24, fontStyle: FontStyle.italic)),
+            Text(title.toUpperCase(), style: GoogleFonts.oswald(fontSize: 22, letterSpacing: 1.4)),
             const SizedBox(height: 8),
             Text(subtitle, textAlign: TextAlign.center),
           ],

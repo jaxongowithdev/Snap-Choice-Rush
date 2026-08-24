@@ -13,7 +13,7 @@ class StorageManager {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('dewey_nook.db');
+    _database = await _initDB('cone_yard.db');
     return _database!;
   }
 
@@ -84,8 +84,8 @@ class StorageManager {
         id INTEGER PRIMARY KEY CHECK (id = 1),
         theme TEXT NOT NULL DEFAULT 'system',
         language TEXT NOT NULL DEFAULT 'en',
-        capacityUnit TEXT NOT NULL DEFAULT 'titles',
-        defaultBoxPrefix TEXT NOT NULL DEFAULT 'DEW',
+        capacityUnit TEXT NOT NULL DEFAULT 'pieces',
+        defaultBoxPrefix TEXT NOT NULL DEFAULT 'YRD',
         showOnboarding INTEGER NOT NULL DEFAULT 1
       )
     ''');

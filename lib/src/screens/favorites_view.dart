@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/dewey_chrome.dart';
+import '../widgets/yard_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -48,7 +48,7 @@ class _FavoritesViewState extends State<FavoritesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Flag')),
+      appBar: AppBar(title: const Text('Star')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
           : _favoriteItems == null || _favoriteItems!.isEmpty
@@ -58,11 +58,11 @@ class _FavoritesViewState extends State<FavoritesView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.bookmark_border, size: 48, color: VisualTheme.secondaryColor),
+                        Icon(Icons.flag_outlined, size: 48, color: VisualTheme.secondaryColor),
                         const SizedBox(height: 8),
-                        Text('Nothing flagged', style: GoogleFonts.libreBaskerville(fontSize: 24, fontStyle: FontStyle.italic)),
+                        Text('Nothing starred', style: GoogleFonts.oswald(fontSize: 24)),
                         const SizedBox(height: 8),
-                        const Text('Bookmark the titles you will pull for workshop.', textAlign: TextAlign.center),
+                        const Text('Flag the kits you will pull for this period.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -74,15 +74,15 @@ class _FavoritesViewState extends State<FavoritesView> {
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final bin = _containersCache[item.containerId];
+                      final cage = _containersCache[item.containerId];
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: CheckoutCard(
+                            child: ClipboardCard(
                               kind: item.category,
                               title: item.name,
-                              meta: '${item.quantity}${bin != null ? '  ·  ${bin.name}' : ''}',
+                              meta: '${item.quantity}${cage != null ? '  ·  ${cage.name}' : ''}',
                               accent: VisualTheme.getCategoryColor(item.category),
                               onTap: () async {
                                 await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
@@ -92,7 +92,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                           ),
                           IconButton(
                             key: ValueKey('favorite_toggle_${item.id}'),
-                            icon: Icon(item.isFavorite ? Icons.bookmark : Icons.bookmark_border, color: item.isFavorite ? VisualTheme.secondaryColor : null),
+                            icon: Icon(item.isFavorite ? Icons.flag : Icons.flag_outlined, color: item.isFavorite ? VisualTheme.secondaryColor : null),
                             onPressed: () async {
                               await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
                               _loadFavorites();
