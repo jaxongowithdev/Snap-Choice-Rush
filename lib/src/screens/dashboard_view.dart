@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/spine_chrome.dart';
+import '../widgets/trace_chrome.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
 import 'favorites_view.dart';
@@ -33,14 +33,14 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GalleryWall(
-        child: Row(
+      body: Blueprint(
+        child: Column(
           children: [
-            SpineNav(
+            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
+            BoardTools(
               index: _selectedIndex,
               onSelect: (i) => setState(() => _selectedIndex = i),
             ),
-            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
           ],
         ),
       ),

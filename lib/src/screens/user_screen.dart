@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Time Spine initialization...');
+      debugPrint('Starting Trace Hall initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Time Spine',
+      title: 'Trace Hall',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -85,9 +85,9 @@ class _UserScreenState extends State<UserScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Time Spine', style: GoogleFonts.cormorantGaramond(color: VisualTheme.parchment, fontSize: 36, fontStyle: FontStyle.italic)),
+                    Text('TRACE HALL', style: GoogleFonts.barlowCondensed(color: VisualTheme.cyan, fontSize: 28, letterSpacing: 4, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 8),
-                    Text('Opening the hall…', style: GoogleFonts.publicSans(color: VisualTheme.parchment.withValues(alpha: 0.75))),
+                    Text('Pinning the board…', style: GoogleFonts.sourceSerif4(color: VisualTheme.vellum.withValues(alpha: 0.75), fontStyle: FontStyle.italic)),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

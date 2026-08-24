@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/spine_chrome.dart';
+import '../widgets/trace_chrome.dart';
 import 'container_form_view.dart';
 import 'item_form_view.dart';
 import 'item_detail_view.dart';
@@ -49,8 +49,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Clear this shelf?'),
-        content: const Text('Every piece filed here will be removed.'),
+        title: const Text('Clear this set?'),
+        content: const Text('Every plate filed here will be removed.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Clear')),
@@ -66,7 +66,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor)));
-    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Shelf not found')));
+    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Set not found')));
 
     final count = _items?.length ?? 0;
 
@@ -76,8 +76,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit shelf')),
-              PopupMenuItem(value: 'delete', child: Text('Clear shelf')),
+              PopupMenuItem(value: 'edit', child: Text('Edit set')),
+              PopupMenuItem(value: 'delete', child: Text('Clear set')),
             ],
             onSelected: (v) {
               if (v == 'edit') {
@@ -92,12 +92,12 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 12, 32),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
           children: [
-            Text(_container!.name, style: GoogleFonts.cormorantGaramond(fontSize: 30, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic, height: 1.1)),
+            Text(_container!.name, style: GoogleFonts.sourceSerif4(fontSize: 30, fontWeight: FontWeight.w600, height: 1.1)),
             const SizedBox(height: 6),
-            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} pieces', style: GoogleFonts.publicSans(fontSize: 13)),
-            AccessionLabel(label: 'PIECES  ·  $count'),
+            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} boards', style: GoogleFonts.barlowCondensed(fontSize: 14)),
+            SheetStamp(label: 'PLATES  ·  $count'),
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
@@ -106,26 +106,22 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                   final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemFormView(preselectedContainerId: widget.containerId)));
                   if (r == true) _loadData();
                 },
-                child: Text('+ file a piece', style: GoogleFonts.cormorantGaramond(fontSize: 18, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
+                child: Text('+ FILE A PLATE', style: GoogleFonts.barlowCondensed(fontSize: 16, letterSpacing: 1, color: VisualTheme.primaryColor)),
               ),
             ),
             if (_items == null || _items!.isEmpty)
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed on this shelf yet'))
+              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed in this set yet'))
             else
-              ...List.generate(_items!.length, (i) {
-                final item = _items![i];
-                return ExhibitPlaque(
-                  kind: item.category,
-                  title: item.name,
-                  meta: '${item.quantity}  ·  ${item.condition}',
-                  accent: VisualTheme.getCategoryColor(item.category),
-                  offsetRight: i.isOdd,
-                  onTap: () async {
-                    await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
-                    _loadData();
-                  },
-                );
-              }),
+              ..._items!.map((item) => DrawingPlate(
+                    kind: item.category,
+                    title: item.name,
+                    meta: '${item.quantity}  ·  ${item.condition}',
+                    accent: VisualTheme.getCategoryColor(item.category),
+                    onTap: () async {
+                      await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
+                      _loadData();
+                    },
+                  )),
           ],
         ),
       ),

@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/spine_chrome.dart';
+import '../widgets/trace_chrome.dart';
 import 'container_detail_view.dart';
 import 'item_form_view.dart';
 import 'search_view.dart';
@@ -22,7 +22,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final _storage = StorageManager.instance;
   Map<String, int>? _stats;
-  List<ContainerModel> _shelves = [];
+  List<ContainerModel> _sets = [];
   Map<int, int> _counts = {};
   List<InventoryItemModel> _pins = [];
   bool _isLoading = true;
@@ -37,15 +37,15 @@ class _HomeViewState extends State<HomeView> {
     setState(() => _isLoading = true);
     try {
       final stats = await _storage.getStatistics();
-      final shelves = await _storage.getAllContainers(sortBy: 'name');
+      final sets = await _storage.getAllContainers(sortBy: 'name');
       final counts = <int, int>{};
-      for (final b in shelves) {
+      for (final b in sets) {
         counts[b.id!] = await _storage.getItemCountInContainer(b.id!);
       }
       final pins = await _storage.getFavoriteItems();
       setState(() {
         _stats = stats;
-        _shelves = shelves;
+        _sets = sets;
         _counts = counts;
         _pins = pins.take(5).toList();
         _isLoading = false;
@@ -61,11 +61,11 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Time Spine'),
+        title: const Text('TRACE HALL'),
         actions: [
           IconButton(
             key: const ValueKey('favorites_button'),
-            icon: const Icon(Icons.flag_outlined),
+            icon: const Icon(Icons.push_pin_outlined),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoritesView())).then((_) => _loadData());
             },
@@ -84,29 +84,25 @@ class _HomeViewState extends State<HomeView> {
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 4, 12, 28),
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
                 children: [
-                  Text('this century', style: GoogleFonts.cormorantGaramond(fontSize: 32, fontStyle: FontStyle.italic, height: 1.1)),
-                  const SizedBox(height: 8),
-                  Text(
-                    (_stats?['totalItems'] ?? 0) == 0
-                        ? 'The hall is empty. Raise a shelf before the unit test.'
-                        : '${_stats!['totalItems']} pieces across ${_stats!['totalContainers']} shelves.',
-                    style: GoogleFonts.publicSans(fontSize: 14, height: 1.45),
+                  TitleBlock(
+                    project: 'TODAY’S BOARD',
+                    note: (_stats?['totalItems'] ?? 0) == 0
+                        ? 'The board is empty. Mix a set before critique.'
+                        : '${_stats!['totalItems']} plates across ${_stats!['totalContainers']} sets.',
                   ),
-                  const AccessionLabel(label: 'THE GALLERY'),
-                  if (_shelves.isEmpty)
-                    Text('No shelves raised yet.\nAncient hall. Local crate. Review cart.', style: GoogleFonts.publicSans(height: 1.5))
+                  const SheetStamp(label: 'WORKING SETS'),
+                  if (_sets.isEmpty)
+                    Text('No sets pinned yet.\nStudio folio. Site roll. Critique crate.', style: GoogleFonts.sourceSerif4(height: 1.5))
                   else
-                    ...List.generate(_shelves.length, (i) {
-                      final c = _shelves[i];
+                    ..._sets.map((c) {
                       final count = _counts[c.id] ?? 0;
-                      return ExhibitPlaque(
+                      return DrawingPlate(
                         kind: c.code,
                         title: c.name,
-                        meta: '${c.room}  ·  $count / ${c.capacity} pieces',
-                        accent: i.isEven ? VisualTheme.primaryColor : VisualTheme.secondaryColor,
-                        offsetRight: i.isOdd,
+                        meta: '${c.room}  ·  $count / ${c.capacity} boards',
+                        accent: VisualTheme.primaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
                           _loadData();
@@ -121,7 +117,7 @@ class _HomeViewState extends State<HomeView> {
                         final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ContainerFormView()));
                         if (r == true) _loadData();
                       },
-                      child: Text('+ new shelf', style: GoogleFonts.cormorantGaramond(fontSize: 18, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
+                      child: Text('+ NEW SET', style: GoogleFonts.barlowCondensed(fontSize: 16, letterSpacing: 1.2, color: VisualTheme.primaryColor)),
                     ),
                   ),
                   TextButton(
@@ -130,11 +126,11 @@ class _HomeViewState extends State<HomeView> {
                       final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ItemFormView()));
                       if (r == true) _loadData();
                     },
-                    child: Text('file a piece  →', style: GoogleFonts.publicSans(color: VisualTheme.primaryColor, fontWeight: FontWeight.w800)),
+                    child: Text('FILE A PLATE  →', style: GoogleFonts.barlowCondensed(color: VisualTheme.primaryColor, fontWeight: FontWeight.w700, letterSpacing: 1)),
                   ),
                   if (_pins.isNotEmpty) ...[
-                    const AccessionLabel(label: 'PINNED FOR THE TEST'),
-                    ..._pins.map((item) => ExhibitPlaque(
+                    const SheetStamp(label: 'PINNED FOR CRITIQUE'),
+                    ..._pins.map((item) => DrawingPlate(
                           kind: item.category,
                           title: item.name,
                           meta: '${item.condition}  ·  ${item.quantity}',
@@ -145,8 +141,8 @@ class _HomeViewState extends State<HomeView> {
                           },
                         )),
                   ],
-                  const AccessionLabel(label: 'CURATOR NOTE'),
-                  Text('Mark a piece Fragile when the paper foxes — restock before Friday’s seminar.', style: GoogleFonts.cormorantGaramond(fontSize: 17, fontStyle: FontStyle.italic, height: 1.4)),
+                  const SheetStamp(label: 'STUDIO NOTE'),
+                  Text('Mark a plate Smudged when the graphite lifts — reprint before Friday’s pin-up.', style: GoogleFonts.sourceSerif4(fontSize: 16, fontStyle: FontStyle.italic, height: 1.4)),
                 ],
               ),
             ),

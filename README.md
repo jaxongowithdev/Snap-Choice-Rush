@@ -1,22 +1,22 @@
-# Time Spine
+# Trace Hall
 
-A private history catalog. File era shelves, primary sources, and class artifacts, then find any piece before the unit test — fully offline.
+A private studio catalog. File drafting sets, plans, and studio plates, then find any drawing before critique — fully offline.
 
-**App Name:** Time Spine
-**Subtitle:** History shelf log
+**App Name:** Trace Hall
+**Subtitle:** Drafting class log
 **Category:** Education
-**Bundle ID:** com.app.timespine.build
-**Database:** `time_spine.db`
+**Bundle ID:** com.app.tracehall.build
+**Database:** `trace_hall.db`
 
 ## Navigation
 
-A vertical museum spine on the left with five irregular plaques — not a Material tab bar, chemical trays, or cubby wall.
+A pile of drafting tools at the bottom — T-square, set squares, scale, compass — not a Material tab bar, museum spine, or chemical trays.
 
-- HALL — this century
-- STACKS — every era shelf
-- PIN — pieces for the test
-- LOG — moves between shelves
-- CRYPT — light and backup
+- SHEET — today’s board
+- SETS — every portfolio
+- PIN — plates for critique
+- LOG — moves between sets
+- DESK — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

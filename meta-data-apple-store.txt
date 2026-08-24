@@ -1,14 +1,14 @@
 APP NAME
-Time Spine
+Trace Hall
 
 SUBTITLE
-History shelf log
+Drafting class log
 
 KEYWORDS
-history,timeline,lesson,class,era,teacher,museum,source,offline,shelf
+draft,trace,lesson,class,plan,teacher,studio,design,offline,sheet
 
 PROMOTION
-File era shelves, primary sources, and class artifacts, then find any piece before the unit test. Private, offline.
+File drafting sets, plans, and studio plates, then find any drawing before critique. Private, offline.
 
 DESCRIPTION
-Time Spine is a private offline history journal — file era shelves, primary sources, and class artifacts, then find any piece before the unit test.
+Trace Hall is a private offline studio journal — file drafting sets, plans, and studio plates, then find any drawing before critique.

@@ -1,3 +1,3 @@
-# Time Spine
+# Trace Hall
 
-Offline history journal. Oxblood / gold / parchment UI, Cormorant Garamond + Public Sans, museum spine, exhibit plaques. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline drafting journal. Blueprint / cyan / vellum UI, Barlow Condensed + Source Serif 4, T-square and triangles, title blocks. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

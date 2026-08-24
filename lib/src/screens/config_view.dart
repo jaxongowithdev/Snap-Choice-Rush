@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import '../database/storage_manager.dart';
 import '../models/user_preferences.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/spine_chrome.dart';
+import '../widgets/trace_chrome.dart';
 
 class ConfigView extends StatefulWidget {
   final VoidCallback onSettingsChanged;
@@ -49,8 +49,8 @@ class _ConfigViewState extends State<ConfigView> {
       final data = await _storage.exportData();
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       await Share.shareXFiles(
-        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'time_spine_${DateTime.now().millisecondsSinceEpoch}.json')],
-        text: 'Time Spine catalog',
+        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'trace_hall_${DateTime.now().millisecondsSinceEpoch}.json')],
+        text: 'Trace Hall catalog',
       );
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Catalog exported')));
     } catch (e) {
@@ -63,7 +63,7 @@ class _ConfigViewState extends State<ConfigView> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Restore a catalog?'),
-        content: const Text('The current shelves will be replaced by the file you pick.'),
+        content: const Text('The current sets will be replaced by the file you pick.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Restore')),
@@ -86,28 +86,28 @@ class _ConfigViewState extends State<ConfigView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Crypt')),
+      appBar: AppBar(title: const Text('DESK')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
         children: [
-          Text('Time Spine', style: GoogleFonts.cormorantGaramond(fontSize: 32, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic)),
+          Text('Trace Hall', style: GoogleFonts.sourceSerif4(fontSize: 32, fontWeight: FontWeight.w600)),
           const SizedBox(height: 6),
-          Text('A private history catalog. Nothing leaves this phone.', style: GoogleFonts.publicSans(height: 1.4)),
-          const AccessionLabel(label: 'LIGHT'),
-          for (final e in const [('light', 'Gallery daylight'), ('dark', 'After hours'), ('system', 'Match the phone')])
+          Text('A private studio catalog. Nothing leaves this phone.', style: GoogleFonts.barlowCondensed(height: 1.4, fontSize: 16)),
+          const SheetStamp(label: 'LIGHT'),
+          for (final e in const [('light', 'Vellum daylight'), ('dark', 'Blueprint night'), ('system', 'Match the phone')])
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Text((_preferences?.theme ?? 'system') == e.$1 ? '●' : '○', style: const TextStyle(color: VisualTheme.primaryColor)),
               title: Text(e.$2),
               onTap: () => _updateTheme(e.$1),
             ),
-          const AccessionLabel(label: 'CATALOG'),
+          const SheetStamp(label: 'CATALOG'),
           ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export catalog'), trailing: const Text('JSON →'), onTap: _exportData),
           ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore catalog'), trailing: const Text('← FILE'), onTap: _importData),
-          const AccessionLabel(label: 'COLOPHON'),
-          Text('Version 1.0.0  ·  Offline history inventory', style: GoogleFonts.publicSans(fontSize: 13)),
+          const SheetStamp(label: 'COLOPHON'),
+          Text('Version 1.0.0  ·  Offline studio inventory', style: GoogleFonts.barlowCondensed(fontSize: 13)),
           const SizedBox(height: 6),
-          Text('No account. No tracking. Local only.', style: GoogleFonts.publicSans(fontSize: 13)),
+          Text('No account. No tracking. Local only.', style: GoogleFonts.barlowCondensed(fontSize: 13)),
         ],
       ),
     );

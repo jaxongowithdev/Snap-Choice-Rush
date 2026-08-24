@@ -16,11 +16,11 @@ class _WelcomeViewState extends State<WelcomeView> {
   int _currentPage = 0;
 
   final _pages = [
-    {'gallery': '1', 'title': 'Time Spine', 'body': 'A history journal for the unit. One shelf per era. Know which source sits in which gallery before the test.'},
-    {'gallery': '2', 'title': 'Twelve kinds', 'body': 'Ancient, maps, speeches, artifacts — file each piece the way your class actually studies it.'},
-    {'gallery': '3', 'title': 'Snap the piece', 'body': 'Photograph a document, a map, or a classroom artifact so you remember the exact item on the shelf.'},
-    {'gallery': '4', 'title': 'Log a move', 'body': 'Shift a source from the unit shelf to the review crate and leave a short note of why it moved.'},
-    {'gallery': '5', 'title': 'Works offline', 'body': 'No account and no signal. The hall stays on this phone.'},
+    {'sheet': '01', 'title': 'Trace Hall', 'body': 'A drafting journal for studio class. One set per project. Know which plate sits in which portfolio before critique.'},
+    {'sheet': '02', 'title': 'Twelve kinds', 'body': 'Plans, sections, elevations, details — file each drawing the way your studio actually works.'},
+    {'sheet': '03', 'title': 'Snap the plate', 'body': 'Photograph a sketch, a model, or a title block so you remember the exact sheet on the board.'},
+    {'sheet': '04', 'title': 'Log a move', 'body': 'Shift a plate from the working set to the critique folio and leave a short note of why it moved.'},
+    {'sheet': '05', 'title': 'Works offline', 'body': 'No account and no signal. The studio catalog stays on this phone.'},
   ];
 
   Future<void> _finish() async {
@@ -37,7 +37,7 @@ class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: VisualTheme.ink,
+      backgroundColor: VisualTheme.primaryColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(28, 12, 28, 20),
@@ -48,7 +48,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: _finish,
-                  child: Text('SKIP', style: GoogleFonts.publicSans(color: VisualTheme.parchment.withValues(alpha: 0.35), letterSpacing: 2)),
+                  child: Text('SKIP', style: GoogleFonts.barlowCondensed(color: VisualTheme.cyan.withValues(alpha: 0.4), letterSpacing: 2)),
                 ),
               ),
               Expanded(
@@ -62,17 +62,11 @@ class _WelcomeViewState extends State<WelcomeView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Spacer(),
-                        Row(
-                          children: [
-                            Container(width: 28, height: 2, color: VisualTheme.secondaryColor),
-                            const SizedBox(width: 10),
-                            Text('GALLERY ${page['gallery']}', style: GoogleFonts.publicSans(fontSize: 12, letterSpacing: 2.4, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
-                          ],
-                        ),
-                        const SizedBox(height: 18),
-                        Text(page['title'] as String, style: GoogleFonts.cormorantGaramond(fontSize: 42, fontStyle: FontStyle.italic, color: VisualTheme.parchment, height: 1.05)),
+                        Text('SHEET ${page['sheet']}', style: GoogleFonts.barlowCondensed(fontSize: 14, letterSpacing: 3, fontWeight: FontWeight.w700, color: VisualTheme.cyan)),
                         const SizedBox(height: 16),
-                        Text(page['body'] as String, style: GoogleFonts.publicSans(fontSize: 16, height: 1.5, color: VisualTheme.parchment.withValues(alpha: 0.78))),
+                        Text(page['title'] as String, style: GoogleFonts.sourceSerif4(fontSize: 40, fontWeight: FontWeight.w600, color: VisualTheme.vellum, height: 1.05)),
+                        const SizedBox(height: 16),
+                        Text(page['body'] as String, style: GoogleFonts.barlowCondensed(fontSize: 18, height: 1.45, color: VisualTheme.cyan.withValues(alpha: 0.9))),
                         const Spacer(),
                       ],
                     );
@@ -81,7 +75,7 @@ class _WelcomeViewState extends State<WelcomeView> {
               ),
               Row(
                 children: [
-                  Text('gallery ${_currentPage + 1} of 5', style: GoogleFonts.publicSans(color: VisualTheme.parchment.withValues(alpha: 0.4))),
+                  Text('A${_currentPage + 1} / A5', style: GoogleFonts.barlowCondensed(color: VisualTheme.cyan.withValues(alpha: 0.5), letterSpacing: 1.2)),
                   const Spacer(),
                   TextButton(
                     onPressed: () {
@@ -91,7 +85,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         _pageController.nextPage(duration: const Duration(milliseconds: 240), curve: Curves.easeOut);
                       }
                     },
-                    child: Text(_currentPage == _pages.length - 1 ? 'ENTER THE HALL' : 'NEXT GALLERY →', style: GoogleFonts.publicSans(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w800)),
+                    child: Text(_currentPage == _pages.length - 1 ? 'PIN THE BOARD' : 'NEXT SHEET →', style: GoogleFonts.barlowCondensed(color: VisualTheme.accentColor, fontWeight: FontWeight.w700, letterSpacing: 1.2, fontSize: 16)),
                   ),
                 ],
               ),
