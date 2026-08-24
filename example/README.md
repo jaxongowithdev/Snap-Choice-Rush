@@ -1,4 +1,4 @@
-# Prompt Booth
+# Lemma Box
 
 ```bash
 flutter run

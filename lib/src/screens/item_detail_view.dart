@@ -5,7 +5,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/booth_chrome.dart';
+import '../widgets/lemma_chrome.dart';
 import 'item_form_view.dart';
 import 'container_detail_view.dart';
 import 'move_item_view.dart';
@@ -57,7 +57,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     setState(() => _item = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Cast for opening night' : 'Struck from the cast'),
+        content: Text(updated.isFavorite ? 'Pinned for the quiz' : 'Pin lifted'),
         duration: const Duration(seconds: 1),
       ));
     }
@@ -67,11 +67,11 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Strike this cue?'),
-        content: const Text('It will leave the booth catalog.'),
+        title: const Text('File this card away?'),
+        content: const Text('It will leave the vocab catalog.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Strike')),
+          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('File away')),
         ],
       ),
     );
@@ -84,7 +84,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Cue not found')));
+    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Card not found')));
 
     return Scaffold(
       appBar: AppBar(
@@ -92,14 +92,14 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         actions: [
           IconButton(
             key: const ValueKey('favorite_toggle'),
-            icon: Icon(_item!.isFavorite ? Icons.theater_comedy : Icons.theater_comedy_outlined, color: _item!.isFavorite ? VisualTheme.secondaryColor : null),
+            icon: Icon(_item!.isFavorite ? Icons.push_pin : Icons.push_pin_outlined, color: _item!.isFavorite ? VisualTheme.secondaryColor : null),
             onPressed: _toggleFavorite,
           ),
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'move', child: Text('Move to another crate')),
-              PopupMenuItem(value: 'edit', child: Text('Edit cue')),
-              PopupMenuItem(value: 'delete', child: Text('Strike')),
+              PopupMenuItem(value: 'move', child: Text('Move to another deck')),
+              PopupMenuItem(value: 'edit', child: Text('Edit card')),
+              PopupMenuItem(value: 'delete', child: Text('File away')),
             ],
             onSelected: (v) {
               if (v == 'move') {
@@ -114,24 +114,25 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(28, 8, 28, 32),
+        padding: const EdgeInsets.fromLTRB(20, 8, 16, 32),
         children: [
           if (_item!.photoPath != null && _item!.photoPath!.isNotEmpty) ...[
-            Image.file(File(_item!.photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.mist, child: const Center(child: Icon(Icons.broken_image)))),
+            Image.file(File(_item!.photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.paper, child: const Center(child: Icon(Icons.broken_image)))),
             const SizedBox(height: 16),
           ],
-          Text(_item!.name, textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 28, fontWeight: FontWeight.w600, height: 1.15)),
+          Text(_item!.name, style: GoogleFonts.literata(fontSize: 32, fontWeight: FontWeight.w700, height: 1.1)),
           const SizedBox(height: 14),
-          Text('count  ${_item!.quantity}     wear  ${_item!.condition}', textAlign: TextAlign.center, style: GoogleFonts.libreFranklin(fontSize: 13)),
-          if (_item!.estimatedValue != null) Text('replace  \$${_item!.estimatedValue}', textAlign: TextAlign.center, style: GoogleFonts.libreFranklin(fontSize: 13)),
+          Text('count  ${_item!.quantity}     wear  ${_item!.condition}', style: GoogleFonts.atkinsonHyperlegible(fontSize: 13)),
+          if (_item!.estimatedValue != null) Text('replace  \$${_item!.estimatedValue}', style: GoogleFonts.atkinsonHyperlegible(fontSize: 13)),
           if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
-            const BillLabel(label: 'STAGE NOTE'),
-            Text(_item!.notes!, textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 16, height: 1.4)),
+            const DeckLabel(label: 'STUDY NOTE'),
+            Text(_item!.notes!, style: GoogleFonts.literata(fontSize: 18, height: 1.4)),
           ],
-          const BillLabel(label: 'SITS IN'),
-          PlaybillBlock(
-            title: _container?.name ?? 'Unknown crate',
-            meta: _container != null ? '${_container!.room}  ·  ${_container!.shelf}  ·  ${_container!.code}' : '',
+          const DeckLabel(label: 'SITS IN'),
+          FlashTile(
+            kind: _container?.code ?? '—',
+            title: _container?.name ?? 'Unknown deck',
+            meta: _container != null ? '${_container!.room}  ·  ${_container!.shelf}' : '',
             accent: VisualTheme.primaryColor,
             onTap: _container == null ? () {} : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),
           ),

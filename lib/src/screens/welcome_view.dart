@@ -16,11 +16,11 @@ class _WelcomeViewState extends State<WelcomeView> {
   int _currentPage = 0;
 
   final _pages = [
-    {'act': 'ACT I', 'title': 'Prompt Booth', 'body': 'A drama catalog for the week. One crate per production. Know which script sits in which booth before opening night.'},
-    {'act': 'ACT II', 'title': 'Twelve kinds', 'body': 'Scripts, roles, props, costumes — file each piece the way your class actually stages it.'},
-    {'act': 'ACT III', 'title': 'Snap the bill', 'body': 'Photograph a prompt book, a costume rack, or a prop crate so you remember the exact edition in the wings.'},
-    {'act': 'ACT IV', 'title': 'Call a cue', 'body': 'Move a role from the rehearsal crate to the opening-night stack and leave a short note of why it moved.'},
-    {'act': 'ACT V', 'title': 'Works offline', 'body': 'No account and no signal. The booth stays on this phone.'},
+    {'card': '01', 'title': 'Lemma Box', 'body': 'A vocab desk for the week. One deck per unit. Know which lemma sits in which box before the quiz.'},
+    {'card': '02', 'title': 'Twelve kinds', 'body': 'Nouns, roots, idioms, spelling — file each card the way your class actually studies it.'},
+    {'card': '03', 'title': 'Snap the card', 'body': 'Photograph a deck, a word wall, or a quiz stack so you remember the exact set on the shelf.'},
+    {'card': '04', 'title': 'Shift a card', 'body': 'Move a lemma from the class deck to the quiz stack and leave a short note of why it moved.'},
+    {'card': '05', 'title': 'Works offline', 'body': 'No account and no signal. The box stays on this phone.'},
   ];
 
   Future<void> _finish() async {
@@ -37,18 +37,18 @@ class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: VisualTheme.velvet,
+      backgroundColor: VisualTheme.primaryColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(28, 12, 28, 20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: _finish,
-                  child: Text('SKIP', style: GoogleFonts.libreFranklin(color: VisualTheme.cream.withValues(alpha: 0.4), letterSpacing: 1.6)),
+                  child: Text('SKIP', style: GoogleFonts.atkinsonHyperlegible(color: VisualTheme.manila.withValues(alpha: 0.4), letterSpacing: 1.6)),
                 ),
               ),
               Expanded(
@@ -59,13 +59,21 @@ class _WelcomeViewState extends State<WelcomeView> {
                   itemBuilder: (context, index) {
                     final page = _pages[index];
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Spacer(),
-                        Text(page['act'] as String, style: GoogleFonts.cinzel(fontSize: 13, letterSpacing: 3, color: VisualTheme.secondaryColor)),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            border: Border(left: BorderSide(color: VisualTheme.secondaryColor, width: 4)),
+                            color: VisualTheme.manila,
+                          ),
+                          child: Text('CARD ${page['card']}', style: GoogleFonts.atkinsonHyperlegible(fontSize: 12, fontWeight: FontWeight.w800, color: VisualTheme.primaryColor)),
+                        ),
+                        const SizedBox(height: 18),
+                        Text(page['title'] as String, style: GoogleFonts.literata(fontSize: 38, fontWeight: FontWeight.w700, color: VisualTheme.manila, height: 1.05)),
                         const SizedBox(height: 16),
-                        Text(page['title'] as String, textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 34, fontWeight: FontWeight.w600, color: VisualTheme.cream, height: 1.15)),
-                        const SizedBox(height: 16),
-                        Text(page['body'] as String, textAlign: TextAlign.center, style: GoogleFonts.libreFranklin(fontSize: 16, height: 1.5, color: VisualTheme.cream.withValues(alpha: 0.78))),
+                        Text(page['body'] as String, style: GoogleFonts.atkinsonHyperlegible(fontSize: 16, height: 1.5, color: VisualTheme.manila.withValues(alpha: 0.82))),
                         const Spacer(),
                       ],
                     );
@@ -74,7 +82,7 @@ class _WelcomeViewState extends State<WelcomeView> {
               ),
               Row(
                 children: [
-                  Text('scene ${_currentPage + 1}', style: GoogleFonts.libreFranklin(color: VisualTheme.cream.withValues(alpha: 0.4))),
+                  Text('card ${_currentPage + 1} of 5', style: GoogleFonts.atkinsonHyperlegible(color: VisualTheme.manila.withValues(alpha: 0.45))),
                   const Spacer(),
                   TextButton(
                     onPressed: () {
@@ -84,7 +92,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         _pageController.nextPage(duration: const Duration(milliseconds: 240), curve: Curves.easeOut);
                       }
                     },
-                    child: Text(_currentPage == _pages.length - 1 ? 'OPEN THE HOUSE' : 'NEXT SCENE →', style: GoogleFonts.cinzel(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
+                    child: Text(_currentPage == _pages.length - 1 ? 'OPEN THE BOX' : 'FLIP →', style: GoogleFonts.atkinsonHyperlegible(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w800)),
                   ),
                 ],
               ),

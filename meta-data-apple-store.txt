@@ -1,14 +1,14 @@
 APP NAME
-Prompt Booth
+Lemma Box
 
 SUBTITLE
-Stage class playbills
+Classroom word cards
 
 KEYWORDS
-drama,script,stage,play,lesson,theater,cast,cue,teacher,offline
+vocab,flashcard,word,lesson,spelling,grammar,lemma,teacher,classroom,offline
 
 PROMOTION
-File class scripts, roles, and props, then find any cue before opening night. Private, offline.
+File classroom word decks, lemmas, and flashcards, then find any card before the quiz. Private, offline.
 
 DESCRIPTION
-Prompt Booth is a private offline drama catalog — file class scripts, roles, and props, then find any cue before opening night.
+Lemma Box is a private offline vocab desk — file word decks, lemmas, and flashcards, then find any card before the quiz.

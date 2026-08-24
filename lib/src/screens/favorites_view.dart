@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/booth_chrome.dart';
+import '../widgets/lemma_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -48,7 +48,7 @@ class _FavoritesViewState extends State<FavoritesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Cast')),
+      appBar: AppBar(title: const Text('Pin')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteItems == null || _favoriteItems!.isEmpty
@@ -58,11 +58,11 @@ class _FavoritesViewState extends State<FavoritesView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.theater_comedy_outlined, size: 48, color: VisualTheme.secondaryColor),
+                        Icon(Icons.push_pin_outlined, size: 48, color: VisualTheme.secondaryColor),
                         const SizedBox(height: 8),
-                        Text('Nobody cast', style: GoogleFonts.cinzel(fontSize: 24, fontWeight: FontWeight.w600)),
+                        Text('Nothing pinned', style: GoogleFonts.literata(fontSize: 24, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 8),
-                        const Text('Cast the cues you will need on opening night.', textAlign: TextAlign.center),
+                        const Text('Pin the cards you will quiz this week.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -70,17 +70,19 @@ class _FavoritesViewState extends State<FavoritesView> {
               : RefreshIndicator(
                   onRefresh: _loadFavorites,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 4, 8, 28),
+                    padding: const EdgeInsets.fromLTRB(20, 4, 8, 16),
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final crate = _containersCache[item.containerId];
+                      final deck = _containersCache[item.containerId];
                       return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: PlaybillBlock(
+                            child: FlashTile(
+                              kind: item.category,
                               title: item.name,
-                              meta: '${item.category}  ·  ${item.quantity}${crate != null ? '  ·  ${crate.name}' : ''}',
+                              meta: '${item.quantity}${deck != null ? '  ·  ${deck.name}' : ''}',
                               accent: VisualTheme.getCategoryColor(item.category),
                               onTap: () async {
                                 await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
@@ -90,7 +92,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                           ),
                           IconButton(
                             key: ValueKey('favorite_toggle_${item.id}'),
-                            icon: Icon(item.isFavorite ? Icons.theater_comedy : Icons.theater_comedy_outlined, color: item.isFavorite ? VisualTheme.secondaryColor : null),
+                            icon: Icon(item.isFavorite ? Icons.push_pin : Icons.push_pin_outlined, color: item.isFavorite ? VisualTheme.secondaryColor : null),
                             onPressed: () async {
                               await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
                               _loadFavorites();

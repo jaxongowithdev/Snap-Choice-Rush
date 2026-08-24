@@ -1,4 +1,4 @@
-// Script crate / classroom playbill set
+// Word deck / classroom flashcard box
 class ContainerModel {
   final int? id;
   final String name;

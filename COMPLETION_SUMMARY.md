@@ -1,3 +1,3 @@
-# Prompt Booth
+# Lemma Box
 
-Offline drama catalog. Velvet / gold / cream UI, Cinzel + Libre Franklin, marquee lights, curtain folds. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline vocab desk. Navy / rubber-red / manila UI, Literata + Atkinson Hyperlegible, fanned card dock, ruled index paper. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Prompt Booth initialization...');
+      debugPrint('Starting Lemma Box initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Prompt Booth',
+      title: 'Lemma Box',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -80,14 +80,14 @@ class _UserScreenState extends State<UserScreen> {
         builder: (context) {
           if (!_isInitialized || _preferences == null) {
             return Scaffold(
-              backgroundColor: VisualTheme.velvet,
+              backgroundColor: VisualTheme.primaryColor,
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Prompt Booth', style: GoogleFonts.cinzel(color: VisualTheme.cream, fontSize: 28, letterSpacing: 1.4)),
+                    Text('Lemma Box', style: GoogleFonts.literata(color: VisualTheme.manila, fontSize: 32, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 8),
-                    Text('Warming the house…', style: GoogleFonts.libreFranklin(color: VisualTheme.cream.withValues(alpha: 0.7))),
+                    Text('Shuffling the deck…', style: GoogleFonts.atkinsonHyperlegible(color: VisualTheme.manila.withValues(alpha: 0.7))),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

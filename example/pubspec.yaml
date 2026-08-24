@@ -1,5 +1,5 @@
-name: prompt_booth_example
-description: "Prompt Booth - Stage class playbills"
+name: lemma_box_example
+description: "Lemma Box - Classroom word cards"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

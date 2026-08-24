@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/booth_chrome.dart';
+import '../widgets/lemma_chrome.dart';
 import 'item_detail_view.dart';
 
 class SearchView extends StatefulWidget {
@@ -58,7 +58,7 @@ class _SearchViewState extends State<SearchView> {
           controller: _searchController,
           autofocus: true,
           cursorColor: VisualTheme.primaryColor,
-          decoration: const InputDecoration(hintText: 'Tempest, lantern, crate…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none),
+          decoration: const InputDecoration(hintText: 'lemma, idiom, deck…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none),
           onChanged: _performSearch,
         ),
         actions: [
@@ -72,17 +72,18 @@ class _SearchViewState extends State<SearchView> {
 
   Widget _buildBody() {
     if (_isSearching) return const Center(child: CircularProgressIndicator());
-    if (_searchController.text.isEmpty) return _hint('find a cue', 'Search a script, kind, or stage note.');
+    if (_searchController.text.isEmpty) return _hint('find a card', 'Search a word, kind, or study note.');
     if (_results == null || _results!.isEmpty) return _hint('no match', 'Try a shorter word or another kind.');
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(28, 4, 28, 28),
+      padding: const EdgeInsets.fromLTRB(20, 4, 16, 28),
       itemCount: _results!.length,
       itemBuilder: (_, i) {
         final item = _results![i];
-        final crate = _containersCache[item.containerId];
-        return PlaybillBlock(
+        final deck = _containersCache[item.containerId];
+        return FlashTile(
+          kind: item.category,
           title: item.name,
-          meta: '${item.category}${crate != null ? '  ·  ${crate.name}' : ''}',
+          meta: deck != null ? deck.name : '',
           accent: VisualTheme.getCategoryColor(item.category),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!))).then((_) => _performSearch(_searchController.text));
@@ -99,7 +100,7 @@ class _SearchViewState extends State<SearchView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title, style: GoogleFonts.cinzel(fontSize: 24, letterSpacing: 1.4)),
+            Text(title, style: GoogleFonts.literata(fontSize: 26, fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
             Text(subtitle, textAlign: TextAlign.center),
           ],

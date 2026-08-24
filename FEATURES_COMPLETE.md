@@ -1,3 +1,3 @@
-# Prompt Booth — feature set
+# Lemma Box — feature set
 
-Top marquee five-bulb bar, velvet-drape chrome, playbill blocks, twelve drama kinds, cue log, cover photos, search, JSON backup, offline SQLite (`prompt_booth.db`).
+Fanned five-card dock, index-card chrome, flash tiles, twelve vocab kinds, shift log, cover photos, search, JSON backup, offline SQLite (`lemma_box.db`).

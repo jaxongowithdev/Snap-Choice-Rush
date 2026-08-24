@@ -1,22 +1,22 @@
-# Prompt Booth
+# Lemma Box
 
-A private drama catalog. File class scripts, roles, and props, then find any cue before opening night — fully offline.
+A private vocab desk. File word decks, lemmas, and flashcards, then find any card before the quiz — fully offline.
 
-**App Name:** Prompt Booth
-**Subtitle:** Stage class playbills
+**App Name:** Lemma Box
+**Subtitle:** Classroom word cards
 **Category:** Education
-**Bundle ID:** com.app.promptbooth.build
-**Database:** `prompt_booth.db`
+**Bundle ID:** com.app.lemmabox.build
+**Database:** `lemma_box.db`
 
 ## Navigation
 
-Marquee bulbs across the top — not a Material tab bar, hanging tanzaku, compass wheel, left rail, or piano keys.
+Fanned index-card dock — not a Material tab bar, marquee, hanging tanzaku, compass wheel, or piano keys.
 
-- HOUSE — this week’s bill
-- SCRIPTS — every crate
-- CAST — opening-night set
-- CUE — moves between crates
-- LOBBY — light and backup
+- DECK — this week’s list
+- BOXES — every word deck
+- PIN — quiz set
+- SHIFT — moves between decks
+- LID — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

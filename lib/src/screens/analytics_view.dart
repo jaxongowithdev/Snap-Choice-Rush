@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../widgets/booth_chrome.dart';
+import '../widgets/lemma_chrome.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -39,23 +39,23 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('House')),
+      appBar: AppBar(title: const Text('Count')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(28, 8, 28, 28),
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
                 children: [
                   if (_stats != null)
-                    Text('${_stats!['totalItems']} cues   ·   ${_stats!['totalContainers']} crates', textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 20)),
+                    Text('${_stats!['totalItems']} cards   ·   ${_stats!['totalContainers']} decks', style: GoogleFonts.literata(fontSize: 22, fontWeight: FontWeight.w700)),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
-                    const BillLabel(label: 'BY KIND'),
-                    ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}', textAlign: TextAlign.center)),
+                    const DeckLabel(label: 'BY KIND'),
+                    ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
-                    const BillLabel(label: 'BY ROOM'),
-                    ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}', textAlign: TextAlign.center)),
+                    const DeckLabel(label: 'BY ROOM'),
+                    ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                 ],
               ),
