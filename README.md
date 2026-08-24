@@ -1,22 +1,22 @@
-# Ink Stanza
+# Prompt Booth
 
-A private poetry workshop. File folios, verses, and sealed copies, then find any poem before the reading — fully offline.
+A private drama catalog. File class scripts, roles, and props, then find any cue before opening night — fully offline.
 
-**App Name:** Ink Stanza
-**Subtitle:** Poetry workshop desk
+**App Name:** Prompt Booth
+**Subtitle:** Stage class playbills
 **Category:** Education
-**Bundle ID:** com.app.inkstanza.build
-**Database:** `ink_stanza.db`
+**Bundle ID:** com.app.promptbooth.build
+**Database:** `prompt_booth.db`
 
 ## Navigation
 
-Right hanging tanzaku — not a Material tab bar, compass wheel, left rail, binder tabs, or piano keys.
+Marquee bulbs across the top — not a Material tab bar, hanging tanzaku, compass wheel, left rail, or piano keys.
 
-- ROOM — this week’s reading
-- FOLIO — every workshop folio
-- SEAL — reading set
-- PASS — moves between folios
-- DESK — light and backup
+- HOUSE — this week’s bill
+- SCRIPTS — every crate
+- CAST — opening-night set
+- CUE — moves between crates
+- LOBBY — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

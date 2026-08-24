@@ -1,5 +1,5 @@
 name: user_screen
-description: "Ink Stanza - File workshop folios, verses, and sealed copies, then find any poem before the reading. Completely offline."
+description: "Prompt Booth - File class scripts, roles, and props, then find any cue before opening night. Completely offline."
 version: 1.0.0+2
 
 environment:

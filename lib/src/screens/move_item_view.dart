@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/stanza_chrome.dart';
+import '../widgets/booth_chrome.dart';
 
 class MoveItemView extends StatefulWidget {
   final InventoryItemModel item;
@@ -53,7 +53,7 @@ class _MoveItemViewState extends State<MoveItemView> {
 
   Future<void> _moveItem() async {
     if (_selectedContainer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination folio')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination crate')));
       return;
     }
     final destCount = _itemCounts[_selectedContainer!.id] ?? 0;
@@ -61,8 +61,8 @@ class _MoveItemViewState extends State<MoveItemView> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('That folio is full'),
-          content: Text('"${_selectedContainer!.name}" has no open lines. File it anyway?'),
+          title: const Text('That crate is full'),
+          content: Text('"${_selectedContainer!.name}" has no open cues. File it anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
             FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('File anyway')),
@@ -81,20 +81,20 @@ class _MoveItemViewState extends State<MoveItemView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Pass')),
+      appBar: AppBar(title: const Text('Cue')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
-              padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
               children: [
-                Text('passing', style: GoogleFonts.figtree(letterSpacing: 1.6, fontSize: 11, color: VisualTheme.primaryColor)),
-                Text(widget.item.name, style: GoogleFonts.spectral(fontSize: 26, fontWeight: FontWeight.w600)),
-                Text('${widget.item.category}  ·  ${widget.item.quantity}'),
-                const SealLabel(label: 'NOW IN'),
-                Text(_currentContainer == null ? 'Unknown folio' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
-                const SealLabel(label: 'PASS INTO'),
+                Text('moving', textAlign: TextAlign.center, style: GoogleFonts.cinzel(letterSpacing: 2.2, fontSize: 11, color: VisualTheme.primaryColor)),
+                Text(widget.item.name, textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 24, fontWeight: FontWeight.w600)),
+                Text('${widget.item.category}  ·  ${widget.item.quantity}', textAlign: TextAlign.center),
+                const BillLabel(label: 'NOW IN'),
+                Text(_currentContainer == null ? 'Unknown crate' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}', textAlign: TextAlign.center),
+                const BillLabel(label: 'MOVE INTO'),
                 if (_containers == null || _containers!.isEmpty)
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other folios yet'))
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other crates yet', textAlign: TextAlign.center))
                 else
                   ..._containers!.map((c) {
                     final count = _itemCounts[c.id] ?? 0;
@@ -102,15 +102,15 @@ class _MoveItemViewState extends State<MoveItemView> {
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: Text(selected ? '●' : '○', style: TextStyle(color: selected ? VisualTheme.primaryColor : null, fontSize: 16)),
-                      title: Text(c.name, style: GoogleFonts.spectral(fontSize: 18, fontWeight: FontWeight.w600)),
+                      title: Text(c.name, style: GoogleFonts.cinzel(fontSize: 16, fontWeight: FontWeight.w600)),
                       subtitle: Text('${c.room}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
                       onTap: () => setState(() => _selectedContainer = c),
                     );
                   }),
                 const SizedBox(height: 12),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the pass?', hintText: 'e.g., Going into the reading-night stack'), maxLines: 2),
+                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the cue?', hintText: 'e.g., Going into the opening-night stack'), maxLines: 2),
                 const SizedBox(height: 22),
-                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Pass the verse')),
+                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Call the cue')),
               ],
             ),
     );

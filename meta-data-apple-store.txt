@@ -1,14 +1,14 @@
 APP NAME
-Ink Stanza
+Prompt Booth
 
 SUBTITLE
-Poetry workshop desk
+Stage class playbills
 
 KEYWORDS
-poem,verse,stanza,poetry,lesson,workshop,haiku,sonnet,teacher,offline
+drama,script,stage,play,lesson,theater,cast,cue,teacher,offline
 
 PROMOTION
-File workshop folios, verses, and sealed copies, then find any poem before the reading. Private, offline.
+File class scripts, roles, and props, then find any cue before opening night. Private, offline.
 
 DESCRIPTION
-Ink Stanza is a private offline poetry workshop — file folios, verses, and sealed copies, then find any poem before the reading.
+Prompt Booth is a private offline drama catalog — file class scripts, roles, and props, then find any cue before opening night.

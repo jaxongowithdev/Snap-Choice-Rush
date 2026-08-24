@@ -1,3 +1,3 @@
-# Ink Stanza — feature set
+# Prompt Booth — feature set
 
-Right-hanging five-strip tanzaku, washi chrome, couplet cards, twelve verse kinds, pass log, cover photos, search, JSON backup, offline SQLite (`ink_stanza.db`).
+Top marquee five-bulb bar, velvet-drape chrome, playbill blocks, twelve drama kinds, cue log, cover photos, search, JSON backup, offline SQLite (`prompt_booth.db`).

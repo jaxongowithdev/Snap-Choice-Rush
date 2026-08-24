@@ -5,7 +5,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/stanza_chrome.dart';
+import '../widgets/booth_chrome.dart';
 import 'item_form_view.dart';
 import 'container_detail_view.dart';
 import 'move_item_view.dart';
@@ -57,7 +57,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     setState(() => _item = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Sealed for the reading' : 'Seal lifted'),
+        content: Text(updated.isFavorite ? 'Cast for opening night' : 'Struck from the cast'),
         duration: const Duration(seconds: 1),
       ));
     }
@@ -67,11 +67,11 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('File this verse away?'),
-        content: const Text('It will leave the workshop catalog.'),
+        title: const Text('Strike this cue?'),
+        content: const Text('It will leave the booth catalog.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('File away')),
+          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Strike')),
         ],
       ),
     );
@@ -84,7 +84,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Verse not found')));
+    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Cue not found')));
 
     return Scaffold(
       appBar: AppBar(
@@ -92,14 +92,14 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         actions: [
           IconButton(
             key: const ValueKey('favorite_toggle'),
-            icon: Icon(_item!.isFavorite ? Icons.auto_awesome : Icons.auto_awesome_outlined, color: _item!.isFavorite ? VisualTheme.primaryColor : null),
+            icon: Icon(_item!.isFavorite ? Icons.theater_comedy : Icons.theater_comedy_outlined, color: _item!.isFavorite ? VisualTheme.secondaryColor : null),
             onPressed: _toggleFavorite,
           ),
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'move', child: Text('Move to another folio')),
-              PopupMenuItem(value: 'edit', child: Text('Edit verse')),
-              PopupMenuItem(value: 'delete', child: Text('File away')),
+              PopupMenuItem(value: 'move', child: Text('Move to another crate')),
+              PopupMenuItem(value: 'edit', child: Text('Edit cue')),
+              PopupMenuItem(value: 'delete', child: Text('Strike')),
             ],
             onSelected: (v) {
               if (v == 'move') {
@@ -114,25 +114,24 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        padding: const EdgeInsets.fromLTRB(28, 8, 28, 32),
         children: [
           if (_item!.photoPath != null && _item!.photoPath!.isNotEmpty) ...[
-            Image.file(File(_item!.photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.fiber, child: const Center(child: Icon(Icons.broken_image)))),
+            Image.file(File(_item!.photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.mist, child: const Center(child: Icon(Icons.broken_image)))),
             const SizedBox(height: 16),
           ],
-          Text(_item!.name, style: GoogleFonts.spectral(fontSize: 32, fontWeight: FontWeight.w600, height: 1.05)),
+          Text(_item!.name, textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 28, fontWeight: FontWeight.w600, height: 1.15)),
           const SizedBox(height: 14),
-          Text('count  ${_item!.quantity}     wear  ${_item!.condition}', style: GoogleFonts.figtree(fontSize: 13)),
-          if (_item!.estimatedValue != null) Text('replace  \$${_item!.estimatedValue}', style: GoogleFonts.figtree(fontSize: 13)),
+          Text('count  ${_item!.quantity}     wear  ${_item!.condition}', textAlign: TextAlign.center, style: GoogleFonts.libreFranklin(fontSize: 13)),
+          if (_item!.estimatedValue != null) Text('replace  \$${_item!.estimatedValue}', textAlign: TextAlign.center, style: GoogleFonts.libreFranklin(fontSize: 13)),
           if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
-            const SealLabel(label: 'MARGINAL NOTE'),
-            Text(_item!.notes!, style: GoogleFonts.spectral(fontSize: 18, fontStyle: FontStyle.italic)),
+            const BillLabel(label: 'STAGE NOTE'),
+            Text(_item!.notes!, textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 16, height: 1.4)),
           ],
-          const SealLabel(label: 'SITS IN'),
-          CoupletCard(
-            kind: _container?.code ?? '—',
-            title: _container?.name ?? 'Unknown folio',
-            meta: _container != null ? '${_container!.room}  ·  ${_container!.shelf}' : '',
+          const BillLabel(label: 'SITS IN'),
+          PlaybillBlock(
+            title: _container?.name ?? 'Unknown crate',
+            meta: _container != null ? '${_container!.room}  ·  ${_container!.shelf}  ·  ${_container!.code}' : '',
             accent: VisualTheme.primaryColor,
             onTap: _container == null ? () {} : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),
           ),

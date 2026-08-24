@@ -1,5 +1,5 @@
-name: ink_stanza_example
-description: "Ink Stanza - Poetry workshop desk"
+name: prompt_booth_example
+description: "Prompt Booth - Stage class playbills"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

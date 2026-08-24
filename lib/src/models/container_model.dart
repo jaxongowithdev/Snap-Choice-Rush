@@ -1,4 +1,4 @@
-// Workshop folio / poetry set
+// Script crate / classroom playbill set
 class ContainerModel {
   final int? id;
   final String name;

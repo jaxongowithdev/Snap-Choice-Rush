@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Ink Stanza initialization...');
+      debugPrint('Starting Prompt Booth initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Ink Stanza',
+      title: 'Prompt Booth',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -80,14 +80,14 @@ class _UserScreenState extends State<UserScreen> {
         builder: (context) {
           if (!_isInitialized || _preferences == null) {
             return Scaffold(
-              backgroundColor: VisualTheme.primaryColor,
+              backgroundColor: VisualTheme.velvet,
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Ink Stanza', style: GoogleFonts.spectral(color: VisualTheme.washi, fontSize: 36, fontStyle: FontStyle.italic)),
+                    Text('Prompt Booth', style: GoogleFonts.cinzel(color: VisualTheme.cream, fontSize: 28, letterSpacing: 1.4)),
                     const SizedBox(height: 8),
-                    Text('Grinding the ink…', style: GoogleFonts.figtree(color: VisualTheme.washi.withValues(alpha: 0.7))),
+                    Text('Warming the house…', style: GoogleFonts.libreFranklin(color: VisualTheme.cream.withValues(alpha: 0.7))),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

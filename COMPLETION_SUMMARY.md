@@ -1,3 +1,3 @@
-# Ink Stanza
+# Prompt Booth
 
-Offline poetry workshop. Cinnabar / indigo / washi UI, Spectral + Figtree, hanging tanzaku rail, fiber paper. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline drama catalog. Velvet / gold / cream UI, Cinzel + Libre Franklin, marquee lights, curtain folds. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

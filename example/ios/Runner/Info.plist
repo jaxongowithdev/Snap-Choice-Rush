@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Ink Stanza</string>
+	<string>Prompt Booth</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Ink Stanza</string>
+	<string>Prompt Booth</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,8 +53,8 @@
 		<false/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Ink Stanza uses your photo library so you can save a photo of each folio or verse.</string>
+	<string>Prompt Booth uses your photo library so you can save a photo of each crate or cue.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Ink Stanza uses your camera so you can photograph broadsides, journals, and sealed copies.</string>
+	<string>Prompt Booth uses your camera so you can photograph prompt books, costume racks, and prop crates.</string>
 </dict>
 </plist>

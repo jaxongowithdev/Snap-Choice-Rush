@@ -1,4 +1,4 @@
-# Ink Stanza
+# Prompt Booth
 
 ```bash
 flutter run
