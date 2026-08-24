@@ -1,14 +1,14 @@
 APP NAME
-Lemma Box
+Press Leaf
 
 SUBTITLE
-Classroom word cards
+Nature study journal
 
 KEYWORDS
-vocab,flashcard,word,lesson,spelling,grammar,lemma,teacher,classroom,offline
+nature,leaf,journal,lesson,field,plant,herbarium,teacher,classroom,offline
 
 PROMOTION
-File classroom word decks, lemmas, and flashcards, then find any card before the quiz. Private, offline.
+File field presses, leaves, and trail finds, then find any specimen before the unit hike. Private, offline.
 
 DESCRIPTION
-Lemma Box is a private offline vocab desk — file word decks, lemmas, and flashcards, then find any card before the quiz.
+Press Leaf is a private offline nature journal — file field presses, leaves, and trail finds, then find any specimen before the unit hike.

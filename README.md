@@ -1,22 +1,22 @@
-# Lemma Box
+# Press Leaf
 
-A private vocab desk. File word decks, lemmas, and flashcards, then find any card before the quiz — fully offline.
+A private nature journal. File field presses, leaves, and trail finds, then find any specimen before the unit hike — fully offline.
 
-**App Name:** Lemma Box
-**Subtitle:** Classroom word cards
+**App Name:** Press Leaf
+**Subtitle:** Nature study journal
 **Category:** Education
-**Bundle ID:** com.app.lemmabox.build
-**Database:** `lemma_box.db`
+**Bundle ID:** com.app.pressleaf.build
+**Database:** `press_leaf.db`
 
 ## Navigation
 
-Fanned index-card dock — not a Material tab bar, marquee, hanging tanzaku, compass wheel, or piano keys.
+Hanging bookmark ribbons from the top — not a Material tab bar, fanned index cards, marquee, tanzaku, or compass.
 
-- DECK — this week’s list
-- BOXES — every word deck
-- PIN — quiz set
-- SHIFT — moves between decks
-- LID — light and backup
+- TRAIL — this week’s walk
+- PRESSES — every field folio
+- PIN — hike set
+- LOG — moves between presses
+- CAMP — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

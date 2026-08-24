@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/lemma_chrome.dart';
+import '../widgets/leaf_chrome.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
 import 'favorites_view.dart';
@@ -33,14 +33,14 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexPaper(
+      body: FieldPaper(
         child: Column(
           children: [
-            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
-            CardFanDock(
+            RibbonRail(
               index: _selectedIndex,
               onSelect: (i) => setState(() => _selectedIndex = i),
             ),
+            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
           ],
         ),
       ),

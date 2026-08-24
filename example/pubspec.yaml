@@ -1,5 +1,5 @@
-name: lemma_box_example
-description: "Lemma Box - Classroom word cards"
+name: press_leaf_example
+description: "Press Leaf - Nature study journal"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

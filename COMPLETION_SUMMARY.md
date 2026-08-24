@@ -1,3 +1,3 @@
-# Lemma Box
+# Press Leaf
 
-Offline vocab desk. Navy / rubber-red / manila UI, Literata + Atkinson Hyperlegible, fanned card dock, ruled index paper. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline nature journal. Moss / rust / cream UI, Newsreader + Nunito Sans, bookmark ribbons, leaf silhouettes. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

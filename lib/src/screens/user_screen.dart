@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Lemma Box initialization...');
+      debugPrint('Starting Press Leaf initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Lemma Box',
+      title: 'Press Leaf',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -85,9 +85,9 @@ class _UserScreenState extends State<UserScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Lemma Box', style: GoogleFonts.literata(color: VisualTheme.manila, fontSize: 32, fontWeight: FontWeight.w700)),
+                    Text('Press Leaf', style: GoogleFonts.newsreader(color: VisualTheme.cream, fontSize: 34, fontStyle: FontStyle.italic)),
                     const SizedBox(height: 8),
-                    Text('Shuffling the deck…', style: GoogleFonts.atkinsonHyperlegible(color: VisualTheme.manila.withValues(alpha: 0.7))),
+                    Text('Opening the press…', style: GoogleFonts.nunitoSans(color: VisualTheme.cream.withValues(alpha: 0.7))),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

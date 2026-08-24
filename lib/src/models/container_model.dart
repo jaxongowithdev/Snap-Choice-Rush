@@ -1,4 +1,4 @@
-// Word deck / classroom flashcard box
+// Field press / nature-study journal
 class ContainerModel {
   final int? id;
   final String name;

@@ -5,7 +5,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/lemma_chrome.dart';
+import '../widgets/leaf_chrome.dart';
 import 'item_form_view.dart';
 import 'container_detail_view.dart';
 import 'move_item_view.dart';
@@ -57,7 +57,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     setState(() => _item = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Pinned for the quiz' : 'Pin lifted'),
+        content: Text(updated.isFavorite ? 'Pinned for the hike' : 'Pin lifted'),
         duration: const Duration(seconds: 1),
       ));
     }
@@ -67,8 +67,8 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('File this card away?'),
-        content: const Text('It will leave the vocab catalog.'),
+        title: const Text('File this slip away?'),
+        content: const Text('It will leave the nature catalog.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('File away')),
@@ -84,7 +84,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Card not found')));
+    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Slip not found')));
 
     return Scaffold(
       appBar: AppBar(
@@ -97,8 +97,8 @@ class _ItemDetailViewState extends State<ItemDetailView> {
           ),
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'move', child: Text('Move to another deck')),
-              PopupMenuItem(value: 'edit', child: Text('Edit card')),
+              PopupMenuItem(value: 'move', child: Text('Move to another press')),
+              PopupMenuItem(value: 'edit', child: Text('Edit slip')),
               PopupMenuItem(value: 'delete', child: Text('File away')),
             ],
             onSelected: (v) {
@@ -114,24 +114,27 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 16, 32),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
           if (_item!.photoPath != null && _item!.photoPath!.isNotEmpty) ...[
-            Image.file(File(_item!.photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.paper, child: const Center(child: Icon(Icons.broken_image)))),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(18),
+              child: Image.file(File(_item!.photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.mist, child: const Center(child: Icon(Icons.broken_image)))),
+            ),
             const SizedBox(height: 16),
           ],
-          Text(_item!.name, style: GoogleFonts.literata(fontSize: 32, fontWeight: FontWeight.w700, height: 1.1)),
+          Text(_item!.name, style: GoogleFonts.newsreader(fontSize: 32, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic, height: 1.1)),
           const SizedBox(height: 14),
-          Text('count  ${_item!.quantity}     wear  ${_item!.condition}', style: GoogleFonts.atkinsonHyperlegible(fontSize: 13)),
-          if (_item!.estimatedValue != null) Text('replace  \$${_item!.estimatedValue}', style: GoogleFonts.atkinsonHyperlegible(fontSize: 13)),
+          Text('count  ${_item!.quantity}     wear  ${_item!.condition}', style: GoogleFonts.nunitoSans(fontSize: 13)),
+          if (_item!.estimatedValue != null) Text('replace  \$${_item!.estimatedValue}', style: GoogleFonts.nunitoSans(fontSize: 13)),
           if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
-            const DeckLabel(label: 'STUDY NOTE'),
-            Text(_item!.notes!, style: GoogleFonts.literata(fontSize: 18, height: 1.4)),
+            const TrailLabel(label: 'FIELD NOTE'),
+            Text(_item!.notes!, style: GoogleFonts.newsreader(fontSize: 18, fontStyle: FontStyle.italic)),
           ],
-          const DeckLabel(label: 'SITS IN'),
-          FlashTile(
+          const TrailLabel(label: 'SITS IN'),
+          SpecimenCard(
             kind: _container?.code ?? '—',
-            title: _container?.name ?? 'Unknown deck',
+            title: _container?.name ?? 'Unknown press',
             meta: _container != null ? '${_container!.room}  ·  ${_container!.shelf}' : '',
             accent: VisualTheme.primaryColor,
             onTap: _container == null ? () {} : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),

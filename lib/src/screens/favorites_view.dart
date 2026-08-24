@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/lemma_chrome.dart';
+import '../widgets/leaf_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -60,9 +60,9 @@ class _FavoritesViewState extends State<FavoritesView> {
                       children: [
                         Icon(Icons.push_pin_outlined, size: 48, color: VisualTheme.secondaryColor),
                         const SizedBox(height: 8),
-                        Text('Nothing pinned', style: GoogleFonts.literata(fontSize: 24, fontWeight: FontWeight.w700)),
+                        Text('Nothing pinned', style: GoogleFonts.newsreader(fontSize: 24, fontStyle: FontStyle.italic)),
                         const SizedBox(height: 8),
-                        const Text('Pin the cards you will quiz this week.', textAlign: TextAlign.center),
+                        const Text('Pin the slips you will take on the next hike.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -70,19 +70,19 @@ class _FavoritesViewState extends State<FavoritesView> {
               : RefreshIndicator(
                   onRefresh: _loadFavorites,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 4, 8, 16),
+                    padding: const EdgeInsets.fromLTRB(20, 4, 8, 28),
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final deck = _containersCache[item.containerId];
+                      final press = _containersCache[item.containerId];
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: FlashTile(
+                            child: SpecimenCard(
                               kind: item.category,
                               title: item.name,
-                              meta: '${item.quantity}${deck != null ? '  ·  ${deck.name}' : ''}',
+                              meta: '${item.quantity}${press != null ? '  ·  ${press.name}' : ''}',
                               accent: VisualTheme.getCategoryColor(item.category),
                               onTap: () async {
                                 await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));

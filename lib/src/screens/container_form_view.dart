@@ -61,23 +61,23 @@ class _ContainerFormViewState extends State<ContainerFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.container != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit deck' : 'New deck')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit press' : 'New press')),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 16, 22, 32),
           children: [
-            TextFormField(key: const ValueKey('name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Deck name', hintText: 'e.g., Class set, Quiz stack'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this deck' : null),
+            TextFormField(key: const ValueKey('name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Press name', hintText: 'e.g., Field satchel, Window sill'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this press' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('code_field'), controller: _codeController, decoration: const InputDecoration(labelText: 'Lex mark', hintText: 'e.g., LEX-01, QUIZ'), textCapitalization: TextCapitalization.characters, validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a lex mark' : null),
+            TextFormField(key: const ValueKey('code_field'), controller: _codeController, decoration: const InputDecoration(labelText: 'Leaf mark', hintText: 'e.g., LEAF-01, HIKE'), textCapitalization: TextCapitalization.characters, validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a leaf mark' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('room_field'), controller: _roomController, decoration: const InputDecoration(labelText: 'Room / class', hintText: 'e.g., Room 14, Homeschool'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Where does this deck live?' : null),
+            TextFormField(key: const ValueKey('room_field'), controller: _roomController, decoration: const InputDecoration(labelText: 'Room / trail', hintText: 'e.g., Room 8, Creek path'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Where does this press live?' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('shelf_field'), controller: _shelfController, decoration: const InputDecoration(labelText: 'Box / shelf', hintText: 'e.g., Word wall, Card box'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a box or shelf' : null),
+            TextFormField(key: const ValueKey('shelf_field'), controller: _shelfController, decoration: const InputDecoration(labelText: 'Shelf / pack', hintText: 'e.g., Window sill, Daypack'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a shelf or pack' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('capacity_field'), controller: _capacityController, decoration: const InputDecoration(labelText: 'Card / slot count'), keyboardType: TextInputType.number, validator: (v) { final n = int.tryParse(v?.trim() ?? ''); return (n == null || n <= 0) ? 'Use a positive number' : null; }),
+            TextFormField(key: const ValueKey('capacity_field'), controller: _capacityController, decoration: const InputDecoration(labelText: 'Slip / slot count'), keyboardType: TextInputType.number, validator: (v) { final n = int.tryParse(v?.trim() ?? ''); return (n == null || n <= 0) ? 'Use a positive number' : null; }),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_button'), onPressed: _saveContainer, child: Text(isEditing ? 'Save deck' : 'File deck')),
+            FilledButton(key: const ValueKey('save_button'), onPressed: _saveContainer, child: Text(isEditing ? 'Save press' : 'Pack press')),
           ],
         ),
       ),

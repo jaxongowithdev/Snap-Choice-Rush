@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import '../database/storage_manager.dart';
 import '../models/user_preferences.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/lemma_chrome.dart';
+import '../widgets/leaf_chrome.dart';
 
 class ConfigView extends StatefulWidget {
   final VoidCallback onSettingsChanged;
@@ -49,10 +49,10 @@ class _ConfigViewState extends State<ConfigView> {
       final data = await _storage.exportData();
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       await Share.shareXFiles(
-        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'lemma_box_${DateTime.now().millisecondsSinceEpoch}.json')],
-        text: 'Lemma Box catalog',
+        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'press_leaf_${DateTime.now().millisecondsSinceEpoch}.json')],
+        text: 'Press Leaf catalog',
       );
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Box exported')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Journal exported')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not export: $e')));
     }
@@ -62,8 +62,8 @@ class _ConfigViewState extends State<ConfigView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Restore a box?'),
-        content: const Text('The current decks will be replaced by the file you pick.'),
+        title: const Text('Restore a journal?'),
+        content: const Text('The current presses will be replaced by the file you pick.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Restore')),
@@ -76,7 +76,7 @@ class _ConfigViewState extends State<ConfigView> {
       if (result == null || result.files.isEmpty || result.files.first.bytes == null) return;
       final data = jsonDecode(String.fromCharCodes(result.files.first.bytes!)) as Map<String, dynamic>;
       await _storage.importData(data);
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Box restored')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Journal restored')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not restore: $e')));
     }
@@ -86,28 +86,28 @@ class _ConfigViewState extends State<ConfigView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Lid')),
+      appBar: AppBar(title: const Text('Camp')),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 16, 16),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
         children: [
-          Text('Lemma Box', style: GoogleFonts.literata(fontSize: 32, fontWeight: FontWeight.w700)),
+          Text('Press Leaf', style: GoogleFonts.newsreader(fontSize: 32, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic)),
           const SizedBox(height: 6),
-          Text('A private vocab desk. Nothing leaves this phone.', style: GoogleFonts.atkinsonHyperlegible(height: 1.4)),
-          const DeckLabel(label: 'LIGHT'),
-          for (final e in const [('light', 'Daylight manila'), ('dark', 'After the quiz'), ('system', 'Match the phone')])
+          Text('A private nature journal. Nothing leaves this phone.', style: GoogleFonts.nunitoSans(height: 1.4)),
+          const TrailLabel(label: 'LIGHT'),
+          for (final e in const [('light', 'Daylight cream'), ('dark', 'After the hike'), ('system', 'Match the phone')])
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Text((_preferences?.theme ?? 'system') == e.$1 ? '●' : '○', style: const TextStyle(color: VisualTheme.primaryColor)),
               title: Text(e.$2),
               onTap: () => _updateTheme(e.$1),
             ),
-          const DeckLabel(label: 'CATALOG'),
-          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export box'), trailing: const Text('JSON →'), onTap: _exportData),
-          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore box'), trailing: const Text('← FILE'), onTap: _importData),
-          const DeckLabel(label: 'COLOPHON'),
-          Text('Version 1.0.0  ·  Offline vocab inventory', style: GoogleFonts.atkinsonHyperlegible(fontSize: 13)),
+          const TrailLabel(label: 'CATALOG'),
+          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export journal'), trailing: const Text('JSON →'), onTap: _exportData),
+          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore journal'), trailing: const Text('← FILE'), onTap: _importData),
+          const TrailLabel(label: 'COLOPHON'),
+          Text('Version 1.0.0  ·  Offline nature inventory', style: GoogleFonts.nunitoSans(fontSize: 13)),
           const SizedBox(height: 6),
-          Text('No account. No tracking. Local only.', style: GoogleFonts.atkinsonHyperlegible(fontSize: 13)),
+          Text('No account. No tracking. Local only.', style: GoogleFonts.nunitoSans(fontSize: 13)),
         ],
       ),
     );

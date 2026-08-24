@@ -1,3 +1,3 @@
 # Listing notes
 
-This project is Lemma Box (`com.app.lemmabox.build`), a vocabulary-classroom catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.
+This project is Press Leaf (`com.app.pressleaf.build`), a nature-study catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.

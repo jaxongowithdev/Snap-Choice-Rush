@@ -16,11 +16,11 @@ class _WelcomeViewState extends State<WelcomeView> {
   int _currentPage = 0;
 
   final _pages = [
-    {'card': '01', 'title': 'Lemma Box', 'body': 'A vocab desk for the week. One deck per unit. Know which lemma sits in which box before the quiz.'},
-    {'card': '02', 'title': 'Twelve kinds', 'body': 'Nouns, roots, idioms, spelling — file each card the way your class actually studies it.'},
-    {'card': '03', 'title': 'Snap the card', 'body': 'Photograph a deck, a word wall, or a quiz stack so you remember the exact set on the shelf.'},
-    {'card': '04', 'title': 'Shift a card', 'body': 'Move a lemma from the class deck to the quiz stack and leave a short note of why it moved.'},
-    {'card': '05', 'title': 'Works offline', 'body': 'No account and no signal. The box stays on this phone.'},
+    {'stop': '1', 'title': 'Press Leaf', 'body': 'A nature journal for the week. One press per hike. Know which specimen sits in which folio before the unit walk.'},
+    {'stop': '2', 'title': 'Twelve kinds', 'body': 'Leaves, flowers, bark, rocks — file each find the way your class actually collects it.'},
+    {'stop': '3', 'title': 'Snap the press', 'body': 'Photograph a leaf, a trail find, or a field satchel so you remember the exact slip in the press.'},
+    {'stop': '4', 'title': 'Log a move', 'body': 'Shift a specimen from the field press to the classroom folio and leave a short note of why it moved.'},
+    {'stop': '5', 'title': 'Works offline', 'body': 'No account and no signal. The journal stays on this phone.'},
   ];
 
   Future<void> _finish() async {
@@ -37,7 +37,7 @@ class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: VisualTheme.primaryColor,
+      backgroundColor: VisualTheme.bark,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(28, 12, 28, 20),
@@ -48,7 +48,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: _finish,
-                  child: Text('SKIP', style: GoogleFonts.atkinsonHyperlegible(color: VisualTheme.manila.withValues(alpha: 0.4), letterSpacing: 1.6)),
+                  child: Text('SKIP', style: GoogleFonts.nunitoSans(color: VisualTheme.cream.withValues(alpha: 0.4), letterSpacing: 1.6)),
                 ),
               ),
               Expanded(
@@ -62,18 +62,11 @@ class _WelcomeViewState extends State<WelcomeView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            border: Border(left: BorderSide(color: VisualTheme.secondaryColor, width: 4)),
-                            color: VisualTheme.manila,
-                          ),
-                          child: Text('CARD ${page['card']}', style: GoogleFonts.atkinsonHyperlegible(fontSize: 12, fontWeight: FontWeight.w800, color: VisualTheme.primaryColor)),
-                        ),
-                        const SizedBox(height: 18),
-                        Text(page['title'] as String, style: GoogleFonts.literata(fontSize: 38, fontWeight: FontWeight.w700, color: VisualTheme.manila, height: 1.05)),
+                        Text('STOP ${page['stop']}', style: GoogleFonts.nunitoSans(fontSize: 12, letterSpacing: 2, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+                        const SizedBox(height: 14),
+                        Text(page['title'] as String, style: GoogleFonts.newsreader(fontSize: 40, fontStyle: FontStyle.italic, color: VisualTheme.cream, height: 1.05)),
                         const SizedBox(height: 16),
-                        Text(page['body'] as String, style: GoogleFonts.atkinsonHyperlegible(fontSize: 16, height: 1.5, color: VisualTheme.manila.withValues(alpha: 0.82))),
+                        Text(page['body'] as String, style: GoogleFonts.nunitoSans(fontSize: 16, height: 1.5, color: VisualTheme.cream.withValues(alpha: 0.8))),
                         const Spacer(),
                       ],
                     );
@@ -82,7 +75,7 @@ class _WelcomeViewState extends State<WelcomeView> {
               ),
               Row(
                 children: [
-                  Text('card ${_currentPage + 1} of 5', style: GoogleFonts.atkinsonHyperlegible(color: VisualTheme.manila.withValues(alpha: 0.45))),
+                  Text('stop ${_currentPage + 1} of 5', style: GoogleFonts.nunitoSans(color: VisualTheme.cream.withValues(alpha: 0.4))),
                   const Spacer(),
                   TextButton(
                     onPressed: () {
@@ -92,7 +85,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         _pageController.nextPage(duration: const Duration(milliseconds: 240), curve: Curves.easeOut);
                       }
                     },
-                    child: Text(_currentPage == _pages.length - 1 ? 'OPEN THE BOX' : 'FLIP →', style: GoogleFonts.atkinsonHyperlegible(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w800)),
+                    child: Text(_currentPage == _pages.length - 1 ? 'OPEN THE PRESS' : 'NEXT STOP →', style: GoogleFonts.nunitoSans(color: VisualTheme.accentColor, fontWeight: FontWeight.w800)),
                   ),
                 ],
               ),

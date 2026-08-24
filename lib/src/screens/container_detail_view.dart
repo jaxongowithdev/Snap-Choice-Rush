@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/lemma_chrome.dart';
+import '../widgets/leaf_chrome.dart';
 import 'container_form_view.dart';
 import 'item_form_view.dart';
 import 'item_detail_view.dart';
@@ -49,8 +49,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Clear this deck?'),
-        content: const Text('Every card filed here will be removed.'),
+        title: const Text('Clear this press?'),
+        content: const Text('Every slip filed here will be removed.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Clear')),
@@ -66,7 +66,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Deck not found')));
+    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Press not found')));
 
     final count = _items?.length ?? 0;
 
@@ -76,8 +76,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit deck')),
-              PopupMenuItem(value: 'delete', child: Text('Clear deck')),
+              PopupMenuItem(value: 'edit', child: Text('Edit press')),
+              PopupMenuItem(value: 'delete', child: Text('Clear press')),
             ],
             onSelected: (v) {
               if (v == 'edit') {
@@ -92,12 +92,12 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 16, 32),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
           children: [
-            Text(_container!.name, style: GoogleFonts.literata(fontSize: 30, fontWeight: FontWeight.w700, height: 1.1)),
+            Text(_container!.name, style: GoogleFonts.newsreader(fontSize: 30, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic, height: 1.1)),
             const SizedBox(height: 6),
-            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} cards', style: GoogleFonts.atkinsonHyperlegible(fontSize: 13)),
-            DeckLabel(label: 'CARDS  ·  $count'),
+            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} slips', style: GoogleFonts.nunitoSans(fontSize: 13)),
+            TrailLabel(label: 'SLIPS  ·  $count'),
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
@@ -106,13 +106,13 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                   final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemFormView(preselectedContainerId: widget.containerId)));
                   if (r == true) _loadData();
                 },
-                child: Text('+ file a card', style: GoogleFonts.literata(fontSize: 18, fontWeight: FontWeight.w700, color: VisualTheme.primaryColor)),
+                child: Text('+ file a slip', style: GoogleFonts.newsreader(fontSize: 18, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
               ),
             ),
             if (_items == null || _items!.isEmpty)
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed in this deck yet'))
+              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed in this press yet'))
             else
-              ..._items!.map((item) => FlashTile(
+              ..._items!.map((item) => SpecimenCard(
                     kind: item.category,
                     title: item.name,
                     meta: '${item.quantity}  ·  ${item.condition}',

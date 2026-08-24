@@ -1,3 +1,3 @@
-# Lemma Box — feature set
+# Press Leaf — feature set
 
-Fanned five-card dock, index-card chrome, flash tiles, twelve vocab kinds, shift log, cover photos, search, JSON backup, offline SQLite (`lemma_box.db`).
+Top hanging five-ribbon rail, botanical field paper, specimen cards, twelve nature kinds, move log, cover photos, search, JSON backup, offline SQLite (`press_leaf.db`).
