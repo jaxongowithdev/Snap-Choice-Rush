@@ -26,7 +26,7 @@ class _ContainerFormViewState extends State<ContainerFormView> {
     _codeController = TextEditingController(text: widget.container?.code);
     _roomController = TextEditingController(text: widget.container?.room);
     _shelfController = TextEditingController(text: widget.container?.shelf);
-    _capacityController = TextEditingController(text: widget.container?.capacity.toString() ?? '20');
+    _capacityController = TextEditingController(text: widget.container?.capacity.toString() ?? '24');
   }
 
   @override
@@ -61,23 +61,23 @@ class _ContainerFormViewState extends State<ContainerFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.container != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit tray' : 'New tray')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit shelf' : 'New shelf')),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 16, 22, 32),
           children: [
-            TextFormField(key: const ValueKey('name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Tray name', hintText: 'e.g., Developer, Holding bath'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this tray' : null),
+            TextFormField(key: const ValueKey('name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Shelf name', hintText: 'e.g., Ancient hall, Review cart'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this shelf' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('code_field'), controller: _codeController, decoration: const InputDecoration(labelText: 'Bath mark', hintText: 'e.g., TRAY-01, DEV'), textCapitalization: TextCapitalization.characters, validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a bath mark' : null),
+            TextFormField(key: const ValueKey('code_field'), controller: _codeController, decoration: const InputDecoration(labelText: 'Accession mark', hintText: 'e.g., ERA-01, UNIT'), textCapitalization: TextCapitalization.characters, validator: (v) => (v == null || v.trim().isEmpty) ? 'Add an accession mark' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('room_field'), controller: _roomController, decoration: const InputDecoration(labelText: 'Room / lab', hintText: 'e.g., Room 12, Home darkroom'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Where does this tray live?' : null),
+            TextFormField(key: const ValueKey('room_field'), controller: _roomController, decoration: const InputDecoration(labelText: 'Room / hall', hintText: 'e.g., Room 9, Homeschool loft'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Where does this shelf live?' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('shelf_field'), controller: _shelfController, decoration: const InputDecoration(labelText: 'Sink / rack', hintText: 'e.g., Left sink, Drying line'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a sink or rack' : null),
+            TextFormField(key: const ValueKey('shelf_field'), controller: _shelfController, decoration: const InputDecoration(labelText: 'Bay / crate', hintText: 'e.g., North wall, Review crate'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a bay or crate' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('capacity_field'), controller: _capacityController, decoration: const InputDecoration(labelText: 'Sheet / slot count'), keyboardType: TextInputType.number, validator: (v) { final n = int.tryParse(v?.trim() ?? ''); return (n == null || n <= 0) ? 'Use a positive number' : null; }),
+            TextFormField(key: const ValueKey('capacity_field'), controller: _capacityController, decoration: const InputDecoration(labelText: 'Piece / slot count'), keyboardType: TextInputType.number, validator: (v) { final n = int.tryParse(v?.trim() ?? ''); return (n == null || n <= 0) ? 'Use a positive number' : null; }),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_button'), onPressed: _saveContainer, child: Text(isEditing ? 'Save tray' : 'Mix tray')),
+            FilledButton(key: const ValueKey('save_button'), onPressed: _saveContainer, child: Text(isEditing ? 'Save shelf' : 'Raise shelf')),
           ],
         ),
       ),

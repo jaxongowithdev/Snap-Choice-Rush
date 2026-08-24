@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/amber_chrome.dart';
+import '../widgets/spine_chrome.dart';
 import 'container_detail_view.dart';
 import 'item_form_view.dart';
 import 'search_view.dart';
@@ -22,19 +22,10 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final _storage = StorageManager.instance;
   Map<String, int>? _stats;
-  List<ContainerModel> _trays = [];
+  List<ContainerModel> _shelves = [];
   Map<int, int> _counts = {};
-  List<InventoryItemModel> _holds = [];
+  List<InventoryItemModel> _pins = [];
   bool _isLoading = true;
-
-  static const _frameColors = [
-    Color(0xFFE8943A),
-    Color(0xFF8FA3A8),
-    Color(0xFFE8C547),
-    Color(0xFFC45A3A),
-    Color(0xFF5A6A4A),
-    Color(0xFFC9C2B4),
-  ];
 
   @override
   void initState() {
@@ -46,17 +37,17 @@ class _HomeViewState extends State<HomeView> {
     setState(() => _isLoading = true);
     try {
       final stats = await _storage.getStatistics();
-      final trays = await _storage.getAllContainers(sortBy: 'name');
+      final shelves = await _storage.getAllContainers(sortBy: 'name');
       final counts = <int, int>{};
-      for (final b in trays) {
+      for (final b in shelves) {
         counts[b.id!] = await _storage.getItemCountInContainer(b.id!);
       }
-      final holds = await _storage.getFavoriteItems();
+      final pins = await _storage.getFavoriteItems();
       setState(() {
         _stats = stats;
-        _trays = trays;
+        _shelves = shelves;
         _counts = counts;
-        _holds = holds.take(5).toList();
+        _pins = pins.take(5).toList();
         _isLoading = false;
       });
     } catch (e) {
@@ -70,11 +61,11 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('AMBER TRAY'),
+        title: const Text('Time Spine'),
         actions: [
           IconButton(
             key: const ValueKey('favorites_button'),
-            icon: const Icon(Icons.water_drop_outlined),
+            icon: const Icon(Icons.flag_outlined),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoritesView())).then((_) => _loadData());
             },
@@ -93,40 +84,35 @@ class _HomeViewState extends State<HomeView> {
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+                padding: const EdgeInsets.fromLTRB(16, 4, 12, 28),
                 children: [
-                  Text('today’s bench', style: GoogleFonts.fraunces(fontSize: 30, fontStyle: FontStyle.italic, height: 1.1)),
+                  Text('this century', style: GoogleFonts.cormorantGaramond(fontSize: 32, fontStyle: FontStyle.italic, height: 1.1)),
                   const SizedBox(height: 8),
                   Text(
                     (_stats?['totalItems'] ?? 0) == 0
-                        ? 'The sink is empty. Mix a tray before critique.'
-                        : '${_stats!['totalItems']} sheets across ${_stats!['totalContainers']} trays.',
-                    style: GoogleFonts.ibmPlexMono(fontSize: 13, height: 1.45),
+                        ? 'The hall is empty. Raise a shelf before the unit test.'
+                        : '${_stats!['totalItems']} pieces across ${_stats!['totalContainers']} shelves.',
+                    style: GoogleFonts.publicSans(fontSize: 14, height: 1.45),
                   ),
-                  const TimerStamp(label: 'ON THE SINK'),
-                  if (_trays.isEmpty)
-                    Text('No trays mixed yet.\nDeveloper. Holding bath. Drying rack.', style: GoogleFonts.ibmPlexMono(height: 1.5))
+                  const AccessionLabel(label: 'THE GALLERY'),
+                  if (_shelves.isEmpty)
+                    Text('No shelves raised yet.\nAncient hall. Local crate. Review cart.', style: GoogleFonts.publicSans(height: 1.5))
                   else
-                    SizedBox(
-                      height: 148,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _trays.length,
-                        itemBuilder: (_, i) {
-                          final c = _trays[i];
-                          final count = _counts[c.id] ?? 0;
-                          return FilmFrame(
-                            title: c.name,
-                            meta: '$count / ${c.capacity}',
-                            accent: _frameColors[i % _frameColors.length],
-                            onTap: () async {
-                              await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
-                              _loadData();
-                            },
-                          );
+                    ...List.generate(_shelves.length, (i) {
+                      final c = _shelves[i];
+                      final count = _counts[c.id] ?? 0;
+                      return ExhibitPlaque(
+                        kind: c.code,
+                        title: c.name,
+                        meta: '${c.room}  ·  $count / ${c.capacity} pieces',
+                        accent: i.isEven ? VisualTheme.primaryColor : VisualTheme.secondaryColor,
+                        offsetRight: i.isOdd,
+                        onTap: () async {
+                          await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
+                          _loadData();
                         },
-                      ),
-                    ),
+                      );
+                    }),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton(
@@ -135,7 +121,7 @@ class _HomeViewState extends State<HomeView> {
                         final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ContainerFormView()));
                         if (r == true) _loadData();
                       },
-                      child: Text('+ mix a tray', style: GoogleFonts.ibmPlexMono(fontSize: 13, color: VisualTheme.primaryColor)),
+                      child: Text('+ new shelf', style: GoogleFonts.cormorantGaramond(fontSize: 18, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
                     ),
                   ),
                   TextButton(
@@ -144,11 +130,11 @@ class _HomeViewState extends State<HomeView> {
                       final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ItemFormView()));
                       if (r == true) _loadData();
                     },
-                    child: Text('file a sheet  →', style: GoogleFonts.ibmPlexMono(color: VisualTheme.primaryColor, fontWeight: FontWeight.w700)),
+                    child: Text('file a piece  →', style: GoogleFonts.publicSans(color: VisualTheme.primaryColor, fontWeight: FontWeight.w800)),
                   ),
-                  if (_holds.isNotEmpty) ...[
-                    const TimerStamp(label: 'IN THE HOLDING BATH'),
-                    ..._holds.map((item) => ContactSheet(
+                  if (_pins.isNotEmpty) ...[
+                    const AccessionLabel(label: 'PINNED FOR THE TEST'),
+                    ..._pins.map((item) => ExhibitPlaque(
                           kind: item.category,
                           title: item.name,
                           meta: '${item.condition}  ·  ${item.quantity}',
@@ -159,8 +145,8 @@ class _HomeViewState extends State<HomeView> {
                           },
                         )),
                   ],
-                  const TimerStamp(label: 'BENCH NOTE'),
-                  Text('Mark a sheet Wet until it leaves the wash — do not file it curly.', style: GoogleFonts.fraunces(fontSize: 17, fontStyle: FontStyle.italic, height: 1.4)),
+                  const AccessionLabel(label: 'CURATOR NOTE'),
+                  Text('Mark a piece Fragile when the paper foxes — restock before Friday’s seminar.', style: GoogleFonts.cormorantGaramond(fontSize: 17, fontStyle: FontStyle.italic, height: 1.4)),
                 ],
               ),
             ),

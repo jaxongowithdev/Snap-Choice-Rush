@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../database/storage_manager.dart';
 import '../models/transfer_history_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/amber_chrome.dart';
+import '../widgets/spine_chrome.dart';
 import 'item_detail_view.dart';
 
 class TransferLogView extends StatefulWidget {
@@ -18,7 +18,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   final _storage = StorageManager.instance;
   List<TransferHistoryModel>? _logs;
   final Map<int, String> _itemNames = {};
-  final Map<int, String> _trayNames = {};
+  final Map<int, String> _shelfNames = {};
   bool _isLoading = true;
 
   @override
@@ -34,15 +34,15 @@ class _TransferLogViewState extends State<TransferLogView> {
       for (final log in logs) {
         if (!_itemNames.containsKey(log.itemId)) {
           final item = await _storage.getItem(log.itemId);
-          _itemNames[log.itemId] = item?.name ?? 'Unknown sheet';
+          _itemNames[log.itemId] = item?.name ?? 'Unknown piece';
         }
-        if (!_trayNames.containsKey(log.fromContainerId)) {
+        if (!_shelfNames.containsKey(log.fromContainerId)) {
           final from = await _storage.getContainer(log.fromContainerId);
-          _trayNames[log.fromContainerId] = from?.name ?? 'Removed tray';
+          _shelfNames[log.fromContainerId] = from?.name ?? 'Removed shelf';
         }
-        if (!_trayNames.containsKey(log.toContainerId)) {
+        if (!_shelfNames.containsKey(log.toContainerId)) {
           final to = await _storage.getContainer(log.toContainerId);
-          _trayNames[log.toContainerId] = to?.name ?? 'Removed tray';
+          _shelfNames[log.toContainerId] = to?.name ?? 'Removed shelf';
         }
       }
       setState(() { _logs = logs; _isLoading = false; });
@@ -56,7 +56,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('LOG')),
+      appBar: AppBar(title: const Text('Log')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
           : _logs == null || _logs!.isEmpty
@@ -66,10 +66,10 @@ class _TransferLogViewState extends State<TransferLogView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('STILL', style: GoogleFonts.ibmPlexMono(fontSize: 14, letterSpacing: 3, color: VisualTheme.primaryColor)),
-                        Text('No moves yet', style: GoogleFonts.fraunces(fontSize: 22, fontWeight: FontWeight.w600)),
+                        Text('still', style: GoogleFonts.cormorantGaramond(fontSize: 28, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
+                        Text('No moves yet', style: GoogleFonts.cormorantGaramond(fontSize: 22, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('When a sheet changes trays, the log lands here.', textAlign: TextAlign.center),
+                        const Text('When a piece changes shelves, the log lands here.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -77,16 +77,17 @@ class _TransferLogViewState extends State<TransferLogView> {
               : RefreshIndicator(
                   onRefresh: _load,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+                    padding: const EdgeInsets.fromLTRB(16, 8, 12, 28),
                     itemCount: _logs!.length,
                     itemBuilder: (_, i) {
                       final log = _logs![i];
                       final when = DateFormat('MMM d').format(log.moveDate);
-                      return ContactSheet(
+                      return ExhibitPlaque(
                         kind: when,
-                        title: _itemNames[log.itemId] ?? 'Sheet',
-                        meta: '${_trayNames[log.fromContainerId]}  →  ${_trayNames[log.toContainerId]}${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}',
+                        title: _itemNames[log.itemId] ?? 'Piece',
+                        meta: '${_shelfNames[log.fromContainerId]}  →  ${_shelfNames[log.toContainerId]}${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}',
                         accent: VisualTheme.secondaryColor,
+                        offsetRight: i.isOdd,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: log.itemId)));
                           _load();

@@ -1,14 +1,14 @@
 APP NAME
-Amber Tray
+Time Spine
 
 SUBTITLE
-Darkroom class log
+History shelf log
 
 KEYWORDS
-photo,darkroom,print,lesson,class,film,teacher,camera,offline,tray
+history,timeline,lesson,class,era,teacher,museum,source,offline,shelf
 
 PROMOTION
-File developing trays, prints, and film sheets, then find any print before critique. Private, offline.
+File era shelves, primary sources, and class artifacts, then find any piece before the unit test. Private, offline.
 
 DESCRIPTION
-Amber Tray is a private offline darkroom journal — file developing trays, prints, and film sheets, then find any print before critique.
+Time Spine is a private offline history journal — file era shelves, primary sources, and class artifacts, then find any piece before the unit test.

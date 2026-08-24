@@ -1,22 +1,22 @@
-# Amber Tray
+# Time Spine
 
-A private darkroom catalog. File developing trays, prints, and film sheets, then find any print before critique — fully offline.
+A private history catalog. File era shelves, primary sources, and class artifacts, then find any piece before the unit test — fully offline.
 
-**App Name:** Amber Tray
-**Subtitle:** Darkroom class log
+**App Name:** Time Spine
+**Subtitle:** History shelf log
 **Category:** Education
-**Bundle ID:** com.app.ambertray.build
-**Database:** `amber_tray.db`
+**Bundle ID:** com.app.timespine.build
+**Database:** `time_spine.db`
 
 ## Navigation
 
-Five overlapping chemical trays at the bottom — not a Material tab bar, cubby wall, or ribbon rail.
+A vertical museum spine on the left with five irregular plaques — not a Material tab bar, chemical trays, or cubby wall.
 
-- GATE — today’s bench
-- TRAYS — every bath
-- HOLD — sheets in the holding bath
-- LOG — moves between trays
-- LAMP — light and backup
+- HALL — this century
+- STACKS — every era shelf
+- PIN — pieces for the test
+- LOG — moves between shelves
+- CRYPT — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

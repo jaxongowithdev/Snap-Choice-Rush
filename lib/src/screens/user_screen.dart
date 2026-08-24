@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Amber Tray initialization...');
+      debugPrint('Starting Time Spine initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Amber Tray',
+      title: 'Time Spine',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -80,14 +80,14 @@ class _UserScreenState extends State<UserScreen> {
         builder: (context) {
           if (!_isInitialized || _preferences == null) {
             return Scaffold(
-              backgroundColor: VisualTheme.fog,
+              backgroundColor: VisualTheme.primaryColor,
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('AMBER TRAY', style: GoogleFonts.ibmPlexMono(color: VisualTheme.primaryColor, fontSize: 22, letterSpacing: 3, fontWeight: FontWeight.w600)),
+                    Text('Time Spine', style: GoogleFonts.cormorantGaramond(color: VisualTheme.parchment, fontSize: 36, fontStyle: FontStyle.italic)),
                     const SizedBox(height: 8),
-                    Text('Warming the lamp…', style: GoogleFonts.fraunces(color: VisualTheme.hypo, fontStyle: FontStyle.italic)),
+                    Text('Opening the hall…', style: GoogleFonts.publicSans(color: VisualTheme.parchment.withValues(alpha: 0.75))),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

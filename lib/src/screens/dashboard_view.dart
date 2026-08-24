@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/amber_chrome.dart';
+import '../widgets/spine_chrome.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
 import 'favorites_view.dart';
@@ -33,14 +33,14 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Safelight(
-        child: Column(
+      body: GalleryWall(
+        child: Row(
           children: [
-            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
-            TrayDock(
+            SpineNav(
               index: _selectedIndex,
               onSelect: (i) => setState(() => _selectedIndex = i),
             ),
+            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
           ],
         ),
       ),

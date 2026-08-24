@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/amber_chrome.dart';
+import '../widgets/spine_chrome.dart';
 import 'item_detail_view.dart';
 
 class SearchView extends StatefulWidget {
@@ -58,8 +58,7 @@ class _SearchViewState extends State<SearchView> {
           controller: _searchController,
           autofocus: true,
           cursorColor: VisualTheme.primaryColor,
-          style: GoogleFonts.ibmPlexMono(),
-          decoration: const InputDecoration(hintText: 'print, film, tray…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none),
+          decoration: const InputDecoration(hintText: 'magna, map, shelf…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none),
           onChanged: _performSearch,
         ),
         actions: [
@@ -73,19 +72,20 @@ class _SearchViewState extends State<SearchView> {
 
   Widget _buildBody() {
     if (_isSearching) return const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor));
-    if (_searchController.text.isEmpty) return _hint('find a sheet', 'Search a print, kind, or bench note.');
+    if (_searchController.text.isEmpty) return _hint('find a piece', 'Search a source, kind, or curator note.');
     if (_results == null || _results!.isEmpty) return _hint('no match', 'Try a shorter word or another kind.');
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
+      padding: const EdgeInsets.fromLTRB(16, 4, 12, 28),
       itemCount: _results!.length,
       itemBuilder: (_, i) {
         final item = _results![i];
-        final tray = _containersCache[item.containerId];
-        return ContactSheet(
+        final shelf = _containersCache[item.containerId];
+        return ExhibitPlaque(
           kind: item.category,
           title: item.name,
-          meta: tray != null ? tray.name : '',
+          meta: shelf != null ? shelf.name : '',
           accent: VisualTheme.getCategoryColor(item.category),
+          offsetRight: i.isOdd,
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!))).then((_) => _performSearch(_searchController.text));
           },
@@ -101,9 +101,9 @@ class _SearchViewState extends State<SearchView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title, style: GoogleFonts.fraunces(fontSize: 26, fontStyle: FontStyle.italic)),
+            Text(title, style: GoogleFonts.cormorantGaramond(fontSize: 26, fontStyle: FontStyle.italic)),
             const SizedBox(height: 8),
-            Text(subtitle, textAlign: TextAlign.center, style: GoogleFonts.ibmPlexMono()),
+            Text(subtitle, textAlign: TextAlign.center),
           ],
         ),
       ),

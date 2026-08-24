@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/amber_chrome.dart';
+import '../widgets/spine_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -48,7 +48,7 @@ class _FavoritesViewState extends State<FavoritesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('HOLD')),
+      appBar: AppBar(title: const Text('Pin')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
           : _favoriteItems == null || _favoriteItems!.isEmpty
@@ -58,11 +58,11 @@ class _FavoritesViewState extends State<FavoritesView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.water_drop_outlined, size: 48, color: VisualTheme.primaryColor),
+                        Icon(Icons.flag_outlined, size: 48, color: VisualTheme.secondaryColor),
                         const SizedBox(height: 8),
-                        Text('Bath is empty', style: GoogleFonts.fraunces(fontSize: 24, fontStyle: FontStyle.italic)),
+                        Text('Nothing pinned', style: GoogleFonts.cormorantGaramond(fontSize: 24, fontStyle: FontStyle.italic)),
                         const SizedBox(height: 8),
-                        const Text('Hold the sheets you will bring to critique.', textAlign: TextAlign.center),
+                        const Text('Pin the pieces you will bring to the unit test.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -70,20 +70,21 @@ class _FavoritesViewState extends State<FavoritesView> {
               : RefreshIndicator(
                   onRefresh: _loadFavorites,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 8, 20),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 4, 28),
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final tray = _containersCache[item.containerId];
+                      final shelf = _containersCache[item.containerId];
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: ContactSheet(
+                            child: ExhibitPlaque(
                               kind: item.category,
                               title: item.name,
-                              meta: '${item.quantity}${tray != null ? '  ·  ${tray.name}' : ''}',
+                              meta: '${item.quantity}${shelf != null ? '  ·  ${shelf.name}' : ''}',
                               accent: VisualTheme.getCategoryColor(item.category),
+                              offsetRight: i.isOdd,
                               onTap: () async {
                                 await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
                                 _loadFavorites();
@@ -92,7 +93,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                           ),
                           IconButton(
                             key: ValueKey('favorite_toggle_${item.id}'),
-                            icon: Icon(item.isFavorite ? Icons.water_drop : Icons.water_drop_outlined, color: item.isFavorite ? VisualTheme.primaryColor : null),
+                            icon: Icon(item.isFavorite ? Icons.flag : Icons.flag_outlined, color: item.isFavorite ? VisualTheme.primaryColor : null),
                             onPressed: () async {
                               await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
                               _loadFavorites();

@@ -1,3 +1,3 @@
-# Amber Tray
+# Time Spine
 
-Offline darkroom journal. Amber / fog / hypo UI, IBM Plex Mono + Fraunces, chemical trays, contact sheets. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline history journal. Oxblood / gold / parchment UI, Cormorant Garamond + Public Sans, museum spine, exhibit plaques. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

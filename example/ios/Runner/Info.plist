@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Amber Tray</string>
+	<string>Time Spine</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Amber Tray</string>
+	<string>Time Spine</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,8 +53,8 @@
 		<false/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Amber Tray uses your photo library so you can save a photo of each tray or print.</string>
+	<string>Time Spine uses your photo library so you can save a photo of each shelf or piece.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Amber Tray uses your camera so you can photograph prints, film strips, and paper boxes.</string>
+	<string>Time Spine uses your camera so you can photograph documents, maps, and classroom artifacts.</string>
 </dict>
 </plist>

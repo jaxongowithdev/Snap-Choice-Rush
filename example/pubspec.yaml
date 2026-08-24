@@ -1,5 +1,5 @@
-name: amber_tray_example
-description: "Amber Tray - Darkroom class log"
+name: time_spine_example
+description: "Time Spine - History shelf log"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

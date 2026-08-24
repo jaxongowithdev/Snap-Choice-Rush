@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/amber_chrome.dart';
+import '../widgets/spine_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -51,7 +51,7 @@ class _ContainerListViewState extends State<ContainerListView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('TRAYS'),
+        title: const Text('Stacks'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
@@ -72,11 +72,11 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.water_drop_outlined, size: 48, color: VisualTheme.primaryColor),
+                        Icon(Icons.account_balance_outlined, size: 48, color: VisualTheme.primaryColor),
                         const SizedBox(height: 8),
-                        Text('No trays mixed', style: GoogleFonts.fraunces(fontSize: 24, fontStyle: FontStyle.italic)),
+                        Text('No shelves raised', style: GoogleFonts.cormorantGaramond(fontSize: 24, fontStyle: FontStyle.italic)),
                         const SizedBox(height: 8),
-                        const Text('Start a developer bath, a holding tray, or the drying rack.', textAlign: TextAlign.center),
+                        const Text('Start an ancient hall, a local crate, or the review cart.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -84,16 +84,17 @@ class _ContainerListViewState extends State<ContainerListView> {
               : RefreshIndicator(
                   onRefresh: _loadContainers,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 12, 88),
                     itemCount: _containers!.length,
                     itemBuilder: (_, i) {
                       final c = _containers![i];
                       final count = _itemCounts[c.id] ?? 0;
-                      return ContactSheet(
+                      return ExhibitPlaque(
                         kind: c.code,
                         title: c.name,
-                        meta: '${c.room}  ·  $count/${c.capacity} sheets',
-                        accent: VisualTheme.primaryColor,
+                        meta: '${c.room}  ·  $count/${c.capacity} pieces',
+                        accent: i.isEven ? VisualTheme.primaryColor : VisualTheme.secondaryColor,
+                        offsetRight: i.isOdd,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
                           _loadContainers();
