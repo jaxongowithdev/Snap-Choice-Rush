@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/leaf_chrome.dart';
+import '../widgets/cubby_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -51,7 +51,7 @@ class _ContainerListViewState extends State<ContainerListView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Presses'),
+        title: const Text('Bins'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
@@ -72,11 +72,11 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.eco_outlined, size: 48, color: VisualTheme.primaryColor),
+                        Icon(Icons.inventory_2_outlined, size: 48, color: VisualTheme.primaryColor),
                         const SizedBox(height: 8),
-                        Text('No presses packed', style: GoogleFonts.newsreader(fontSize: 24, fontStyle: FontStyle.italic)),
+                        Text('No cubbies labeled', style: GoogleFonts.fredoka(fontSize: 24)),
                         const SizedBox(height: 8),
-                        const Text('Start a field satchel, a classroom folio, or the window sill.', textAlign: TextAlign.center),
+                        const Text('Start an art wall, a block corner, or the quiet loft.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -84,16 +84,16 @@ class _ContainerListViewState extends State<ContainerListView> {
               : RefreshIndicator(
                   onRefresh: _loadContainers,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 88),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 88),
                     itemCount: _containers!.length,
                     itemBuilder: (_, i) {
                       final c = _containers![i];
                       final count = _itemCounts[c.id] ?? 0;
-                      return SpecimenCard(
+                      return ToteCard(
                         kind: c.code,
                         title: c.name,
-                        meta: '${c.room}  ·  $count/${c.capacity} slips',
-                        accent: VisualTheme.secondaryColor,
+                        meta: '${c.room}  ·  $count/${c.capacity} totes',
+                        accent: VisualTheme.primaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
                           _loadContainers();

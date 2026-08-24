@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/leaf_chrome.dart';
+import '../widgets/cubby_chrome.dart';
 import 'item_detail_view.dart';
 
 class SearchView extends StatefulWidget {
@@ -58,7 +58,7 @@ class _SearchViewState extends State<SearchView> {
           controller: _searchController,
           autofocus: true,
           cursorColor: VisualTheme.primaryColor,
-          decoration: const InputDecoration(hintText: 'maple, moss, press…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none),
+          decoration: const InputDecoration(hintText: 'blocks, glue, cubby…', border: InputBorder.none, enabledBorder: InputBorder.none, focusedBorder: InputBorder.none, filled: false),
           onChanged: _performSearch,
         ),
         actions: [
@@ -72,18 +72,18 @@ class _SearchViewState extends State<SearchView> {
 
   Widget _buildBody() {
     if (_isSearching) return const Center(child: CircularProgressIndicator());
-    if (_searchController.text.isEmpty) return _hint('find a slip', 'Search a specimen, kind, or field note.');
-    if (_results == null || _results!.isEmpty) return _hint('no match', 'Try a shorter word or another kind.');
+    if (_searchController.text.isEmpty) return _hint('find a tote', 'Search a kit, center, or teacher note.');
+    if (_results == null || _results!.isEmpty) return _hint('no match', 'Try a shorter word or another center.');
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 28),
       itemCount: _results!.length,
       itemBuilder: (_, i) {
         final item = _results![i];
-        final press = _containersCache[item.containerId];
-        return SpecimenCard(
+        final cubby = _containersCache[item.containerId];
+        return ToteCard(
           kind: item.category,
           title: item.name,
-          meta: press != null ? press.name : '',
+          meta: cubby != null ? cubby.name : '',
           accent: VisualTheme.getCategoryColor(item.category),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!))).then((_) => _performSearch(_searchController.text));
@@ -100,7 +100,7 @@ class _SearchViewState extends State<SearchView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title, style: GoogleFonts.newsreader(fontSize: 26, fontStyle: FontStyle.italic)),
+            Text(title, style: GoogleFonts.fredoka(fontSize: 26)),
             const SizedBox(height: 8),
             Text(subtitle, textAlign: TextAlign.center),
           ],

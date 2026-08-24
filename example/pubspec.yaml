@@ -1,5 +1,5 @@
-name: press_leaf_example
-description: "Press Leaf - Nature study journal"
+name: cubby_wall_example
+description: "Cubby Wall - Classroom center log"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

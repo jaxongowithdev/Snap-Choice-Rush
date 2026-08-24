@@ -1,22 +1,22 @@
-# Press Leaf
+# Cubby Wall
 
-A private nature journal. File field presses, leaves, and trail finds, then find any specimen before the unit hike — fully offline.
+A private classroom catalog. File learning cubbies, center totes, and morning kits, then find any bin before circle time — fully offline.
 
-**App Name:** Press Leaf
-**Subtitle:** Nature study journal
+**App Name:** Cubby Wall
+**Subtitle:** Classroom center log
 **Category:** Education
-**Bundle ID:** com.app.pressleaf.build
-**Database:** `press_leaf.db`
+**Bundle ID:** com.app.cubbywall.build
+**Database:** `cubby_wall.db`
 
 ## Navigation
 
-Hanging bookmark ribbons from the top — not a Material tab bar, fanned index cards, marquee, tanzaku, or compass.
+A 2+3 wooden cubby wall at the top — not a Material tab bar, ribbon rail, marquee, or fanned cards.
 
-- TRAIL — this week’s walk
-- PRESSES — every field folio
-- PIN — hike set
-- LOG — moves between presses
-- CAMP — light and backup
+- RUG — this morning’s centers
+- BINS — every labeled cubby
+- STAR — kits for circle
+- LOG — moves between cubbies
+- OFFICE — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../widgets/leaf_chrome.dart';
+import '../widgets/cubby_chrome.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -45,16 +45,16 @@ class _AnalyticsViewState extends State<AnalyticsView> {
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
                 children: [
                   if (_stats != null)
-                    Text('${_stats!['totalItems']} slips   ·   ${_stats!['totalContainers']} presses', style: GoogleFonts.newsreader(fontSize: 22)),
+                    Text('${_stats!['totalItems']} totes   ·   ${_stats!['totalContainers']} cubbies', style: GoogleFonts.fredoka(fontSize: 22)),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
-                    const TrailLabel(label: 'BY KIND'),
+                    const NameTag(label: 'BY CENTER'),
                     ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
-                    const TrailLabel(label: 'BY ROOM'),
+                    const NameTag(label: 'BY ROOM'),
                     ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                 ],

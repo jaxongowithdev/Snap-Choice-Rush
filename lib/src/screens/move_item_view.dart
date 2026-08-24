@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/leaf_chrome.dart';
+import '../widgets/cubby_chrome.dart';
 
 class MoveItemView extends StatefulWidget {
   final InventoryItemModel item;
@@ -53,7 +53,7 @@ class _MoveItemViewState extends State<MoveItemView> {
 
   Future<void> _moveItem() async {
     if (_selectedContainer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination press')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination cubby')));
       return;
     }
     final destCount = _itemCounts[_selectedContainer!.id] ?? 0;
@@ -61,8 +61,8 @@ class _MoveItemViewState extends State<MoveItemView> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('That press is full'),
-          content: Text('"${_selectedContainer!.name}" has no open slips. File it anyway?'),
+          title: const Text('That cubby is full'),
+          content: Text('"${_selectedContainer!.name}" has no open totes. File it anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
             FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('File anyway')),
@@ -87,14 +87,14 @@ class _MoveItemViewState extends State<MoveItemView> {
           : ListView(
               padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
               children: [
-                Text('moving', style: GoogleFonts.nunitoSans(letterSpacing: 1.6, fontSize: 11, fontWeight: FontWeight.w800, color: VisualTheme.primaryColor)),
-                Text(widget.item.name, style: GoogleFonts.newsreader(fontSize: 26, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic)),
+                Text('moving', style: GoogleFonts.fredoka(letterSpacing: 1.4, fontSize: 12, color: VisualTheme.primaryColor)),
+                Text(widget.item.name, style: GoogleFonts.fredoka(fontSize: 26, fontWeight: FontWeight.w600)),
                 Text('${widget.item.category}  ·  ${widget.item.quantity}'),
-                const TrailLabel(label: 'NOW IN'),
-                Text(_currentContainer == null ? 'Unknown press' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
-                const TrailLabel(label: 'MOVE INTO'),
+                const NameTag(label: 'NOW IN'),
+                Text(_currentContainer == null ? 'Unknown cubby' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
+                const NameTag(label: 'MOVE INTO'),
                 if (_containers == null || _containers!.isEmpty)
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other presses yet'))
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other cubbies yet'))
                 else
                   ..._containers!.map((c) {
                     final count = _itemCounts[c.id] ?? 0;
@@ -102,13 +102,13 @@ class _MoveItemViewState extends State<MoveItemView> {
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: Text(selected ? '●' : '○', style: TextStyle(color: selected ? VisualTheme.primaryColor : null, fontSize: 16)),
-                      title: Text(c.name, style: GoogleFonts.newsreader(fontSize: 18, fontWeight: FontWeight.w600)),
+                      title: Text(c.name, style: GoogleFonts.fredoka(fontSize: 18, fontWeight: FontWeight.w600)),
                       subtitle: Text('${c.room}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
                       onTap: () => setState(() => _selectedContainer = c),
                     );
                   }),
                 const SizedBox(height: 12),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going into the classroom folio'), maxLines: 2),
+                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going into the quiet loft'), maxLines: 2),
                 const SizedBox(height: 22),
                 FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Log the move')),
               ],

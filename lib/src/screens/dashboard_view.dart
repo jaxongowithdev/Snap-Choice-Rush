@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/leaf_chrome.dart';
+import '../widgets/cubby_chrome.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
 import 'favorites_view.dart';
@@ -33,10 +33,10 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FieldPaper(
+      body: CorkWall(
         child: Column(
           children: [
-            RibbonRail(
+            CubbyNav(
               index: _selectedIndex,
               onSelect: (i) => setState(() => _selectedIndex = i),
             ),

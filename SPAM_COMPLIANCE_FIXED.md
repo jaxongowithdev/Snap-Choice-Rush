@@ -1,3 +1,3 @@
 # Listing notes
 
-This project is Press Leaf (`com.app.pressleaf.build`), a nature-study catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.
+This project is Cubby Wall (`com.app.cubbywall.build`), a classroom-center catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.
