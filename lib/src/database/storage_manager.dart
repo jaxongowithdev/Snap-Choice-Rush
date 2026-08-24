@@ -13,7 +13,7 @@ class StorageManager {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('etude_hall.db');
+    _database = await _initDB('meridian_desk.db');
     return _database!;
   }
 
@@ -85,7 +85,7 @@ class StorageManager {
         theme TEXT NOT NULL DEFAULT 'system',
         language TEXT NOT NULL DEFAULT 'en',
         capacityUnit TEXT NOT NULL DEFAULT 'items',
-        defaultBoxPrefix TEXT NOT NULL DEFAULT 'CLEF',
+        defaultBoxPrefix TEXT NOT NULL DEFAULT 'MER',
         showOnboarding INTEGER NOT NULL DEFAULT 1
       )
     ''');

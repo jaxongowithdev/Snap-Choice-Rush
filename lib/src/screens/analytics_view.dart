@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../widgets/hall_chrome.dart';
+import '../widgets/atlas_chrome.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -39,22 +39,22 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Roll')),
+      appBar: AppBar(title: const Text('Survey')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(24, 8, 24, 28),
+                padding: const EdgeInsets.fromLTRB(22, 8, 22, 28),
                 children: [
                   if (_stats != null)
-                    Text('${_stats!['totalItems']} pieces   ·   ${_stats!['totalContainers']} books', style: GoogleFonts.cormorantGaramond(fontSize: 22)),
+                    Text('${_stats!['totalItems']} pins   ·   ${_stats!['totalContainers']} folios', style: GoogleFonts.fraunces(fontSize: 22)),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
-                    const MovementLabel(label: 'BY KIND'),
+                    const LegendLabel(label: 'BY KIND'),
                     ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
-                    const MovementLabel(label: 'BY STUDIO'),
+                    const LegendLabel(label: 'BY ROOM'),
                     ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                 ],

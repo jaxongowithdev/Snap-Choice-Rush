@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/hall_chrome.dart';
+import '../widgets/atlas_chrome.dart';
 import 'container_form_view.dart';
 import 'item_form_view.dart';
 import 'item_detail_view.dart';
@@ -49,8 +49,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Clear this book?'),
-        content: const Text('Every piece filed here will be removed.'),
+        title: const Text('Clear this folio?'),
+        content: const Text('Every pin filed here will be removed.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Clear')),
@@ -63,10 +63,15 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     }
   }
 
+  String _bearing(int i) {
+    const pts = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    return pts[i % pts.length];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Book not found')));
+    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Folio not found')));
 
     final count = _items?.length ?? 0;
 
@@ -76,8 +81,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit book')),
-              PopupMenuItem(value: 'delete', child: Text('Clear book')),
+              PopupMenuItem(value: 'edit', child: Text('Edit folio')),
+              PopupMenuItem(value: 'delete', child: Text('Clear folio')),
             ],
             onSelected: (v) {
               if (v == 'edit') {
@@ -92,12 +97,12 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+          padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
           children: [
-            Text(_container!.name, style: GoogleFonts.cormorantGaramond(fontSize: 34, fontWeight: FontWeight.w600, height: 1.05)),
+            Text(_container!.name, style: GoogleFonts.fraunces(fontSize: 32, fontWeight: FontWeight.w600, height: 1.05)),
             const SizedBox(height: 6),
-            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} bars', style: GoogleFonts.workSans(fontSize: 13)),
-            MovementLabel(label: 'PIECES  ·  $count'),
+            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} pins', style: GoogleFonts.outfit(fontSize: 13)),
+            LegendLabel(label: 'PINS  ·  $count'),
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
@@ -106,14 +111,14 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                   final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemFormView(preselectedContainerId: widget.containerId)));
                   if (r == true) _loadData();
                 },
-                child: Text('+ file a piece', style: GoogleFonts.cormorantGaramond(fontSize: 20, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
+                child: Text('+ file a pin', style: GoogleFonts.fraunces(fontSize: 18, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
               ),
             ),
             if (_items == null || _items!.isEmpty)
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed in this book yet'))
+              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed in this folio yet'))
             else
-              ..._items!.asMap().entries.map((e) => MeasureRow(
-                    beat: '${e.key + 1}',
+              ..._items!.asMap().entries.map((e) => BearingRow(
+                    bearing: _bearing(e.key),
                     title: e.value.name,
                     meta: '${e.value.category}  ·  ${e.value.quantity}  ·  ${e.value.condition}',
                     accent: VisualTheme.getCategoryColor(e.value.category),

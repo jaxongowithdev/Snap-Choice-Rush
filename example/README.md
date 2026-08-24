@@ -1,4 +1,4 @@
-# Etude Hall
+# Meridian Desk
 
 ```bash
 flutter run

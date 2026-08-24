@@ -1,4 +1,4 @@
-// Bar cart / home-rail bottle model
+// Atlas folio / classroom map set
 class ContainerModel {
   final int? id;
   final String name;

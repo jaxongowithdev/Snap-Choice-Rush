@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/hall_chrome.dart';
+import '../widgets/atlas_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -46,12 +46,17 @@ class _ContainerListViewState extends State<ContainerListView> {
     }
   }
 
+  String _bearing(int i) {
+    const pts = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    return pts[i % pts.length];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Books'),
+        title: const Text('Maps'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
@@ -72,10 +77,10 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('𝄞', style: GoogleFonts.cormorantGaramond(fontSize: 48, color: VisualTheme.primaryColor)),
-                        Text('No books staged', style: GoogleFonts.cormorantGaramond(fontSize: 28, fontWeight: FontWeight.w600)),
+                        Text('N', style: GoogleFonts.fraunces(fontSize: 48, color: VisualTheme.primaryColor)),
+                        Text('No folios plotted', style: GoogleFonts.fraunces(fontSize: 26, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('Start a studio stand, a recital folder, or the jazz fakebook.', textAlign: TextAlign.center),
+                        const Text('Start a wall folio, a field satchel, or the globe cabinet.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -83,13 +88,13 @@ class _ContainerListViewState extends State<ContainerListView> {
               : RefreshIndicator(
                   onRefresh: _loadContainers,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(24, 4, 24, 100),
+                    padding: const EdgeInsets.fromLTRB(22, 4, 22, 12),
                     itemCount: _containers!.length,
                     itemBuilder: (_, i) {
                       final c = _containers![i];
                       final count = _itemCounts[c.id] ?? 0;
-                      return MeasureRow(
-                        beat: '${i + 1}',
+                      return BearingRow(
+                        bearing: _bearing(i),
                         title: c.name,
                         meta: '${c.code}  ·  ${c.room}  ·  $count/${c.capacity}',
                         accent: VisualTheme.secondaryColor,

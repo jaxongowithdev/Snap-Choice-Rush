@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../database/storage_manager.dart';
 import '../models/transfer_history_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/hall_chrome.dart';
+import '../widgets/atlas_chrome.dart';
 import 'item_detail_view.dart';
 
 class TransferLogView extends StatefulWidget {
@@ -18,7 +18,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   final _storage = StorageManager.instance;
   List<TransferHistoryModel>? _logs;
   final Map<int, String> _itemNames = {};
-  final Map<int, String> _bookNames = {};
+  final Map<int, String> _folioNames = {};
   bool _isLoading = true;
 
   @override
@@ -34,15 +34,15 @@ class _TransferLogViewState extends State<TransferLogView> {
       for (final log in logs) {
         if (!_itemNames.containsKey(log.itemId)) {
           final item = await _storage.getItem(log.itemId);
-          _itemNames[log.itemId] = item?.name ?? 'Unknown piece';
+          _itemNames[log.itemId] = item?.name ?? 'Unknown pin';
         }
-        if (!_bookNames.containsKey(log.fromContainerId)) {
+        if (!_folioNames.containsKey(log.fromContainerId)) {
           final from = await _storage.getContainer(log.fromContainerId);
-          _bookNames[log.fromContainerId] = from?.name ?? 'Removed book';
+          _folioNames[log.fromContainerId] = from?.name ?? 'Removed folio';
         }
-        if (!_bookNames.containsKey(log.toContainerId)) {
+        if (!_folioNames.containsKey(log.toContainerId)) {
           final to = await _storage.getContainer(log.toContainerId);
-          _bookNames[log.toContainerId] = to?.name ?? 'Removed book';
+          _folioNames[log.toContainerId] = to?.name ?? 'Removed folio';
         }
       }
       setState(() { _logs = logs; _isLoading = false; });
@@ -56,7 +56,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Cue')),
+      appBar: AppBar(title: const Text('Log')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _logs == null || _logs!.isEmpty
@@ -66,10 +66,10 @@ class _TransferLogViewState extends State<TransferLogView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('tacet', style: GoogleFonts.cormorantGaramond(fontSize: 32, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
-                        Text('No cues yet', style: GoogleFonts.cormorantGaramond(fontSize: 26, fontWeight: FontWeight.w600)),
+                        Text('still', style: GoogleFonts.fraunces(fontSize: 32, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
+                        Text('No shifts yet', style: GoogleFonts.fraunces(fontSize: 24, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('When a piece changes books, the cue lands here.', textAlign: TextAlign.center),
+                        const Text('When a pin changes folios, the log lands here.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -77,15 +77,15 @@ class _TransferLogViewState extends State<TransferLogView> {
               : RefreshIndicator(
                   onRefresh: _load,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(24, 8, 24, 28),
+                    padding: const EdgeInsets.fromLTRB(22, 8, 22, 12),
                     itemCount: _logs!.length,
                     itemBuilder: (_, i) {
                       final log = _logs![i];
                       final when = DateFormat('MMM d').format(log.moveDate);
-                      return MeasureRow(
-                        beat: '${i + 1}',
-                        title: _itemNames[log.itemId] ?? 'Piece',
-                        meta: '${_bookNames[log.fromContainerId]}  →  ${_bookNames[log.toContainerId]}  ·  $when${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}',
+                      return BearingRow(
+                        bearing: 'W',
+                        title: _itemNames[log.itemId] ?? 'Pin',
+                        meta: '${_folioNames[log.fromContainerId]}  →  ${_folioNames[log.toContainerId]}  ·  $when${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}',
                         accent: VisualTheme.secondaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: log.itemId)));

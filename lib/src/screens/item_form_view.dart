@@ -29,8 +29,8 @@ class _ItemFormViewState extends State<ItemFormView> {
   String _selectedCondition = 'Clean';
   String? _photoPath;
   final _imagePicker = ImagePicker();
-  final _conditions = ['Clean', 'Marked', 'Torn', 'Filed'];
-  final _categories = ['Scores', 'Etudes', 'Methods', 'Recordings', 'Duets', 'Theory', 'Rhythm', 'Ensemble', 'Reeds', 'Strings', 'Gear', 'Other'];
+  final _conditions = ['Clean', 'Folded', 'Torn', 'Filed'];
+  final _categories = ['Continents', 'Capitals', 'Rivers', 'Ranges', 'Coasts', 'Climate', 'Cultures', 'Trade', 'Maps', 'Globes', 'Field', 'Other'];
 
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _ItemFormViewState extends State<ItemFormView> {
       final photo = await _imagePicker.pickImage(source: source, maxWidth: 1024, maxHeight: 1024, imageQuality: 85);
       if (photo == null) return;
       final appDir = await getApplicationDocumentsDirectory();
-      final fileName = 'etude_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
+      final fileName = 'meridian_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
       final savedPath = path_pkg.join(appDir.path, 'photos', fileName);
       await Directory(path_pkg.join(appDir.path, 'photos')).create(recursive: true);
       await File(photo.path).copy(savedPath);
@@ -95,7 +95,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Future<void> _saveItem() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedContainerId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a book first')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a folio first')));
       return;
     }
     final item = InventoryItemModel(
@@ -121,11 +121,11 @@ class _ItemFormViewState extends State<ItemFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.item != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit piece' : 'File a piece')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit pin' : 'File a pin')),
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+          padding: const EdgeInsets.fromLTRB(22, 16, 22, 32),
           children: [
             if (_photoPath != null)
               Stack(
@@ -143,11 +143,11 @@ class _ItemFormViewState extends State<ItemFormView> {
                 ],
               ),
             const SizedBox(height: 16),
-            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Piece name', hintText: 'e.g., Op. 299 No. 1, Bach prelude'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this piece' : null),
+            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Pin name', hintText: 'e.g., Nile delta, Tokyo capital'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this pin' : null),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(key: const ValueKey('category_dropdown'), value: _categories.contains(_categoryController.text) ? _categoryController.text : null, decoration: const InputDecoration(labelText: 'Kind'), items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) _categoryController.text = v; }, validator: (_) => _categoryController.text.isEmpty ? 'Pick a kind' : null),
             const SizedBox(height: 12),
-            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Book'), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a book' : null),
+            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Folio'), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a folio' : null),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -159,9 +159,9 @@ class _ItemFormViewState extends State<ItemFormView> {
             const SizedBox(height: 12),
             TextFormField(key: const ValueKey('value_field'), controller: _valueController, decoration: const InputDecoration(labelText: 'Replacement cost (optional)'), keyboardType: TextInputType.number),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Practice note', hintText: 'Tempo, weak bar, or last lesson'), maxLines: 3),
+            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Field note', hintText: 'Unit, lat/long, or last lesson'), maxLines: 3),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save piece' : 'File piece')),
+            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save pin' : 'File pin')),
           ],
         ),
       ),

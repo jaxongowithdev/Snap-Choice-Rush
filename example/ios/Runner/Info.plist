@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Etude Hall</string>
+	<string>Meridian Desk</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Etude Hall</string>
+	<string>Meridian Desk</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,8 +53,8 @@
 		<false/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Etude Hall uses your photo library so you can save a photo of each score or book.</string>
+	<string>Meridian Desk uses your photo library so you can save a photo of each map or folio.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Etude Hall uses your camera so you can photograph method books, parts, and recital folders.</string>
+	<string>Meridian Desk uses your camera so you can photograph wall maps, globes, and field satchels.</string>
 </dict>
 </plist>

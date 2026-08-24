@@ -1,3 +1,3 @@
-# Etude Hall — feature set
+# Meridian Desk — feature set
 
-Piano-key five-tab dock, staff-paper chrome, measure rows, twelve music kinds, cue log, cover photos, search, JSON backup, offline SQLite (`etude_hall.db`).
+Compass-rose five-point wheel, graticule chrome, bearing rows, twelve geography kinds, shift log, cover photos, search, JSON backup, offline SQLite (`meridian_desk.db`).

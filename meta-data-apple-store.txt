@@ -1,14 +1,14 @@
 APP NAME
-Etude Hall
+Meridian Desk
 
 SUBTITLE
-Stage practice books
+Classroom atlas desk
 
 KEYWORDS
-piano,score,etude,recital,music,lesson,practice,clef,teacher,offline
+atlas,map,geography,lesson,globe,classroom,continent,capital,teacher,offline
 
 PROMOTION
-Stage practice books, file scores and etudes, and find any piece before recital. Private, offline.
+File classroom maps, globes, and field pins, then find any place before the unit test. Private, offline.
 
 DESCRIPTION
-Etude Hall is a private offline recital catalog — stage practice books, file scores and etudes, and find any piece before the concert.
+Meridian Desk is a private offline classroom atlas — file maps, globes, and field pins, then find any place before the unit test.

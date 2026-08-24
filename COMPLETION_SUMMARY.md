@@ -1,3 +1,3 @@
-# Etude Hall
+# Meridian Desk
 
-Offline recital catalog. Wine / gold / ivory UI, Cormorant Garamond + Work Sans, piano dock, staff lines. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline classroom atlas. Sea / coral / sand UI, Fraunces + Outfit, compass wheel, lat-long grid. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

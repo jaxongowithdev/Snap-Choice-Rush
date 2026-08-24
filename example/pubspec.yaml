@@ -1,5 +1,5 @@
-name: etude_hall_example
-description: "Etude Hall - Music practice catalog"
+name: meridian_desk_example
+description: "Meridian Desk - Classroom atlas desk"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

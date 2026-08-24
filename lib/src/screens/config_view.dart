@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import '../database/storage_manager.dart';
 import '../models/user_preferences.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/hall_chrome.dart';
+import '../widgets/atlas_chrome.dart';
 
 class ConfigView extends StatefulWidget {
   final VoidCallback onSettingsChanged;
@@ -49,10 +49,10 @@ class _ConfigViewState extends State<ConfigView> {
       final data = await _storage.exportData();
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       await Share.shareXFiles(
-        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'etude_hall_${DateTime.now().millisecondsSinceEpoch}.json')],
-        text: 'Etude Hall catalog',
+        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'meridian_desk_${DateTime.now().millisecondsSinceEpoch}.json')],
+        text: 'Meridian Desk catalog',
       );
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Hall exported')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Desk exported')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not export: $e')));
     }
@@ -62,8 +62,8 @@ class _ConfigViewState extends State<ConfigView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Restore a hall?'),
-        content: const Text('The current books will be replaced by the file you pick.'),
+        title: const Text('Restore a desk?'),
+        content: const Text('The current folios will be replaced by the file you pick.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Restore')),
@@ -76,7 +76,7 @@ class _ConfigViewState extends State<ConfigView> {
       if (result == null || result.files.isEmpty || result.files.first.bytes == null) return;
       final data = jsonDecode(String.fromCharCodes(result.files.first.bytes!)) as Map<String, dynamic>;
       await _storage.importData(data);
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Hall restored')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Desk restored')));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not restore: $e')));
     }
@@ -86,28 +86,28 @@ class _ConfigViewState extends State<ConfigView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Foyer')),
+      appBar: AppBar(title: const Text('Cabin')),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+        padding: const EdgeInsets.fromLTRB(22, 8, 22, 12),
         children: [
-          Text('Etude Hall', style: GoogleFonts.cormorantGaramond(fontSize: 34, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic)),
+          Text('Meridian Desk', style: GoogleFonts.fraunces(fontSize: 32, fontWeight: FontWeight.w600)),
           const SizedBox(height: 6),
-          Text('A private recital list. Nothing leaves this phone.', style: GoogleFonts.workSans(height: 1.4)),
-          const MovementLabel(label: 'LIGHT'),
-          for (final e in const [('light', 'Daylight ivory'), ('dark', 'After the concert'), ('system', 'Match the phone')])
+          Text('A private classroom atlas. Nothing leaves this phone.', style: GoogleFonts.outfit(height: 1.4)),
+          const LegendLabel(label: 'LIGHT'),
+          for (final e in const [('light', 'Daylight sand'), ('dark', 'After the field trip'), ('system', 'Match the phone')])
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Text((_preferences?.theme ?? 'system') == e.$1 ? '●' : '○', style: const TextStyle(color: VisualTheme.primaryColor)),
               title: Text(e.$2),
               onTap: () => _updateTheme(e.$1),
             ),
-          const MovementLabel(label: 'CATALOG'),
-          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export hall'), trailing: const Text('JSON →'), onTap: _exportData),
-          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore hall'), trailing: const Text('← FILE'), onTap: _importData),
-          const MovementLabel(label: 'COLOPHON'),
-          Text('Version 1.0.0  ·  Offline music inventory', style: GoogleFonts.workSans(fontSize: 13)),
+          const LegendLabel(label: 'CATALOG'),
+          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export desk'), trailing: const Text('JSON →'), onTap: _exportData),
+          ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore desk'), trailing: const Text('← FILE'), onTap: _importData),
+          const LegendLabel(label: 'COLOPHON'),
+          Text('Version 1.0.0  ·  Offline geography inventory', style: GoogleFonts.outfit(fontSize: 13)),
           const SizedBox(height: 6),
-          Text('No account. No tracking. Local only.', style: GoogleFonts.workSans(fontSize: 13)),
+          Text('No account. No tracking. Local only.', style: GoogleFonts.outfit(fontSize: 13)),
         ],
       ),
     );

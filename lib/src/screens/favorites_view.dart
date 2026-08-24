@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/hall_chrome.dart';
+import '../widgets/atlas_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -58,10 +58,10 @@ class _FavoritesViewState extends State<FavoritesView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('★', style: GoogleFonts.cormorantGaramond(fontSize: 40, color: VisualTheme.secondaryColor)),
-                        Text('Nothing starred', style: GoogleFonts.cormorantGaramond(fontSize: 28, fontWeight: FontWeight.w600)),
+                        Text('★', style: GoogleFonts.fraunces(fontSize: 40, color: VisualTheme.secondaryColor)),
+                        Text('Nothing starred', style: GoogleFonts.fraunces(fontSize: 26, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('Star the pieces you will play at the next recital.', textAlign: TextAlign.center),
+                        const Text('Star the pins you will teach in the next unit.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -69,18 +69,18 @@ class _FavoritesViewState extends State<FavoritesView> {
               : RefreshIndicator(
                   onRefresh: _loadFavorites,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(24, 4, 24, 28),
+                    padding: const EdgeInsets.fromLTRB(22, 4, 22, 12),
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final book = _containersCache[item.containerId];
+                      final folio = _containersCache[item.containerId];
                       return Row(
                         children: [
                           Expanded(
-                            child: MeasureRow(
-                              beat: '★',
+                            child: BearingRow(
+                              bearing: '★',
                               title: item.name,
-                              meta: '${item.category}  ·  ${item.quantity}${book != null ? '  ·  ${book.name}' : ''}',
+                              meta: '${item.category}  ·  ${item.quantity}${folio != null ? '  ·  ${folio.name}' : ''}',
                               accent: VisualTheme.getCategoryColor(item.category),
                               onTap: () async {
                                 await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
@@ -90,7 +90,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                           ),
                           IconButton(
                             key: ValueKey('favorite_toggle_${item.id}'),
-                            icon: Icon(item.isFavorite ? Icons.star : Icons.star_outline, color: item.isFavorite ? VisualTheme.secondaryColor : null),
+                            icon: Icon(item.isFavorite ? Icons.north : Icons.north_outlined, color: item.isFavorite ? VisualTheme.secondaryColor : null),
                             onPressed: () async {
                               await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
                               _loadFavorites();

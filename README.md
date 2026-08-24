@@ -1,22 +1,22 @@
-# Etude Hall
+# Meridian Desk
 
-A private recital catalog. Stage practice books, file scores and etudes, and find any piece before the concert — fully offline.
+A private classroom atlas. File maps, globes, and field pins, then find any place before the unit test — fully offline.
 
-**App Name:** Etude Hall
-**Subtitle:** Stage practice books
+**App Name:** Meridian Desk
+**Subtitle:** Classroom atlas desk
 **Category:** Education
-**Bundle ID:** com.app.etudehall.build
-**Database:** `etude_hall.db`
+**Bundle ID:** com.app.meridiandesk.build
+**Database:** `meridian_desk.db`
 
 ## Navigation
 
-Piano-key dock — not a Material tab bar, left rail, or binder tabs.
+Compass-rose wheel — not a Material tab bar, left rail, binder tabs, chalkboard dock, or piano keys.
 
-- HALL — this week’s programme
-- BOOKS — every practice book
-- STAR — recital set
-- CUE — moves between books
-- FOYER — light and backup
+- TRUE — this week’s expedition
+- MAPS — every atlas folio
+- STAR — unit set
+- LOG — shifts between folios
+- CABIN — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 
