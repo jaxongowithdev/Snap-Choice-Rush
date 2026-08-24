@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/trace_chrome.dart';
+import '../widgets/dewey_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -51,7 +51,7 @@ class _ContainerListViewState extends State<ContainerListView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('SETS'),
+        title: const Text('Bins'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
@@ -72,11 +72,11 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.architecture, size: 48, color: VisualTheme.primaryColor),
+                        Icon(Icons.menu_book_outlined, size: 48, color: VisualTheme.primaryColor),
                         const SizedBox(height: 8),
-                        Text('No sets pinned', style: GoogleFonts.sourceSerif4(fontSize: 24)),
+                        Text('No bins labeled', style: GoogleFonts.libreBaskerville(fontSize: 24, fontStyle: FontStyle.italic)),
                         const SizedBox(height: 8),
-                        const Text('Start a studio folio, a site roll, or the critique crate.', textAlign: TextAlign.center),
+                        const Text('Start a chapter crate, a picture tub, or the teacher shelf.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -84,15 +84,15 @@ class _ContainerListViewState extends State<ContainerListView> {
               : RefreshIndicator(
                   onRefresh: _loadContainers,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 12, 88),
                     itemCount: _containers!.length,
                     itemBuilder: (_, i) {
                       final c = _containers![i];
                       final count = _itemCounts[c.id] ?? 0;
-                      return DrawingPlate(
+                      return CheckoutCard(
                         kind: c.code,
                         title: c.name,
-                        meta: '${c.room}  ·  $count/${c.capacity} boards',
+                        meta: '${c.room}  ·  $count/${c.capacity} titles',
                         accent: VisualTheme.primaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));

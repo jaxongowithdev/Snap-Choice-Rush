@@ -13,7 +13,7 @@ class StorageManager {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('trace_hall.db');
+    _database = await _initDB('dewey_nook.db');
     return _database!;
   }
 
@@ -52,7 +52,7 @@ class StorageManager {
         name TEXT NOT NULL,
         category TEXT NOT NULL,
         quantity INTEGER NOT NULL DEFAULT 1,
-        condition TEXT NOT NULL DEFAULT 'Draft',
+        condition TEXT NOT NULL DEFAULT 'New',
         purchaseDate TEXT,
         estimatedValue REAL,
         notes TEXT,
@@ -84,8 +84,8 @@ class StorageManager {
         id INTEGER PRIMARY KEY CHECK (id = 1),
         theme TEXT NOT NULL DEFAULT 'system',
         language TEXT NOT NULL DEFAULT 'en',
-        capacityUnit TEXT NOT NULL DEFAULT 'boards',
-        defaultBoxPrefix TEXT NOT NULL DEFAULT 'PLAT',
+        capacityUnit TEXT NOT NULL DEFAULT 'titles',
+        defaultBoxPrefix TEXT NOT NULL DEFAULT 'DEW',
         showOnboarding INTEGER NOT NULL DEFAULT 1
       )
     ''');

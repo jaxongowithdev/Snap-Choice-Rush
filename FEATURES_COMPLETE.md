@@ -1,3 +1,3 @@
-# Trace Hall — feature set
+# Dewey Nook — feature set
 
-Bottom drafting-tool pile, blueprint grid, title-block home, crop-marked drawing plates, twelve studio kinds, move log, cover photos, search, JSON backup, offline SQLite (`trace_hall.db`).
+Right-side wooden catalog drawers, oak slat wall, book-spine home, manila checkout cards, twelve reading kinds, checkout log, cover photos, search, JSON backup, offline SQLite (`dewey_nook.db`).

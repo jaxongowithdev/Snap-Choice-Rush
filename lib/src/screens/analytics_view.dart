@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../widgets/trace_chrome.dart';
+import '../widgets/dewey_chrome.dart';
 import '../utils/visual_theme.dart';
 
 class AnalyticsView extends StatefulWidget {
@@ -40,7 +40,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('CENSUS')),
+      appBar: AppBar(title: const Text('Census')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
           : RefreshIndicator(
@@ -49,13 +49,13 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
                 children: [
                   if (_stats != null)
-                    Text('${_stats!['totalItems']} plates   ·   ${_stats!['totalContainers']} sets', style: GoogleFonts.sourceSerif4(fontSize: 22)),
+                    Text('${_stats!['totalItems']} titles   ·   ${_stats!['totalContainers']} bins', style: GoogleFonts.libreBaskerville(fontSize: 22, fontStyle: FontStyle.italic)),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
-                    const SheetStamp(label: 'BY KIND'),
+                    const PocketLabel(label: 'BY KIND'),
                     ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
-                    const SheetStamp(label: 'BY ROOM'),
+                    const PocketLabel(label: 'BY ROOM'),
                     ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
                   ],
                 ],

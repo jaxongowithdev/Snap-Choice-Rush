@@ -26,11 +26,11 @@ class _ItemFormViewState extends State<ItemFormView> {
   late TextEditingController _valueController;
   List<ContainerModel>? _containers;
   int? _selectedContainerId;
-  String _selectedCondition = 'Draft';
+  String _selectedCondition = 'New';
   String? _photoPath;
   final _imagePicker = ImagePicker();
-  final _conditions = ['Draft', 'Inked', 'Smudged', 'Filed'];
-  final _categories = ['Plans', 'Sections', 'Elevations', 'Details', 'Site', 'Models', 'Tools', 'Paper', 'Ink', 'Notes', 'Critique', 'Other'];
+  final _conditions = ['New', 'Loaned', 'Worn', 'Filed'];
+  final _categories = ['Picture', 'Chapter', 'Nonfiction', 'Poetry', 'Graphic', 'Biography', 'Folktale', 'Science', 'History', 'Series', 'Teacher', 'Other'];
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _ItemFormViewState extends State<ItemFormView> {
     _quantityController = TextEditingController(text: widget.item?.quantity.toString() ?? '1');
     _notesController = TextEditingController(text: widget.item?.notes);
     _valueController = TextEditingController(text: widget.item?.estimatedValue?.toString());
-    _selectedCondition = widget.item?.condition ?? 'Draft';
+    _selectedCondition = widget.item?.condition ?? 'New';
     _selectedContainerId = widget.item?.containerId ?? widget.preselectedContainerId;
     _photoPath = widget.item?.photoPath;
     _loadContainers();
@@ -70,7 +70,7 @@ class _ItemFormViewState extends State<ItemFormView> {
       final photo = await _imagePicker.pickImage(source: source, maxWidth: 1024, maxHeight: 1024, imageQuality: 85);
       if (photo == null) return;
       final appDir = await getApplicationDocumentsDirectory();
-      final fileName = 'plat_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
+      final fileName = 'dewey_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
       final savedPath = path_pkg.join(appDir.path, 'photos', fileName);
       await Directory(path_pkg.join(appDir.path, 'photos')).create(recursive: true);
       await File(photo.path).copy(savedPath);
@@ -95,7 +95,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Future<void> _saveItem() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedContainerId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a set first')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a bin first')));
       return;
     }
     final item = InventoryItemModel(
@@ -121,7 +121,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.item != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit plate' : 'File a plate')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit title' : 'File a title')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -143,11 +143,11 @@ class _ItemFormViewState extends State<ItemFormView> {
                 ],
               ),
             const SizedBox(height: 16),
-            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Plate name', hintText: 'e.g., Ground floor plan, Stair detail'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this plate' : null),
+            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Title name', hintText: 'e.g., Frog and Toad, Weather kit'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this title' : null),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(key: const ValueKey('category_dropdown'), value: _categories.contains(_categoryController.text) ? _categoryController.text : null, decoration: const InputDecoration(labelText: 'Kind'), items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) _categoryController.text = v; }, validator: (_) => _categoryController.text.isEmpty ? 'Pick a kind' : null),
             const SizedBox(height: 12),
-            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Set'), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a set' : null),
+            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Bin'), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a bin' : null),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -159,9 +159,9 @@ class _ItemFormViewState extends State<ItemFormView> {
             const SizedBox(height: 12),
             TextFormField(key: const ValueKey('value_field'), controller: _valueController, decoration: const InputDecoration(labelText: 'Replacement cost (optional)'), keyboardType: TextInputType.number),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Studio note', hintText: 'Scale, revision, or last critique'), maxLines: 3),
+            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Librarian note', hintText: 'Last checkout, missing pages, or level'), maxLines: 3),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save plate' : 'File plate')),
+            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save title' : 'File title')),
           ],
         ),
       ),

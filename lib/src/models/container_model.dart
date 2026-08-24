@@ -1,4 +1,4 @@
-// Field press / nature-study journal
+// Classroom library bin / reading crate
 class ContainerModel {
   final int? id;
   final String name;

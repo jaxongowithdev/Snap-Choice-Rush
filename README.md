@@ -1,21 +1,21 @@
-# Trace Hall
+# Dewey Nook
 
-A private studio catalog. File drafting sets, plans, and studio plates, then find any drawing before critique — fully offline.
+A private reading journal. File classroom shelves, reading bins, and book kits, then find any title before independent reading — fully offline.
 
-**App Name:** Trace Hall
-**Subtitle:** Drafting class log
+**App Name:** Dewey Nook
+**Subtitle:** Reading workshop log
 **Category:** Education
-**Bundle ID:** com.app.tracehall.build
-**Database:** `trace_hall.db`
+**Bundle ID:** com.app.deweynook.build
+**Database:** `dewey_nook.db`
 
 ## Navigation
 
-A pile of drafting tools at the bottom — T-square, set squares, scale, compass — not a Material tab bar, museum spine, or chemical trays.
+Five stacked wooden catalog drawers on the right — not a Material tab bar, drafting tools, or hanging ribbons. The selected drawer slides open.
 
-- SHEET — today’s board
-- SETS — every portfolio
-- PIN — plates for critique
-- LOG — moves between sets
+- NOOK — this week’s bin
+- BINS — every crate and shelf
+- FLAG — titles for workshop
+- LOG — checkouts between bins
 - DESK — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.

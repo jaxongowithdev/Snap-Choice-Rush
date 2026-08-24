@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Trace Hall initialization...');
+      debugPrint('Starting Dewey Nook initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Trace Hall',
+      title: 'Dewey Nook',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -85,9 +85,9 @@ class _UserScreenState extends State<UserScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('TRACE HALL', style: GoogleFonts.barlowCondensed(color: VisualTheme.cyan, fontSize: 28, letterSpacing: 4, fontWeight: FontWeight.w700)),
+                    Text('Dewey Nook', style: GoogleFonts.libreBaskerville(color: VisualTheme.paper, fontSize: 32, fontStyle: FontStyle.italic)),
                     const SizedBox(height: 8),
-                    Text('Pinning the board…', style: GoogleFonts.sourceSerif4(color: VisualTheme.vellum.withValues(alpha: 0.75), fontStyle: FontStyle.italic)),
+                    Text('Opening the catalog…', style: GoogleFonts.outfit(color: VisualTheme.paper.withValues(alpha: 0.75))),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

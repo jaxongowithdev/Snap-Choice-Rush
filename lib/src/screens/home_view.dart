@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/trace_chrome.dart';
+import '../widgets/dewey_chrome.dart';
 import 'container_detail_view.dart';
 import 'item_form_view.dart';
 import 'search_view.dart';
@@ -22,10 +22,19 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final _storage = StorageManager.instance;
   Map<String, int>? _stats;
-  List<ContainerModel> _sets = [];
+  List<ContainerModel> _bins = [];
   Map<int, int> _counts = {};
-  List<InventoryItemModel> _pins = [];
+  List<InventoryItemModel> _flags = [];
   bool _isLoading = true;
+
+  static const _spineColors = [
+    Color(0xFF2C4A3C),
+    Color(0xFFB33A2B),
+    Color(0xFFC4A35A),
+    Color(0xFF3D5C7A),
+    Color(0xFF7A4A6A),
+    Color(0xFF5A7A4A),
+  ];
 
   @override
   void initState() {
@@ -37,17 +46,17 @@ class _HomeViewState extends State<HomeView> {
     setState(() => _isLoading = true);
     try {
       final stats = await _storage.getStatistics();
-      final sets = await _storage.getAllContainers(sortBy: 'name');
+      final bins = await _storage.getAllContainers(sortBy: 'name');
       final counts = <int, int>{};
-      for (final b in sets) {
+      for (final b in bins) {
         counts[b.id!] = await _storage.getItemCountInContainer(b.id!);
       }
-      final pins = await _storage.getFavoriteItems();
+      final flags = await _storage.getFavoriteItems();
       setState(() {
         _stats = stats;
-        _sets = sets;
+        _bins = bins;
         _counts = counts;
-        _pins = pins.take(5).toList();
+        _flags = flags.take(5).toList();
         _isLoading = false;
       });
     } catch (e) {
@@ -61,11 +70,11 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('TRACE HALL'),
+        title: const Text('Dewey Nook'),
         actions: [
           IconButton(
             key: const ValueKey('favorites_button'),
-            icon: const Icon(Icons.push_pin_outlined),
+            icon: const Icon(Icons.bookmark_border),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoritesView())).then((_) => _loadData());
             },
@@ -84,31 +93,46 @@ class _HomeViewState extends State<HomeView> {
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+                padding: const EdgeInsets.fromLTRB(16, 4, 12, 28),
                 children: [
-                  TitleBlock(
-                    project: 'TODAY’S BOARD',
-                    note: (_stats?['totalItems'] ?? 0) == 0
-                        ? 'The board is empty. Mix a set before critique.'
-                        : '${_stats!['totalItems']} plates across ${_stats!['totalContainers']} sets.',
+                  Text('this week’s bin', style: GoogleFonts.libreBaskerville(fontSize: 28, fontStyle: FontStyle.italic, height: 1.1)),
+                  const SizedBox(height: 8),
+                  Text(
+                    (_stats?['totalItems'] ?? 0) == 0
+                        ? 'The nook is empty. Label a bin before independent reading.'
+                        : '${_stats!['totalItems']} titles across ${_stats!['totalContainers']} bins.',
+                    style: GoogleFonts.outfit(fontSize: 15, height: 1.45),
                   ),
-                  const SheetStamp(label: 'WORKING SETS'),
-                  if (_sets.isEmpty)
-                    Text('No sets pinned yet.\nStudio folio. Site roll. Critique crate.', style: GoogleFonts.sourceSerif4(height: 1.5))
+                  const PocketLabel(label: 'ON THE SHELF'),
+                  if (_bins.isEmpty)
+                    Text('No bins labeled yet.\nChapter crate. Picture tub. Teacher shelf.', style: GoogleFonts.outfit(height: 1.5))
                   else
-                    ..._sets.map((c) {
-                      final count = _counts[c.id] ?? 0;
-                      return DrawingPlate(
-                        kind: c.code,
-                        title: c.name,
-                        meta: '${c.room}  ·  $count / ${c.capacity} boards',
-                        accent: VisualTheme.primaryColor,
-                        onTap: () async {
-                          await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
-                          _loadData();
-                        },
-                      );
-                    }),
+                    SizedBox(
+                      height: 168,
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: List.generate(_bins.length, (i) {
+                              final c = _bins[i];
+                              final count = _counts[c.id] ?? 0;
+                              return BookSpine(
+                                title: c.name,
+                                meta: '$count',
+                                accent: _spineColors[i % _spineColors.length],
+                                height: 96.0 + (i % 4) * 18,
+                                onTap: () async {
+                                  await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
+                                  _loadData();
+                                },
+                              );
+                            }),
+                          ),
+                        ),
+                      ),
+                    ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton(
@@ -117,7 +141,7 @@ class _HomeViewState extends State<HomeView> {
                         final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ContainerFormView()));
                         if (r == true) _loadData();
                       },
-                      child: Text('+ NEW SET', style: GoogleFonts.barlowCondensed(fontSize: 16, letterSpacing: 1.2, color: VisualTheme.primaryColor)),
+                      child: Text('+ new bin', style: GoogleFonts.libreBaskerville(fontSize: 16, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
                     ),
                   ),
                   TextButton(
@@ -126,11 +150,11 @@ class _HomeViewState extends State<HomeView> {
                       final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ItemFormView()));
                       if (r == true) _loadData();
                     },
-                    child: Text('FILE A PLATE  →', style: GoogleFonts.barlowCondensed(color: VisualTheme.primaryColor, fontWeight: FontWeight.w700, letterSpacing: 1)),
+                    child: Text('file a title  →', style: GoogleFonts.outfit(color: VisualTheme.secondaryColor, fontWeight: FontWeight.w800)),
                   ),
-                  if (_pins.isNotEmpty) ...[
-                    const SheetStamp(label: 'PINNED FOR CRITIQUE'),
-                    ..._pins.map((item) => DrawingPlate(
+                  if (_flags.isNotEmpty) ...[
+                    const PocketLabel(label: 'FLAGGED FOR WORKSHOP'),
+                    ..._flags.map((item) => CheckoutCard(
                           kind: item.category,
                           title: item.name,
                           meta: '${item.condition}  ·  ${item.quantity}',
@@ -141,8 +165,8 @@ class _HomeViewState extends State<HomeView> {
                           },
                         )),
                   ],
-                  const SheetStamp(label: 'STUDIO NOTE'),
-                  Text('Mark a plate Smudged when the graphite lifts — reprint before Friday’s pin-up.', style: GoogleFonts.sourceSerif4(fontSize: 16, fontStyle: FontStyle.italic, height: 1.4)),
+                  const PocketLabel(label: 'LIBRARIAN NOTE'),
+                  Text('Mark a title Worn when the spine splits — replace it before Friday’s checkout.', style: GoogleFonts.libreBaskerville(fontSize: 16, fontStyle: FontStyle.italic, height: 1.4)),
                 ],
               ),
             ),

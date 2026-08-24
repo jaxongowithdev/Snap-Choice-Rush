@@ -1,3 +1,3 @@
-# Trace Hall
+# Dewey Nook
 
-Offline drafting journal. Blueprint / cyan / vellum UI, Barlow Condensed + Source Serif 4, T-square and triangles, title blocks. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline classroom-library journal. Hunter green / stamp red / manila UI, Libre Baskerville + Outfit, catalog drawers, book spines. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

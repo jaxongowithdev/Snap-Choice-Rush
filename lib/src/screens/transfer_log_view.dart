@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../database/storage_manager.dart';
 import '../models/transfer_history_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/trace_chrome.dart';
+import '../widgets/dewey_chrome.dart';
 import 'item_detail_view.dart';
 
 class TransferLogView extends StatefulWidget {
@@ -18,7 +18,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   final _storage = StorageManager.instance;
   List<TransferHistoryModel>? _logs;
   final Map<int, String> _itemNames = {};
-  final Map<int, String> _setNames = {};
+  final Map<int, String> _binNames = {};
   bool _isLoading = true;
 
   @override
@@ -34,15 +34,15 @@ class _TransferLogViewState extends State<TransferLogView> {
       for (final log in logs) {
         if (!_itemNames.containsKey(log.itemId)) {
           final item = await _storage.getItem(log.itemId);
-          _itemNames[log.itemId] = item?.name ?? 'Unknown plate';
+          _itemNames[log.itemId] = item?.name ?? 'Unknown title';
         }
-        if (!_setNames.containsKey(log.fromContainerId)) {
+        if (!_binNames.containsKey(log.fromContainerId)) {
           final from = await _storage.getContainer(log.fromContainerId);
-          _setNames[log.fromContainerId] = from?.name ?? 'Removed set';
+          _binNames[log.fromContainerId] = from?.name ?? 'Removed bin';
         }
-        if (!_setNames.containsKey(log.toContainerId)) {
+        if (!_binNames.containsKey(log.toContainerId)) {
           final to = await _storage.getContainer(log.toContainerId);
-          _setNames[log.toContainerId] = to?.name ?? 'Removed set';
+          _binNames[log.toContainerId] = to?.name ?? 'Removed bin';
         }
       }
       setState(() { _logs = logs; _isLoading = false; });
@@ -56,7 +56,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('LOG')),
+      appBar: AppBar(title: const Text('Log')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
           : _logs == null || _logs!.isEmpty
@@ -66,10 +66,10 @@ class _TransferLogViewState extends State<TransferLogView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('STILL', style: GoogleFonts.barlowCondensed(fontSize: 16, letterSpacing: 3, color: VisualTheme.primaryColor)),
-                        Text('No moves yet', style: GoogleFonts.sourceSerif4(fontSize: 22, fontWeight: FontWeight.w600)),
+                        Text('STILL', style: GoogleFonts.outfit(fontSize: 12, letterSpacing: 3, fontWeight: FontWeight.w800, color: VisualTheme.secondaryColor)),
+                        Text('No checkouts yet', style: GoogleFonts.libreBaskerville(fontSize: 22, fontWeight: FontWeight.w700, fontStyle: FontStyle.italic)),
                         const SizedBox(height: 8),
-                        const Text('When a plate changes sets, the log lands here.', textAlign: TextAlign.center),
+                        const Text('When a title changes bins, the card lands here.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -82,10 +82,10 @@ class _TransferLogViewState extends State<TransferLogView> {
                     itemBuilder: (_, i) {
                       final log = _logs![i];
                       final when = DateFormat('MMM d').format(log.moveDate);
-                      return DrawingPlate(
+                      return CheckoutCard(
                         kind: when,
-                        title: _itemNames[log.itemId] ?? 'Plate',
-                        meta: '${_setNames[log.fromContainerId]}  →  ${_setNames[log.toContainerId]}${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}',
+                        title: _itemNames[log.itemId] ?? 'Title',
+                        meta: '${_binNames[log.fromContainerId]}  →  ${_binNames[log.toContainerId]}${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}',
                         accent: VisualTheme.secondaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: log.itemId)));
