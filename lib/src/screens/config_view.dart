@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import '../database/storage_manager.dart';
 import '../models/user_preferences.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/atlas_chrome.dart';
+import '../widgets/stanza_chrome.dart';
 
 class ConfigView extends StatefulWidget {
   final VoidCallback onSettingsChanged;
@@ -49,8 +49,8 @@ class _ConfigViewState extends State<ConfigView> {
       final data = await _storage.exportData();
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       await Share.shareXFiles(
-        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'meridian_desk_${DateTime.now().millisecondsSinceEpoch}.json')],
-        text: 'Meridian Desk catalog',
+        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'ink_stanza_${DateTime.now().millisecondsSinceEpoch}.json')],
+        text: 'Ink Stanza catalog',
       );
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Desk exported')));
     } catch (e) {
@@ -86,28 +86,28 @@ class _ConfigViewState extends State<ConfigView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Cabin')),
+      appBar: AppBar(title: const Text('Desk')),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(22, 8, 22, 12),
+        padding: const EdgeInsets.fromLTRB(20, 8, 16, 28),
         children: [
-          Text('Meridian Desk', style: GoogleFonts.fraunces(fontSize: 32, fontWeight: FontWeight.w600)),
+          Text('Ink Stanza', style: GoogleFonts.spectral(fontSize: 32, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic)),
           const SizedBox(height: 6),
-          Text('A private classroom atlas. Nothing leaves this phone.', style: GoogleFonts.outfit(height: 1.4)),
-          const LegendLabel(label: 'LIGHT'),
-          for (final e in const [('light', 'Daylight sand'), ('dark', 'After the field trip'), ('system', 'Match the phone')])
+          Text('A private poetry workshop. Nothing leaves this phone.', style: GoogleFonts.figtree(height: 1.4)),
+          const SealLabel(label: 'LIGHT'),
+          for (final e in const [('light', 'Daylight washi'), ('dark', 'After the reading'), ('system', 'Match the phone')])
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Text((_preferences?.theme ?? 'system') == e.$1 ? '●' : '○', style: const TextStyle(color: VisualTheme.primaryColor)),
               title: Text(e.$2),
               onTap: () => _updateTheme(e.$1),
             ),
-          const LegendLabel(label: 'CATALOG'),
+          const SealLabel(label: 'CATALOG'),
           ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export desk'), trailing: const Text('JSON →'), onTap: _exportData),
           ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore desk'), trailing: const Text('← FILE'), onTap: _importData),
-          const LegendLabel(label: 'COLOPHON'),
-          Text('Version 1.0.0  ·  Offline geography inventory', style: GoogleFonts.outfit(fontSize: 13)),
+          const SealLabel(label: 'COLOPHON'),
+          Text('Version 1.0.0  ·  Offline poetry inventory', style: GoogleFonts.figtree(fontSize: 13)),
           const SizedBox(height: 6),
-          Text('No account. No tracking. Local only.', style: GoogleFonts.outfit(fontSize: 13)),
+          Text('No account. No tracking. Local only.', style: GoogleFonts.figtree(fontSize: 13)),
         ],
       ),
     );

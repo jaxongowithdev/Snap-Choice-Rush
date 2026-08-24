@@ -1,4 +1,4 @@
-# Meridian Desk
+# Ink Stanza
 
 ```bash
 flutter run

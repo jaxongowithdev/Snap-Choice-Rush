@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/atlas_chrome.dart';
+import '../widgets/stanza_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -46,17 +46,12 @@ class _ContainerListViewState extends State<ContainerListView> {
     }
   }
 
-  String _bearing(int i) {
-    const pts = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-    return pts[i % pts.length];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Maps'),
+        title: const Text('Folio'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
@@ -77,10 +72,10 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('N', style: GoogleFonts.fraunces(fontSize: 48, color: VisualTheme.primaryColor)),
-                        Text('No folios plotted', style: GoogleFonts.fraunces(fontSize: 26, fontWeight: FontWeight.w600)),
+                        Text('印', style: GoogleFonts.spectral(fontSize: 40, color: VisualTheme.primaryColor)),
+                        Text('No folios hanging', style: GoogleFonts.spectral(fontSize: 26, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('Start a wall folio, a field satchel, or the globe cabinet.', textAlign: TextAlign.center),
+                        const Text('Start a class set, a reading-night stack, or the journal drawer.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -88,15 +83,15 @@ class _ContainerListViewState extends State<ContainerListView> {
               : RefreshIndicator(
                   onRefresh: _loadContainers,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(22, 4, 22, 12),
+                    padding: const EdgeInsets.fromLTRB(20, 4, 16, 88),
                     itemCount: _containers!.length,
                     itemBuilder: (_, i) {
                       final c = _containers![i];
                       final count = _itemCounts[c.id] ?? 0;
-                      return BearingRow(
-                        bearing: _bearing(i),
+                      return CoupletCard(
+                        kind: c.code,
                         title: c.name,
-                        meta: '${c.code}  ·  ${c.room}  ·  $count/${c.capacity}',
+                        meta: '${c.room}  ·  $count/${c.capacity} lines',
                         accent: VisualTheme.secondaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));

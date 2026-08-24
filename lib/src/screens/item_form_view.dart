@@ -29,8 +29,8 @@ class _ItemFormViewState extends State<ItemFormView> {
   String _selectedCondition = 'Clean';
   String? _photoPath;
   final _imagePicker = ImagePicker();
-  final _conditions = ['Clean', 'Folded', 'Torn', 'Filed'];
-  final _categories = ['Continents', 'Capitals', 'Rivers', 'Ranges', 'Coasts', 'Climate', 'Cultures', 'Trade', 'Maps', 'Globes', 'Field', 'Other'];
+  final _conditions = ['Clean', 'Smudged', 'Creased', 'Filed'];
+  final _categories = ['Sonnets', 'Haiku', 'Free verse', 'Spoken', 'Chorus', 'Drama', 'Forms', 'Devices', 'Journals', 'Translation', 'Anthology', 'Other'];
 
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _ItemFormViewState extends State<ItemFormView> {
       final photo = await _imagePicker.pickImage(source: source, maxWidth: 1024, maxHeight: 1024, imageQuality: 85);
       if (photo == null) return;
       final appDir = await getApplicationDocumentsDirectory();
-      final fileName = 'meridian_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
+      final fileName = 'stanza_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
       final savedPath = path_pkg.join(appDir.path, 'photos', fileName);
       await Directory(path_pkg.join(appDir.path, 'photos')).create(recursive: true);
       await File(photo.path).copy(savedPath);
@@ -121,7 +121,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.item != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit pin' : 'File a pin')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit verse' : 'File a verse')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -143,7 +143,7 @@ class _ItemFormViewState extends State<ItemFormView> {
                 ],
               ),
             const SizedBox(height: 16),
-            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Pin name', hintText: 'e.g., Nile delta, Tokyo capital'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this pin' : null),
+            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Verse name', hintText: 'e.g., October sonnet, Frog haiku'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this verse' : null),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(key: const ValueKey('category_dropdown'), value: _categories.contains(_categoryController.text) ? _categoryController.text : null, decoration: const InputDecoration(labelText: 'Kind'), items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) _categoryController.text = v; }, validator: (_) => _categoryController.text.isEmpty ? 'Pick a kind' : null),
             const SizedBox(height: 12),
@@ -159,9 +159,9 @@ class _ItemFormViewState extends State<ItemFormView> {
             const SizedBox(height: 12),
             TextFormField(key: const ValueKey('value_field'), controller: _valueController, decoration: const InputDecoration(labelText: 'Replacement cost (optional)'), keyboardType: TextInputType.number),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Field note', hintText: 'Unit, lat/long, or last lesson'), maxLines: 3),
+            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Marginal note', hintText: 'Meter, weak line, or last workshop'), maxLines: 3),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save pin' : 'File pin')),
+            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save verse' : 'File verse')),
           ],
         ),
       ),

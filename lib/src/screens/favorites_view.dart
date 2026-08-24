@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/atlas_chrome.dart';
+import '../widgets/stanza_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -48,7 +48,7 @@ class _FavoritesViewState extends State<FavoritesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Star')),
+      appBar: AppBar(title: const Text('Seal')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteItems == null || _favoriteItems!.isEmpty
@@ -58,10 +58,10 @@ class _FavoritesViewState extends State<FavoritesView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('★', style: GoogleFonts.fraunces(fontSize: 40, color: VisualTheme.secondaryColor)),
-                        Text('Nothing starred', style: GoogleFonts.fraunces(fontSize: 26, fontWeight: FontWeight.w600)),
+                        Text('印', style: GoogleFonts.spectral(fontSize: 40, color: VisualTheme.primaryColor)),
+                        Text('Nothing sealed', style: GoogleFonts.spectral(fontSize: 26, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('Star the pins you will teach in the next unit.', textAlign: TextAlign.center),
+                        const Text('Seal the verses you will read at the next workshop.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -69,18 +69,19 @@ class _FavoritesViewState extends State<FavoritesView> {
               : RefreshIndicator(
                   onRefresh: _loadFavorites,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(22, 4, 22, 12),
+                    padding: const EdgeInsets.fromLTRB(20, 4, 16, 28),
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
                       final folio = _containersCache[item.containerId];
                       return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: BearingRow(
-                              bearing: '★',
+                            child: CoupletCard(
+                              kind: item.category,
                               title: item.name,
-                              meta: '${item.category}  ·  ${item.quantity}${folio != null ? '  ·  ${folio.name}' : ''}',
+                              meta: '${item.quantity}${folio != null ? '  ·  ${folio.name}' : ''}',
                               accent: VisualTheme.getCategoryColor(item.category),
                               onTap: () async {
                                 await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
@@ -90,7 +91,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                           ),
                           IconButton(
                             key: ValueKey('favorite_toggle_${item.id}'),
-                            icon: Icon(item.isFavorite ? Icons.north : Icons.north_outlined, color: item.isFavorite ? VisualTheme.secondaryColor : null),
+                            icon: Icon(item.isFavorite ? Icons.auto_awesome : Icons.auto_awesome_outlined, color: item.isFavorite ? VisualTheme.primaryColor : null),
                             onPressed: () async {
                               await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
                               _loadFavorites();

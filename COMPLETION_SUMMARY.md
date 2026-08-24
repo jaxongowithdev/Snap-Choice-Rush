@@ -1,3 +1,3 @@
-# Meridian Desk
+# Ink Stanza
 
-Offline classroom atlas. Sea / coral / sand UI, Fraunces + Outfit, compass wheel, lat-long grid. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline poetry workshop. Cinnabar / indigo / washi UI, Spectral + Figtree, hanging tanzaku rail, fiber paper. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

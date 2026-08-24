@@ -1,5 +1,5 @@
-name: meridian_desk_example
-description: "Meridian Desk - Classroom atlas desk"
+name: ink_stanza_example
+description: "Ink Stanza - Poetry workshop desk"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

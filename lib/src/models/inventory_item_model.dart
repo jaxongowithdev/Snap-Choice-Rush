@@ -5,7 +5,7 @@ class InventoryItemModel {
   final String name;
   final String category;
   final int quantity;
-  final String condition; // Clean, Folded, Torn, Filed
+  final String condition; // Clean, Smudged, Creased, Filed
   final String? purchaseDate;
   final double? estimatedValue;
   final String? notes;

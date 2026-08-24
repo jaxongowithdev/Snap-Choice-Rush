@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/atlas_chrome.dart';
+import '../widgets/stanza_chrome.dart';
 import 'container_form_view.dart';
 import 'item_form_view.dart';
 import 'item_detail_view.dart';
@@ -50,7 +50,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Clear this folio?'),
-        content: const Text('Every pin filed here will be removed.'),
+        content: const Text('Every verse filed here will be removed.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Clear')),
@@ -61,11 +61,6 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
       await _storage.deleteContainer(widget.containerId);
       if (mounted) Navigator.pop(context, true);
     }
-  }
-
-  String _bearing(int i) {
-    const pts = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-    return pts[i % pts.length];
   }
 
   @override
@@ -97,12 +92,12 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
+          padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
           children: [
-            Text(_container!.name, style: GoogleFonts.fraunces(fontSize: 32, fontWeight: FontWeight.w600, height: 1.05)),
+            Text(_container!.name, style: GoogleFonts.spectral(fontSize: 32, fontWeight: FontWeight.w600, height: 1.05)),
             const SizedBox(height: 6),
-            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} pins', style: GoogleFonts.outfit(fontSize: 13)),
-            LegendLabel(label: 'PINS  ·  $count'),
+            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} lines', style: GoogleFonts.figtree(fontSize: 13)),
+            SealLabel(label: 'VERSES  ·  $count'),
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
@@ -111,19 +106,19 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                   final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemFormView(preselectedContainerId: widget.containerId)));
                   if (r == true) _loadData();
                 },
-                child: Text('+ file a pin', style: GoogleFonts.fraunces(fontSize: 18, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
+                child: Text('+ file a verse', style: GoogleFonts.spectral(fontSize: 18, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
               ),
             ),
             if (_items == null || _items!.isEmpty)
               const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed in this folio yet'))
             else
-              ..._items!.asMap().entries.map((e) => BearingRow(
-                    bearing: _bearing(e.key),
-                    title: e.value.name,
-                    meta: '${e.value.category}  ·  ${e.value.quantity}  ·  ${e.value.condition}',
-                    accent: VisualTheme.getCategoryColor(e.value.category),
+              ..._items!.map((item) => CoupletCard(
+                    kind: item.category,
+                    title: item.name,
+                    meta: '${item.quantity}  ·  ${item.condition}',
+                    accent: VisualTheme.getCategoryColor(item.category),
                     onTap: () async {
-                      await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: e.value.id!)));
+                      await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
                       _loadData();
                     },
                   )),

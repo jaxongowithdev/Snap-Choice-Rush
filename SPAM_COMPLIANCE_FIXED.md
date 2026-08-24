@@ -1,3 +1,3 @@
 # Listing notes
 
-This project is Meridian Desk (`com.app.meridiandesk.build`), a geography-classroom catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.
+This project is Ink Stanza (`com.app.inkstanza.build`), a poetry-workshop catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.

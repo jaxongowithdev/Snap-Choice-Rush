@@ -1,4 +1,4 @@
-// Atlas folio / classroom map set
+// Workshop folio / poetry set
 class ContainerModel {
   final int? id;
   final String name;

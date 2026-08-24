@@ -1,22 +1,22 @@
-# Meridian Desk
+# Ink Stanza
 
-A private classroom atlas. File maps, globes, and field pins, then find any place before the unit test — fully offline.
+A private poetry workshop. File folios, verses, and sealed copies, then find any poem before the reading — fully offline.
 
-**App Name:** Meridian Desk
-**Subtitle:** Classroom atlas desk
+**App Name:** Ink Stanza
+**Subtitle:** Poetry workshop desk
 **Category:** Education
-**Bundle ID:** com.app.meridiandesk.build
-**Database:** `meridian_desk.db`
+**Bundle ID:** com.app.inkstanza.build
+**Database:** `ink_stanza.db`
 
 ## Navigation
 
-Compass-rose wheel — not a Material tab bar, left rail, binder tabs, chalkboard dock, or piano keys.
+Right hanging tanzaku — not a Material tab bar, compass wheel, left rail, binder tabs, or piano keys.
 
-- TRUE — this week’s expedition
-- MAPS — every atlas folio
-- STAR — unit set
-- LOG — shifts between folios
-- CABIN — light and backup
+- ROOM — this week’s reading
+- FOLIO — every workshop folio
+- SEAL — reading set
+- PASS — moves between folios
+- DESK — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

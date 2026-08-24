@@ -1,3 +1,3 @@
-# Meridian Desk — feature set
+# Ink Stanza — feature set
 
-Compass-rose five-point wheel, graticule chrome, bearing rows, twelve geography kinds, shift log, cover photos, search, JSON backup, offline SQLite (`meridian_desk.db`).
+Right-hanging five-strip tanzaku, washi chrome, couplet cards, twelve verse kinds, pass log, cover photos, search, JSON backup, offline SQLite (`ink_stanza.db`).

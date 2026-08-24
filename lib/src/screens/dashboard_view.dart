@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/atlas_chrome.dart';
+import '../widgets/stanza_chrome.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
 import 'favorites_view.dart';
@@ -33,11 +33,11 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GraticulePaper(
-        child: Column(
+      body: WashiPaper(
+        child: Row(
           children: [
             Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
-            CompassWheel(
+            TanzakuRail(
               index: _selectedIndex,
               onSelect: (i) => setState(() => _selectedIndex = i),
             ),

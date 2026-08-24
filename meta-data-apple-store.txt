@@ -1,14 +1,14 @@
 APP NAME
-Meridian Desk
+Ink Stanza
 
 SUBTITLE
-Classroom atlas desk
+Poetry workshop desk
 
 KEYWORDS
-atlas,map,geography,lesson,globe,classroom,continent,capital,teacher,offline
+poem,verse,stanza,poetry,lesson,workshop,haiku,sonnet,teacher,offline
 
 PROMOTION
-File classroom maps, globes, and field pins, then find any place before the unit test. Private, offline.
+File workshop folios, verses, and sealed copies, then find any poem before the reading. Private, offline.
 
 DESCRIPTION
-Meridian Desk is a private offline classroom atlas — file maps, globes, and field pins, then find any place before the unit test.
+Ink Stanza is a private offline poetry workshop — file folios, verses, and sealed copies, then find any poem before the reading.

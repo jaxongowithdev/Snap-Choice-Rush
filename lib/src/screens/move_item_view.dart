@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/atlas_chrome.dart';
+import '../widgets/stanza_chrome.dart';
 
 class MoveItemView extends StatefulWidget {
   final InventoryItemModel item;
@@ -62,7 +62,7 @@ class _MoveItemViewState extends State<MoveItemView> {
         context: context,
         builder: (_) => AlertDialog(
           title: const Text('That folio is full'),
-          content: Text('"${_selectedContainer!.name}" has no open pins. File it anyway?'),
+          content: Text('"${_selectedContainer!.name}" has no open lines. File it anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
             FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('File anyway')),
@@ -81,18 +81,18 @@ class _MoveItemViewState extends State<MoveItemView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Shift')),
+      appBar: AppBar(title: const Text('Pass')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
               padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
               children: [
-                Text('moving', style: GoogleFonts.outfit(letterSpacing: 1.6, fontSize: 11, color: VisualTheme.primaryColor)),
-                Text(widget.item.name, style: GoogleFonts.fraunces(fontSize: 26, fontWeight: FontWeight.w600)),
+                Text('passing', style: GoogleFonts.figtree(letterSpacing: 1.6, fontSize: 11, color: VisualTheme.primaryColor)),
+                Text(widget.item.name, style: GoogleFonts.spectral(fontSize: 26, fontWeight: FontWeight.w600)),
                 Text('${widget.item.category}  ·  ${widget.item.quantity}'),
-                const LegendLabel(label: 'NOW IN'),
+                const SealLabel(label: 'NOW IN'),
                 Text(_currentContainer == null ? 'Unknown folio' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
-                const LegendLabel(label: 'MOVE INTO'),
+                const SealLabel(label: 'PASS INTO'),
                 if (_containers == null || _containers!.isEmpty)
                   const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other folios yet'))
                 else
@@ -102,15 +102,15 @@ class _MoveItemViewState extends State<MoveItemView> {
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: Text(selected ? '●' : '○', style: TextStyle(color: selected ? VisualTheme.primaryColor : null, fontSize: 16)),
-                      title: Text(c.name, style: GoogleFonts.fraunces(fontSize: 18, fontWeight: FontWeight.w600)),
+                      title: Text(c.name, style: GoogleFonts.spectral(fontSize: 18, fontWeight: FontWeight.w600)),
                       subtitle: Text('${c.room}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
                       onTap: () => setState(() => _selectedContainer = c),
                     );
                   }),
                 const SizedBox(height: 12),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the shift?', hintText: 'e.g., Going into the field satchel'), maxLines: 2),
+                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the pass?', hintText: 'e.g., Going into the reading-night stack'), maxLines: 2),
                 const SizedBox(height: 22),
-                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Log the shift')),
+                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Pass the verse')),
               ],
             ),
     );

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../database/storage_manager.dart';
 import '../models/transfer_history_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/atlas_chrome.dart';
+import '../widgets/stanza_chrome.dart';
 import 'item_detail_view.dart';
 
 class TransferLogView extends StatefulWidget {
@@ -34,7 +34,7 @@ class _TransferLogViewState extends State<TransferLogView> {
       for (final log in logs) {
         if (!_itemNames.containsKey(log.itemId)) {
           final item = await _storage.getItem(log.itemId);
-          _itemNames[log.itemId] = item?.name ?? 'Unknown pin';
+          _itemNames[log.itemId] = item?.name ?? 'Unknown verse';
         }
         if (!_folioNames.containsKey(log.fromContainerId)) {
           final from = await _storage.getContainer(log.fromContainerId);
@@ -56,7 +56,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Log')),
+      appBar: AppBar(title: const Text('Pass')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _logs == null || _logs!.isEmpty
@@ -66,10 +66,10 @@ class _TransferLogViewState extends State<TransferLogView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('still', style: GoogleFonts.fraunces(fontSize: 32, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
-                        Text('No shifts yet', style: GoogleFonts.fraunces(fontSize: 24, fontWeight: FontWeight.w600)),
+                        Text('still', style: GoogleFonts.spectral(fontSize: 32, fontStyle: FontStyle.italic, color: VisualTheme.primaryColor)),
+                        Text('No passes yet', style: GoogleFonts.spectral(fontSize: 24, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 8),
-                        const Text('When a pin changes folios, the log lands here.', textAlign: TextAlign.center),
+                        const Text('When a verse changes folios, the pass lands here.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -77,15 +77,15 @@ class _TransferLogViewState extends State<TransferLogView> {
               : RefreshIndicator(
                   onRefresh: _load,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(22, 8, 22, 12),
+                    padding: const EdgeInsets.fromLTRB(20, 8, 16, 28),
                     itemCount: _logs!.length,
                     itemBuilder: (_, i) {
                       final log = _logs![i];
                       final when = DateFormat('MMM d').format(log.moveDate);
-                      return BearingRow(
-                        bearing: 'W',
-                        title: _itemNames[log.itemId] ?? 'Pin',
-                        meta: '${_folioNames[log.fromContainerId]}  →  ${_folioNames[log.toContainerId]}  ·  $when${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}',
+                      return CoupletCard(
+                        kind: when,
+                        title: _itemNames[log.itemId] ?? 'Verse',
+                        meta: '${_folioNames[log.fromContainerId]}  →  ${_folioNames[log.toContainerId]}${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}',
                         accent: VisualTheme.secondaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: log.itemId)));
