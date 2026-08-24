@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/cubby_chrome.dart';
+import '../widgets/amber_chrome.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
 import 'favorites_view.dart';
@@ -33,14 +33,14 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CorkWall(
+      body: Safelight(
         child: Column(
           children: [
-            CubbyNav(
+            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
+            TrayDock(
               index: _selectedIndex,
               onSelect: (i) => setState(() => _selectedIndex = i),
             ),
-            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
           ],
         ),
       ),

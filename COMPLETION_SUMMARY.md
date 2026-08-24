@@ -1,3 +1,3 @@
-# Cubby Wall
+# Amber Tray
 
-Offline classroom catalog. Sky / apple / sun UI, Fredoka + Literata, wooden cubby grid, name-tag stickers. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline darkroom journal. Amber / fog / hypo UI, IBM Plex Mono + Fraunces, chemical trays, contact sheets. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

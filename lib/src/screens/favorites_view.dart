@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/cubby_chrome.dart';
+import '../widgets/amber_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -48,9 +48,9 @@ class _FavoritesViewState extends State<FavoritesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Star')),
+      appBar: AppBar(title: const Text('HOLD')),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
           : _favoriteItems == null || _favoriteItems!.isEmpty
               ? Center(
                   child: Padding(
@@ -58,11 +58,11 @@ class _FavoritesViewState extends State<FavoritesView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.star_outline, size: 48, color: VisualTheme.accentColor),
+                        Icon(Icons.water_drop_outlined, size: 48, color: VisualTheme.primaryColor),
                         const SizedBox(height: 8),
-                        Text('Nothing starred', style: GoogleFonts.fredoka(fontSize: 24)),
+                        Text('Bath is empty', style: GoogleFonts.fraunces(fontSize: 24, fontStyle: FontStyle.italic)),
                         const SizedBox(height: 8),
-                        const Text('Star the totes you will pull for tomorrow’s circle.', textAlign: TextAlign.center),
+                        const Text('Hold the sheets you will bring to critique.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -70,19 +70,19 @@ class _FavoritesViewState extends State<FavoritesView> {
               : RefreshIndicator(
                   onRefresh: _loadFavorites,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 8, 28),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 8, 20),
                     itemCount: _favoriteItems!.length,
                     itemBuilder: (_, i) {
                       final item = _favoriteItems![i];
-                      final cubby = _containersCache[item.containerId];
+                      final tray = _containersCache[item.containerId];
                       return Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: ToteCard(
+                            child: ContactSheet(
                               kind: item.category,
                               title: item.name,
-                              meta: '${item.quantity}${cubby != null ? '  ·  ${cubby.name}' : ''}',
+                              meta: '${item.quantity}${tray != null ? '  ·  ${tray.name}' : ''}',
                               accent: VisualTheme.getCategoryColor(item.category),
                               onTap: () async {
                                 await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
@@ -92,7 +92,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                           ),
                           IconButton(
                             key: ValueKey('favorite_toggle_${item.id}'),
-                            icon: Icon(item.isFavorite ? Icons.star : Icons.star_outline, color: item.isFavorite ? VisualTheme.accentColor : null),
+                            icon: Icon(item.isFavorite ? Icons.water_drop : Icons.water_drop_outlined, color: item.isFavorite ? VisualTheme.primaryColor : null),
                             onPressed: () async {
                               await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
                               _loadFavorites();

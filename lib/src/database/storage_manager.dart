@@ -13,7 +13,7 @@ class StorageManager {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('cubby_wall.db');
+    _database = await _initDB('amber_tray.db');
     return _database!;
   }
 
@@ -52,7 +52,7 @@ class StorageManager {
         name TEXT NOT NULL,
         category TEXT NOT NULL,
         quantity INTEGER NOT NULL DEFAULT 1,
-        condition TEXT NOT NULL DEFAULT 'Open',
+        condition TEXT NOT NULL DEFAULT 'Wet',
         purchaseDate TEXT,
         estimatedValue REAL,
         notes TEXT,
@@ -84,8 +84,8 @@ class StorageManager {
         id INTEGER PRIMARY KEY CHECK (id = 1),
         theme TEXT NOT NULL DEFAULT 'system',
         language TEXT NOT NULL DEFAULT 'en',
-        capacityUnit TEXT NOT NULL DEFAULT 'totes',
-        defaultBoxPrefix TEXT NOT NULL DEFAULT 'CUB',
+        capacityUnit TEXT NOT NULL DEFAULT 'sheets',
+        defaultBoxPrefix TEXT NOT NULL DEFAULT 'TRAY',
         showOnboarding INTEGER NOT NULL DEFAULT 1
       )
     ''');

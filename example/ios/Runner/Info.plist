@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Cubby Wall</string>
+	<string>Amber Tray</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Cubby Wall</string>
+	<string>Amber Tray</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -53,8 +53,8 @@
 		<false/>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Cubby Wall uses your photo library so you can save a photo of each cubby or tote.</string>
+	<string>Amber Tray uses your photo library so you can save a photo of each tray or print.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Cubby Wall uses your camera so you can photograph bins, name tags, and morning kits.</string>
+	<string>Amber Tray uses your camera so you can photograph prints, film strips, and paper boxes.</string>
 </dict>
 </plist>

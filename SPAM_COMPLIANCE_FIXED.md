@@ -1,3 +1,3 @@
 # Listing notes
 
-This project is Cubby Wall (`com.app.cubbywall.build`), a classroom-center catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.
+This project is Amber Tray (`com.app.ambertray.build`), a photo-class darkroom catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.

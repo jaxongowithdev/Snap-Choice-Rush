@@ -1,22 +1,22 @@
-# Cubby Wall
+# Amber Tray
 
-A private classroom catalog. File learning cubbies, center totes, and morning kits, then find any bin before circle time — fully offline.
+A private darkroom catalog. File developing trays, prints, and film sheets, then find any print before critique — fully offline.
 
-**App Name:** Cubby Wall
-**Subtitle:** Classroom center log
+**App Name:** Amber Tray
+**Subtitle:** Darkroom class log
 **Category:** Education
-**Bundle ID:** com.app.cubbywall.build
-**Database:** `cubby_wall.db`
+**Bundle ID:** com.app.ambertray.build
+**Database:** `amber_tray.db`
 
 ## Navigation
 
-A 2+3 wooden cubby wall at the top — not a Material tab bar, ribbon rail, marquee, or fanned cards.
+Five overlapping chemical trays at the bottom — not a Material tab bar, cubby wall, or ribbon rail.
 
-- RUG — this morning’s centers
-- BINS — every labeled cubby
-- STAR — kits for circle
-- LOG — moves between cubbies
-- OFFICE — light and backup
+- GATE — today’s bench
+- TRAYS — every bath
+- HOLD — sheets in the holding bath
+- LOG — moves between trays
+- LAMP — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

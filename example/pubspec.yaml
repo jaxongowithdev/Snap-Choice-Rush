@@ -1,5 +1,5 @@
-name: cubby_wall_example
-description: "Cubby Wall - Classroom center log"
+name: amber_tray_example
+description: "Amber Tray - Darkroom class log"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

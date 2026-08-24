@@ -5,7 +5,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/cubby_chrome.dart';
+import '../widgets/amber_chrome.dart';
 import 'item_form_view.dart';
 import 'container_detail_view.dart';
 import 'move_item_view.dart';
@@ -57,7 +57,7 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     setState(() => _item = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Starred for circle' : 'Star lifted'),
+        content: Text(updated.isFavorite ? 'Held in the bath' : 'Lifted from the bath'),
         duration: const Duration(seconds: 1),
       ));
     }
@@ -67,8 +67,8 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('File this tote away?'),
-        content: const Text('It will leave the classroom catalog.'),
+        title: const Text('File this sheet away?'),
+        content: const Text('It will leave the darkroom catalog.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('File away')),
@@ -83,22 +83,22 @@ class _ItemDetailViewState extends State<ItemDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Tote not found')));
+    if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor)));
+    if (_item == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Sheet not found')));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_item!.category),
+        title: Text(_item!.category.toUpperCase()),
         actions: [
           IconButton(
             key: const ValueKey('favorite_toggle'),
-            icon: Icon(_item!.isFavorite ? Icons.star : Icons.star_outline, color: _item!.isFavorite ? VisualTheme.accentColor : null),
+            icon: Icon(_item!.isFavorite ? Icons.water_drop : Icons.water_drop_outlined, color: _item!.isFavorite ? VisualTheme.primaryColor : null),
             onPressed: _toggleFavorite,
           ),
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'move', child: Text('Move to another cubby')),
-              PopupMenuItem(value: 'edit', child: Text('Edit tote')),
+              PopupMenuItem(value: 'move', child: Text('Move to another tray')),
+              PopupMenuItem(value: 'edit', child: Text('Edit sheet')),
               PopupMenuItem(value: 'delete', child: Text('File away')),
             ],
             onSelected: (v) {
@@ -117,24 +117,21 @@ class _ItemDetailViewState extends State<ItemDetailView> {
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
           if (_item!.photoPath != null && _item!.photoPath!.isNotEmpty) ...[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.file(File(_item!.photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.mist, child: const Center(child: Icon(Icons.broken_image)))),
-            ),
+            Image.file(File(_item!.photoPath!), height: 200, width: double.infinity, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(height: 120, color: VisualTheme.hypo, child: const Center(child: Icon(Icons.broken_image)))),
             const SizedBox(height: 16),
           ],
-          Text(_item!.name, style: GoogleFonts.fredoka(fontSize: 32, fontWeight: FontWeight.w600, height: 1.1)),
+          Text(_item!.name, style: GoogleFonts.fraunces(fontSize: 32, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic, height: 1.1)),
           const SizedBox(height: 14),
-          Text('count  ${_item!.quantity}     wear  ${_item!.condition}', style: GoogleFonts.literata(fontSize: 13)),
-          if (_item!.estimatedValue != null) Text('replace  \$${_item!.estimatedValue}', style: GoogleFonts.literata(fontSize: 13)),
+          Text('COUNT  ${_item!.quantity}     WEAR  ${_item!.condition}'.toUpperCase(), style: GoogleFonts.ibmPlexMono(fontSize: 12)),
+          if (_item!.estimatedValue != null) Text('REPLACE  \$${_item!.estimatedValue}', style: GoogleFonts.ibmPlexMono(fontSize: 12)),
           if (_item!.notes != null && _item!.notes!.isNotEmpty) ...[
-            const NameTag(label: 'TEACHER NOTE'),
-            Text(_item!.notes!, style: GoogleFonts.literata(fontSize: 18, fontStyle: FontStyle.italic)),
+            const TimerStamp(label: 'BENCH NOTE'),
+            Text(_item!.notes!, style: GoogleFonts.fraunces(fontSize: 18, fontStyle: FontStyle.italic)),
           ],
-          const NameTag(label: 'SITS IN'),
-          ToteCard(
+          const TimerStamp(label: 'SITS IN'),
+          ContactSheet(
             kind: _container?.code ?? '—',
-            title: _container?.name ?? 'Unknown cubby',
+            title: _container?.name ?? 'Unknown tray',
             meta: _container != null ? '${_container!.room}  ·  ${_container!.shelf}' : '',
             accent: VisualTheme.primaryColor,
             onTap: _container == null ? () {} : () => Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: _container!.id!))),

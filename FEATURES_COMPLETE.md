@@ -1,3 +1,3 @@
-# Cubby Wall — feature set
+# Amber Tray — feature set
 
-Top 2+3 cubby wall nav, cork bulletin background, tote cards, twelve learning centers, move log, cover photos, search, JSON backup, offline SQLite (`cubby_wall.db`).
+Bottom overlapping five-tray dock, safelight grain, contact-sheet cards, horizontal film strip home, twelve photo kinds, move log, cover photos, search, JSON backup, offline SQLite (`amber_tray.db`).

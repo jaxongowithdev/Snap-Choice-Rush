@@ -1,14 +1,14 @@
 APP NAME
-Cubby Wall
+Amber Tray
 
 SUBTITLE
-Classroom center log
+Darkroom class log
 
 KEYWORDS
-cubby,center,classroom,teacher,preschool,lesson,tote,homeschool,offline,bin
+photo,darkroom,print,lesson,class,film,teacher,camera,offline,tray
 
 PROMOTION
-File learning cubbies, center totes, and morning kits, then find any bin before circle time. Private, offline.
+File developing trays, prints, and film sheets, then find any print before critique. Private, offline.
 
 DESCRIPTION
-Cubby Wall is a private offline classroom journal — file learning cubbies, center totes, and morning kits, then find any bin before circle time.
+Amber Tray is a private offline darkroom journal — file developing trays, prints, and film sheets, then find any print before critique.

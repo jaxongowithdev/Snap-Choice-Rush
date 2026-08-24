@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/cubby_chrome.dart';
+import '../widgets/amber_chrome.dart';
 import 'container_form_view.dart';
 import 'item_form_view.dart';
 import 'item_detail_view.dart';
@@ -49,11 +49,11 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Clear this cubby?'),
-        content: const Text('Every tote filed here will be removed.'),
+        title: const Text('Dump this tray?'),
+        content: const Text('Every sheet filed here will be removed.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Clear')),
+          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Dump')),
         ],
       ),
     );
@@ -65,8 +65,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator()));
-    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Cubby not found')));
+    if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor)));
+    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Tray not found')));
 
     final count = _items?.length ?? 0;
 
@@ -76,8 +76,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit cubby')),
-              PopupMenuItem(value: 'delete', child: Text('Clear cubby')),
+              PopupMenuItem(value: 'edit', child: Text('Edit tray')),
+              PopupMenuItem(value: 'delete', child: Text('Dump tray')),
             ],
             onSelected: (v) {
               if (v == 'edit') {
@@ -94,10 +94,10 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
           children: [
-            Text(_container!.name, style: GoogleFonts.fredoka(fontSize: 30, fontWeight: FontWeight.w600, height: 1.1)),
+            Text(_container!.name, style: GoogleFonts.fraunces(fontSize: 30, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic, height: 1.1)),
             const SizedBox(height: 6),
-            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} totes', style: GoogleFonts.literata(fontSize: 13)),
-            NameTag(label: 'TOTES  ·  $count'),
+            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} sheets', style: GoogleFonts.ibmPlexMono(fontSize: 12)),
+            TimerStamp(label: 'SHEETS  ·  $count'),
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
@@ -106,13 +106,13 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                   final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemFormView(preselectedContainerId: widget.containerId)));
                   if (r == true) _loadData();
                 },
-                child: Text('+ file a tote', style: GoogleFonts.fredoka(fontSize: 16, color: VisualTheme.primaryColor)),
+                child: Text('+ file a sheet', style: GoogleFonts.ibmPlexMono(fontSize: 13, color: VisualTheme.primaryColor)),
               ),
             ),
             if (_items == null || _items!.isEmpty)
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed in this cubby yet'))
+              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing in this tray yet'))
             else
-              ..._items!.map((item) => ToteCard(
+              ..._items!.map((item) => ContactSheet(
                     kind: item.category,
                     title: item.name,
                     meta: '${item.quantity}  ·  ${item.condition}',

@@ -15,20 +15,12 @@ class _WelcomeViewState extends State<WelcomeView> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  static const _papers = [
-    Color(0xFF4A90C8),
-    Color(0xFFE24B3D),
-    Color(0xFFF0C020),
-    Color(0xFF7B5EA7),
-    Color(0xFF5AAB5A),
-  ];
-
   final _pages = [
-    {'circle': '1', 'title': 'Cubby Wall', 'body': 'A classroom journal for the morning. One cubby per learning center. Know which tote sits in which bin before circle time.'},
-    {'circle': '2', 'title': 'Twelve centers', 'body': 'Blocks, art, dramatic play, sensory — file each kit the way your room actually runs.'},
-    {'circle': '3', 'title': 'Snap the tote', 'body': 'Photograph a bin, a name tag, or a morning kit so you remember the exact tub on the wall.'},
-    {'circle': '4', 'title': 'Move a kit', 'body': 'Shift a tote from the art cubby to the quiet shelf and leave a short note of why it moved.'},
-    {'circle': '5', 'title': 'Works offline', 'body': 'No account and no signal. The classroom catalog stays on this phone.'},
+    {'timer': '1', 'title': 'Amber Tray', 'body': 'A darkroom journal for photo class. One tray per paper grade. Know which print sits in which bath before critique.'},
+    {'timer': '2', 'title': 'Twelve kinds', 'body': 'Negatives, prints, contacts, chemistry — file each piece the way your bench actually runs.'},
+    {'timer': '3', 'title': 'Snap the print', 'body': 'Photograph a wet print, a film strip, or a paper box so you remember the exact sheet in the tray.'},
+    {'timer': '4', 'title': 'Log a move', 'body': 'Shift a print from the holding bath to the drying rack and leave a short note of why it moved.'},
+    {'timer': '5', 'title': 'Works offline', 'body': 'No account and no signal. The catalog stays on this phone, even with the lights out.'},
   ];
 
   Future<void> _finish() async {
@@ -44,10 +36,8 @@ class _WelcomeViewState extends State<WelcomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final paper = _papers[_currentPage];
-    final ink = _currentPage == 2 ? VisualTheme.ink : VisualTheme.label;
     return Scaffold(
-      backgroundColor: paper,
+      backgroundColor: VisualTheme.fog,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(28, 12, 28, 20),
@@ -58,7 +48,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: _finish,
-                  child: Text('SKIP', style: GoogleFonts.fredoka(color: ink.withValues(alpha: 0.45), letterSpacing: 1.4)),
+                  child: Text('SKIP', style: GoogleFonts.ibmPlexMono(color: VisualTheme.primaryColor.withValues(alpha: 0.4), letterSpacing: 2)),
                 ),
               ),
               Expanded(
@@ -72,15 +62,11 @@ class _WelcomeViewState extends State<WelcomeView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(color: VisualTheme.label, borderRadius: BorderRadius.circular(6)),
-                          child: Text('CIRCLE ${page['circle']}', style: GoogleFonts.fredoka(fontSize: 12, letterSpacing: 1.4, fontWeight: FontWeight.w600, color: VisualTheme.ink)),
-                        ),
-                        const SizedBox(height: 18),
-                        Text(page['title'] as String, style: GoogleFonts.fredoka(fontSize: 40, fontWeight: FontWeight.w600, color: ink, height: 1.05)),
+                        Text('TIMER ${page['timer']}', style: GoogleFonts.ibmPlexMono(fontSize: 12, letterSpacing: 3, fontWeight: FontWeight.w600, color: VisualTheme.primaryColor)),
                         const SizedBox(height: 16),
-                        Text(page['body'] as String, style: GoogleFonts.literata(fontSize: 17, height: 1.5, color: ink.withValues(alpha: 0.88))),
+                        Text(page['title'] as String, style: GoogleFonts.fraunces(fontSize: 40, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic, color: VisualTheme.print, height: 1.05)),
+                        const SizedBox(height: 16),
+                        Text(page['body'] as String, style: GoogleFonts.ibmPlexMono(fontSize: 14, height: 1.55, color: VisualTheme.hypo)),
                         const Spacer(),
                       ],
                     );
@@ -89,7 +75,7 @@ class _WelcomeViewState extends State<WelcomeView> {
               ),
               Row(
                 children: [
-                  Text('circle ${_currentPage + 1} of 5', style: GoogleFonts.fredoka(color: ink.withValues(alpha: 0.5))),
+                  Text('0${_currentPage + 1} / 05', style: GoogleFonts.ibmPlexMono(color: VisualTheme.primaryColor.withValues(alpha: 0.5))),
                   const Spacer(),
                   TextButton(
                     onPressed: () {
@@ -99,7 +85,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                         _pageController.nextPage(duration: const Duration(milliseconds: 240), curve: Curves.easeOut);
                       }
                     },
-                    child: Text(_currentPage == _pages.length - 1 ? 'OPEN THE ROOM' : 'NEXT CIRCLE →', style: GoogleFonts.fredoka(color: ink, fontWeight: FontWeight.w600)),
+                    child: Text(_currentPage == _pages.length - 1 ? 'LIGHTS OUT' : 'ADVANCE →', style: GoogleFonts.ibmPlexMono(color: VisualTheme.primaryColor, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
                   ),
                 ],
               ),

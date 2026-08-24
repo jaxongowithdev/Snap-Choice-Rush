@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../widgets/cubby_chrome.dart';
+import '../widgets/amber_chrome.dart';
+import '../utils/visual_theme.dart';
 
 class AnalyticsView extends StatefulWidget {
   const AnalyticsView({super.key});
@@ -39,23 +40,23 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Census')),
+      appBar: AppBar(title: const Text('CENSUS')),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
                 children: [
                   if (_stats != null)
-                    Text('${_stats!['totalItems']} totes   ·   ${_stats!['totalContainers']} cubbies', style: GoogleFonts.fredoka(fontSize: 22)),
+                    Text('${_stats!['totalItems']} sheets   ·   ${_stats!['totalContainers']} trays', style: GoogleFonts.fraunces(fontSize: 22)),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
-                    const NameTag(label: 'BY CENTER'),
-                    ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
+                    const TimerStamp(label: 'BY KIND'),
+                    ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}', style: GoogleFonts.ibmPlexMono())),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
-                    const NameTag(label: 'BY ROOM'),
-                    ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
+                    const TimerStamp(label: 'BY ROOM'),
+                    ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}', style: GoogleFonts.ibmPlexMono())),
                   ],
                 ],
               ),
