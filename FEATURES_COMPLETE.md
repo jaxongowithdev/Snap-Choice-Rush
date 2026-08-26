@@ -1,3 +1,3 @@
-# Star Loci — feature set
+# Orbit Recall — feature set
 
-Top Cassiopeia constellation nav, star-field chart paper, planet orbs, locus plates, twelve sky kinds, transfer log, cover photos, search, JSON backup, offline SQLite (`star_loci.db`).
+Five-tab pill dock (Deck, Missions, Drill, Stats, Base), bento dashboard with progress rings, missions grouped by track, twelve cue types with anchors and photos, a flip-card drill room with weakest-first queueing and run scoring, five recall levels, starred drill deck, reassign flight log, search, JSON backup and restore, light/dark, offline SQLite (`orbit_recall.db`).

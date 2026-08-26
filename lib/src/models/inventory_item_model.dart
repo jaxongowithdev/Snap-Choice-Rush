@@ -1,11 +1,13 @@
-// Item stored in containers
+// A Cue — one memorised card inside a mission.
+// `quantity` -> reps done, `condition` -> recall level,
+// `estimatedValue` -> mastery score 0-100, `purchaseDate` -> last drilled
 class InventoryItemModel {
   final int? id;
   final int containerId;
   final String name;
   final String category;
   final int quantity;
-  final String condition; // New, Recalled, Faded, Filed
+  final String condition; // Fresh, Shaky, Steady, Locked, Faded
   final String? purchaseDate;
   final double? estimatedValue;
   final String? notes;
@@ -21,7 +23,7 @@ class InventoryItemModel {
     required this.name,
     required this.category,
     this.quantity = 1,
-    this.condition = 'New',
+    this.condition = 'Fresh',
     this.purchaseDate,
     this.estimatedValue,
     this.notes,
@@ -59,7 +61,7 @@ class InventoryItemModel {
       name: map['name'] as String,
       category: map['category'] as String,
       quantity: map['quantity'] as int? ?? 1,
-      condition: map['condition'] as String? ?? 'New',
+      condition: map['condition'] as String? ?? 'Fresh',
       purchaseDate: map['purchaseDate'] as String?,
       estimatedValue: map['estimatedValue'] as double?,
       notes: map['notes'] as String?,

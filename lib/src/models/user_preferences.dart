@@ -1,16 +1,16 @@
-// User preferences/settings model
+// Orbit Recall — local preferences
 class UserPreferences {
   final String theme; // 'light', 'dark', 'system'
   final String language; // 'en', 'vi', etc.
-  final String capacityUnit; // 'items', 'percentage'
-  final String defaultBoxPrefix; // 'BOX', 'A', 'B', etc.
+  final String capacityUnit; // label for a mission slot
+  final String defaultBoxPrefix; // mission code prefix
   final bool showOnboarding;
 
   UserPreferences({
     this.theme = 'system',
     this.language = 'en',
-    this.capacityUnit = 'loci',
-    this.defaultBoxPrefix = 'LOC',
+    this.capacityUnit = 'cues',
+    this.defaultBoxPrefix = 'MSN',
     this.showOnboarding = true,
   });
 
@@ -28,8 +28,8 @@ class UserPreferences {
     return UserPreferences(
       theme: map['theme'] as String? ?? 'system',
       language: map['language'] as String? ?? 'en',
-      capacityUnit: map['capacityUnit'] as String? ?? 'loci',
-      defaultBoxPrefix: map['defaultBoxPrefix'] as String? ?? 'LOC',
+      capacityUnit: map['capacityUnit'] as String? ?? 'cues',
+      defaultBoxPrefix: map['defaultBoxPrefix'] as String? ?? 'MSN',
       showOnboarding: (map['showOnboarding'] as int? ?? 1) == 1,
     );
   }

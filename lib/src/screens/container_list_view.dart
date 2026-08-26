@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/loci_chrome.dart';
+import '../widgets/cosmo_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -16,99 +15,220 @@ class ContainerListView extends StatefulWidget {
 
 class _ContainerListViewState extends State<ContainerListView> {
   final _storage = StorageManager.instance;
-  List<ContainerModel>? _containers;
-  Map<int, int> _itemCounts = {};
+  List<ContainerModel>? _missions;
+  Map<int, int> _counts = {};
   bool _isLoading = true;
   String _sortBy = 'name';
+  String _trackFilter = 'All';
+
+  static const _accents = [
+    VisualTheme.nova,
+    VisualTheme.sky,
+    VisualTheme.flare,
+    VisualTheme.mint,
+    VisualTheme.rose,
+    VisualTheme.plum,
+  ];
 
   @override
   void initState() {
     super.initState();
-    _loadContainers();
+    _load();
   }
 
-  Future<void> _loadContainers() async {
+  Future<void> _load() async {
     setState(() => _isLoading = true);
     try {
-      final containers = await _storage.getAllContainers(sortBy: _sortBy);
+      final missions = await _storage.getAllContainers(sortBy: _sortBy);
       final counts = <int, int>{};
-      for (final c in containers) {
-        counts[c.id!] = await _storage.getItemCountInContainer(c.id!);
+      for (final m in missions) {
+        counts[m.id!] = await _storage.getItemCountInContainer(m.id!);
       }
+      if (!mounted) return;
       setState(() {
-        _containers = containers;
-        _itemCounts = counts;
+        _missions = missions;
+        _counts = counts;
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('Error loading containers: $e');
-      setState(() => _isLoading = false);
+      debugPrint('Error loading missions: $e');
+      if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  List<String> get _tracks {
+    final set = <String>{'All'};
+    for (final m in _missions ?? <ContainerModel>[]) {
+      set.add(m.room);
+    }
+    return set.toList();
+  }
+
+  List<ContainerModel> get _visible {
+    final all = _missions ?? <ContainerModel>[];
+    if (_trackFilter == 'All') return all;
+    return all.where((m) => m.room == _trackFilter).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Text('ROOMS'),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
-            itemBuilder: (_) => const [
-              PopupMenuItem(value: 'name', child: Text('By name')),
-              PopupMenuItem(value: 'room', child: Text('By wing')),
-              PopupMenuItem(value: 'updated', child: Text('Last opened')),
-            ],
-          ),
-        ],
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: VisualTheme.secondaryColor))
-          : _containers == null || _containers!.isEmpty
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.auto_awesome_outlined, size: 48, color: VisualTheme.secondaryColor),
-                        const SizedBox(height: 8),
-                        Text('No rooms opened', style: GoogleFonts.cinzel(fontSize: 22)),
-                        const SizedBox(height: 8),
-                        const Text('Start a planet hall, a myth gallery, or the number vault.', textAlign: TextAlign.center),
-                      ],
+      body: SafeArea(
+        bottom: false,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : RefreshIndicator(
+                onRefresh: _load,
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(18, 6, 18, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text('Missions',
+                                      style: VisualTheme.display(32,
+                                          color: VisualTheme.inkOf(context))),
+                                ),
+                                PopupMenuButton<String>(
+                                  icon: const Icon(Icons.swap_vert_rounded),
+                                  onSelected: (v) {
+                                    setState(() => _sortBy = v);
+                                    _load();
+                                  },
+                                  itemBuilder: (_) => const [
+                                    PopupMenuItem(value: 'name', child: Text('Sort by name')),
+                                    PopupMenuItem(value: 'room', child: Text('Sort by track')),
+                                    PopupMenuItem(value: 'updated', child: Text('Recently touched')),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Text('Each mission is one themed set of cues.',
+                                style: VisualTheme.body(14,
+                                    color: VisualTheme.mutedOf(context))),
+                            const SizedBox(height: 16),
+                            if ((_missions ?? []).isNotEmpty)
+                              SizedBox(
+                                height: 40,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _tracks.length,
+                                  separatorBuilder: (_, __) => const SizedBox(width: 8),
+                                  itemBuilder: (_, i) {
+                                    final t = _tracks[i];
+                                    final on = t == _trackFilter;
+                                    return GestureDetector(
+                                      onTap: () => setState(() => _trackFilter = t),
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 180),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 9),
+                                        decoration: BoxDecoration(
+                                          color: on
+                                              ? VisualTheme.nova
+                                              : VisualTheme.surfaceOf(context),
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            if (t != 'All') ...[
+                                              Icon(VisualTheme.trackIcon(t),
+                                                  size: 15,
+                                                  color: on
+                                                      ? Colors.white
+                                                      : VisualTheme.mutedOf(context)),
+                                              const SizedBox(width: 5),
+                                            ],
+                                            Text(t,
+                                                style: VisualTheme.heading(13.5,
+                                                    color: on
+                                                        ? Colors.white
+                                                        : VisualTheme.inkOf(context),
+                                                    w: FontWeight.w700)),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              : RefreshIndicator(
-                  onRefresh: _loadContainers,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 88),
-                    itemCount: _containers!.length,
-                    itemBuilder: (_, i) {
-                      final c = _containers![i];
-                      final count = _itemCounts[c.id] ?? 0;
-                      return StarPlate(
-                        kind: c.code,
-                        title: c.name,
-                        meta: '${c.room}  ·  $count/${c.capacity} loci',
-                        accent: VisualTheme.primaryColor,
-                        onTap: () async {
-                          await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));
-                          _loadContainers();
-                        },
-                      );
-                    },
-                  ),
+                    if (_visible.isEmpty)
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: EmptyOrbit(
+                          icon: Icons.rocket_launch_rounded,
+                          tint: VisualTheme.sky,
+                          title: 'No missions here',
+                          body:
+                              'A mission holds one topic — the eight planets, Jupiter’s moons, the Apollo timeline.',
+                          actionLabel: 'Launch a mission',
+                          onAction: () async {
+                            final r = await Navigator.push(context,
+                                MaterialPageRoute(builder: (_) => const ContainerFormView()));
+                            if (r == true) _load();
+                          },
+                        ),
+                      )
+                    else
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 100),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 12,
+                            mainAxisExtent: 226,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) {
+                              final m = _visible[i];
+                              return MissionTile(
+                                code: m.code,
+                                name: m.name,
+                                track: m.room,
+                                filled: _counts[m.id] ?? 0,
+                                target: m.capacity,
+                                accent: _accents[i % _accents.length],
+                                onTap: () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              ContainerDetailView(containerId: m.id!)));
+                                  _load();
+                                },
+                              );
+                            },
+                            childCount: _visible.length,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-      floatingActionButton: FloatingActionButton(
+              ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
         key: const ValueKey('fab_add_container'),
+        heroTag: 'fab_missions',
         onPressed: () async {
-          final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => const ContainerFormView()));
-          if (r == true) _loadContainers();
+          final r = await Navigator.push(
+              context, MaterialPageRoute(builder: (_) => const ContainerFormView()));
+          if (r == true) _load();
         },
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.add_rounded),
+        label: const Text('Mission'),
       ),
     );
   }

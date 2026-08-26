@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../widgets/loci_chrome.dart';
+import '../widgets/cosmo_chrome.dart';
 import 'home_view.dart';
 import 'container_list_view.dart';
-import 'favorites_view.dart';
-import 'transfer_log_view.dart';
+import 'drill_view.dart';
+import 'analytics_view.dart';
 import 'config_view.dart';
 
 class DashboardView extends StatefulWidget {
@@ -11,21 +11,23 @@ class DashboardView extends StatefulWidget {
   const DashboardView({super.key, required this.onSettingsChanged});
 
   @override
-  State<DashboardView> createState() => _DashboardViewState();
+  State<DashboardView> createState() => DashboardViewState();
 }
 
-class _DashboardViewState extends State<DashboardView> {
+class DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 0;
   late final List<Widget> _screens;
+
+  void go(int index) => setState(() => _selectedIndex = index);
 
   @override
   void initState() {
     super.initState();
     _screens = [
-      const HomeView(),
+      HomeView(onJump: go),
       const ContainerListView(),
-      const FavoritesView(),
-      const TransferLogView(),
+      const DrillView(),
+      const AnalyticsView(),
       ConfigView(onSettingsChanged: widget.onSettingsChanged),
     ];
   }
@@ -33,14 +35,14 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StarField(
+      extendBody: true,
+      body: StarDust(
         child: Column(
           children: [
-            DomeStars(
-              index: _selectedIndex,
-              onSelect: (i) => setState(() => _selectedIndex = i),
+            Expanded(
+              child: IndexedStack(index: _selectedIndex, children: _screens),
             ),
-            Expanded(child: IndexedStack(index: _selectedIndex, children: _screens)),
+            OrbitDock(index: _selectedIndex, onSelect: go),
           ],
         ),
       ),

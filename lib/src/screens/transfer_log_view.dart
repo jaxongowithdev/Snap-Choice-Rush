@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../database/storage_manager.dart';
 import '../models/transfer_history_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/loci_chrome.dart';
+import '../widgets/cosmo_chrome.dart';
 import 'item_detail_view.dart';
 
 class TransferLogView extends StatefulWidget {
@@ -17,8 +16,8 @@ class TransferLogView extends StatefulWidget {
 class _TransferLogViewState extends State<TransferLogView> {
   final _storage = StorageManager.instance;
   List<TransferHistoryModel>? _logs;
-  final Map<int, String> _itemNames = {};
-  final Map<int, String> _roomNames = {};
+  final Map<int, String> _cueNames = {};
+  final Map<int, String> _missionNames = {};
   bool _isLoading = true;
 
   @override
@@ -32,69 +31,201 @@ class _TransferLogViewState extends State<TransferLogView> {
     try {
       final logs = await _storage.getTransferHistory();
       for (final log in logs) {
-        if (!_itemNames.containsKey(log.itemId)) {
-          final item = await _storage.getItem(log.itemId);
-          _itemNames[log.itemId] = item?.name ?? 'Unknown locus';
+        if (!_cueNames.containsKey(log.itemId)) {
+          final cue = await _storage.getItem(log.itemId);
+          _cueNames[log.itemId] = cue?.name ?? 'Dropped cue';
         }
-        if (!_roomNames.containsKey(log.fromContainerId)) {
-          final from = await _storage.getContainer(log.fromContainerId);
-          _roomNames[log.fromContainerId] = from?.name ?? 'Removed room';
-        }
-        if (!_roomNames.containsKey(log.toContainerId)) {
-          final to = await _storage.getContainer(log.toContainerId);
-          _roomNames[log.toContainerId] = to?.name ?? 'Removed room';
+        for (final id in [log.fromContainerId, log.toContainerId]) {
+          if (!_missionNames.containsKey(id)) {
+            final m = await _storage.getContainer(id);
+            _missionNames[id] = m?.name ?? 'Scrubbed mission';
+          }
         }
       }
-      setState(() { _logs = logs; _isLoading = false; });
+      if (!mounted) return;
+      setState(() {
+        _logs = logs;
+        _isLoading = false;
+      });
     } catch (e) {
-      debugPrint('Error loading transfer log: $e');
-      setState(() => _isLoading = false);
+      debugPrint('Error loading flight log: $e');
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final dark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('LOG')),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: VisualTheme.secondaryColor))
-          : _logs == null || _logs!.isEmpty
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('STILL', style: GoogleFonts.cinzel(fontSize: 12, letterSpacing: 3, color: VisualTheme.secondaryColor)),
-                        Text('No transfers yet', style: GoogleFonts.cinzel(fontSize: 22, fontWeight: FontWeight.w700)),
-                        const SizedBox(height: 8),
-                        const Text('When a locus changes rooms, the plate lands here.', textAlign: TextAlign.center),
-                      ],
+      body: StarDust(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(14, 4, 18, 8),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_rounded),
+                      onPressed: () => Navigator.pop(context),
                     ),
-                  ),
-                )
-              : RefreshIndicator(
-                  onRefresh: _load,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
-                    itemCount: _logs!.length,
-                    itemBuilder: (_, i) {
-                      final log = _logs![i];
-                      final when = DateFormat('MMM d').format(log.moveDate);
-                      return StarPlate(
-                        kind: when,
-                        title: _itemNames[log.itemId] ?? 'Locus',
-                        meta: '${_roomNames[log.fromContainerId]}  →  ${_roomNames[log.toContainerId]}${log.notes != null && log.notes!.isNotEmpty ? '  ·  ${log.notes}' : ''}',
-                        accent: VisualTheme.secondaryColor,
-                        onTap: () async {
-                          await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: log.itemId)));
-                          _load();
-                        },
-                      );
-                    },
-                  ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text('Flight log',
+                          style: VisualTheme.display(28, color: VisualTheme.inkOf(context))),
+                    ),
+                  ],
                 ),
+              ),
+              Expanded(
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : (_logs == null || _logs!.isEmpty)
+                        ? const EmptyOrbit(
+                            icon: Icons.route_rounded,
+                            tint: VisualTheme.sky,
+                            title: 'No reassigns yet',
+                            body: 'Every time a cue changes mission, the move lands here with its note.',
+                          )
+                        : RefreshIndicator(
+                            onRefresh: _load,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.fromLTRB(18, 8, 18, 40),
+                              itemCount: _logs!.length,
+                              itemBuilder: (_, i) {
+                                final log = _logs![i];
+                                final first = i == 0;
+                                final last = i == _logs!.length - 1;
+                                return IntrinsicHeight(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      SizedBox(
+                                        width: 30,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              width: 2,
+                                              height: 14,
+                                              color: first
+                                                  ? Colors.transparent
+                                                  : VisualTheme.sky.withValues(alpha: 0.3),
+                                            ),
+                                            Container(
+                                              width: 12,
+                                              height: 12,
+                                              decoration: BoxDecoration(
+                                                color: VisualTheme.sky,
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  color: dark
+                                                      ? VisualTheme.night
+                                                      : VisualTheme.canvas,
+                                                  width: 2.5,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                width: 2,
+                                                color: last
+                                                    ? Colors.transparent
+                                                    : VisualTheme.sky.withValues(alpha: 0.3),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(bottom: 12, left: 4),
+                                          child: BentoTile(
+                                            padding: const EdgeInsets.all(15),
+                                            onTap: () async {
+                                              await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      ItemDetailView(itemId: log.itemId),
+                                                ),
+                                              );
+                                              _load();
+                                            },
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        _cueNames[log.itemId] ?? 'Cue',
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: VisualTheme.heading(16,
+                                                            color: VisualTheme.inkOf(context),
+                                                            w: FontWeight.w700),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      DateFormat('MMM d')
+                                                          .format(log.moveDate),
+                                                      style: VisualTheme.tag(11,
+                                                          color: VisualTheme.mutedOf(context)),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                  children: [
+                                                    Flexible(
+                                                      child: TinyPill(
+                                                        label: _missionNames[
+                                                                log.fromContainerId] ??
+                                                            '—',
+                                                        color: VisualTheme.mutedOf(context),
+                                                      ),
+                                                    ),
+                                                    const Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(horizontal: 6),
+                                                      child: Icon(
+                                                          Icons.arrow_forward_rounded,
+                                                          size: 14,
+                                                          color: VisualTheme.sky),
+                                                    ),
+                                                    Flexible(
+                                                      child: TinyPill(
+                                                        label:
+                                                            _missionNames[log.toContainerId] ??
+                                                                '—',
+                                                        color: VisualTheme.sky,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                if ((log.notes ?? '').isNotEmpty) ...[
+                                                  const SizedBox(height: 8),
+                                                  Text(log.notes!,
+                                                      style: VisualTheme.body(13,
+                                                          color:
+                                                              VisualTheme.mutedOf(context))),
+                                                ],
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

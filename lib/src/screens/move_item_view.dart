@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
+import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/loci_chrome.dart';
+import '../widgets/cosmo_chrome.dart';
 
 class MoveItemView extends StatefulWidget {
   final InventoryItemModel item;
@@ -17,16 +16,16 @@ class MoveItemView extends StatefulWidget {
 class _MoveItemViewState extends State<MoveItemView> {
   final _storage = StorageManager.instance;
   final _notesController = TextEditingController();
-  List<ContainerModel>? _containers;
-  ContainerModel? _currentContainer;
-  ContainerModel? _selectedContainer;
-  Map<int, int> _itemCounts = {};
+  List<ContainerModel>? _targets;
+  ContainerModel? _current;
+  ContainerModel? _picked;
+  Map<int, int> _counts = {};
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _load();
   }
 
   @override
@@ -35,45 +34,56 @@ class _MoveItemViewState extends State<MoveItemView> {
     super.dispose();
   }
 
-  Future<void> _loadData() async {
+  Future<void> _load() async {
     setState(() => _isLoading = true);
     try {
       final current = await _storage.getContainer(widget.item.containerId);
-      final others = (await _storage.getAllContainers()).where((c) => c.id != widget.item.containerId).toList();
+      final others = (await _storage.getAllContainers())
+          .where((m) => m.id != widget.item.containerId)
+          .toList();
       final counts = <int, int>{};
-      for (final c in others) {
-        counts[c.id!] = await _storage.getItemCountInContainer(c.id!);
+      for (final m in others) {
+        counts[m.id!] = await _storage.getItemCountInContainer(m.id!);
       }
-      setState(() { _currentContainer = current; _containers = others; _itemCounts = counts; _isLoading = false; });
+      if (!mounted) return;
+      setState(() {
+        _current = current;
+        _targets = others;
+        _counts = counts;
+        _isLoading = false;
+      });
     } catch (e) {
-      debugPrint('Error loading containers: $e');
-      setState(() => _isLoading = false);
+      debugPrint('Error loading missions: $e');
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  Future<void> _moveItem() async {
-    if (_selectedContainer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination room')));
-      return;
-    }
-    final destCount = _itemCounts[_selectedContainer!.id] ?? 0;
-    if (destCount >= _selectedContainer!.capacity) {
+  Future<void> _move() async {
+    if (_picked == null) return;
+    final destCount = _counts[_picked!.id] ?? 0;
+    if (destCount >= _picked!.capacity) {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('That room is full'),
-          content: Text('"${_selectedContainer!.name}" has no open loci. File it anyway?'),
+          title: const Text('Mission is at target'),
+          content: Text('"${_picked!.name}" already holds ${_picked!.capacity} cues. Reassign anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
-            FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('File anyway')),
+            FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Reassign')),
           ],
         ),
       );
       if (confirm != true) return;
     }
-    await _storage.moveItem(widget.item.id!, widget.item.containerId, _selectedContainer!.id!, _notesController.text.trim().isEmpty ? null : _notesController.text.trim());
+    await _storage.moveItem(
+      widget.item.id!,
+      widget.item.containerId,
+      _picked!.id!,
+      _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+    );
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Moved to ${_selectedContainer!.name}')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Reassigned to ${_picked!.name}')));
       Navigator.pop(context, true);
     }
   }
@@ -81,38 +91,126 @@ class _MoveItemViewState extends State<MoveItemView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TRANSFER')),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: VisualTheme.secondaryColor))
-          : ListView(
-              padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
-              children: [
-                Text('MOVING', textAlign: TextAlign.center, style: GoogleFonts.cinzel(letterSpacing: 2, fontSize: 12, fontWeight: FontWeight.w700, color: VisualTheme.secondaryColor)),
-                Text(widget.item.name, textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 24, fontWeight: FontWeight.w700)),
-                Text('${widget.item.category}  ·  ${widget.item.quantity}', textAlign: TextAlign.center),
-                const SkyStamp(label: 'NOW IN'),
-                Text(_currentContainer == null ? 'Unknown room' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}', textAlign: TextAlign.center),
-                const SkyStamp(label: 'MOVE INTO'),
-                if (_containers == null || _containers!.isEmpty)
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other rooms yet', textAlign: TextAlign.center))
-                else
-                  ..._containers!.map((c) {
-                    final count = _itemCounts[c.id] ?? 0;
-                    final selected = _selectedContainer?.id == c.id;
-                    return ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: Text(selected ? '★' : '☆', style: TextStyle(color: selected ? VisualTheme.secondaryColor : null, fontSize: 16)),
-                      title: Text(c.name, style: GoogleFonts.cinzel(fontSize: 16, fontWeight: FontWeight.w700)),
-                      subtitle: Text('${c.room}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
-                      onTap: () => setState(() => _selectedContainer = c),
-                    );
-                  }),
-                const SizedBox(height: 12),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going into the myth gallery'), maxLines: 2),
-                const SizedBox(height: 22),
-                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Log the transfer')),
-              ],
-            ),
+      body: StarDust(
+        child: SafeArea(
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : ListView(
+                  padding: const EdgeInsets.fromLTRB(18, 4, 18, 40),
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.close_rounded),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    Text('Reassign cue',
+                        style: VisualTheme.display(30, color: VisualTheme.inkOf(context))),
+                    const SizedBox(height: 18),
+                    BentoTile(
+                      fill: VisualTheme.getCategoryColor(widget.item.category),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('MOVING',
+                              style: VisualTheme.tag(11,
+                                  color: Colors.white.withValues(alpha: 0.75))),
+                          const SizedBox(height: 8),
+                          Text(widget.item.name,
+                              style: VisualTheme.display(22, color: Colors.white)),
+                          const SizedBox(height: 8),
+                          Text(
+                            'now in ${_current?.name ?? 'an unknown mission'}',
+                            style: VisualTheme.body(13.5,
+                                color: Colors.white.withValues(alpha: 0.85)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SectionHead(title: 'Destination mission'),
+                    if (_targets == null || _targets!.isEmpty)
+                      BentoTile(
+                        fill: VisualTheme.veilOf(context),
+                        child: Text('No other mission to move into yet.',
+                            style: VisualTheme.body(14, color: VisualTheme.mutedOf(context))),
+                      )
+                    else
+                      ..._targets!.map((m) {
+                        final count = _counts[m.id] ?? 0;
+                        final on = _picked?.id == m.id;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: BentoTile(
+                            fill: on ? VisualTheme.nova.withValues(alpha: 0.12) : null,
+                            onTap: () => setState(() => _picked = m),
+                            padding: const EdgeInsets.all(14),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 42,
+                                  height: 42,
+                                  decoration: BoxDecoration(
+                                    color: VisualTheme.nova.withValues(alpha: 0.14),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Icon(VisualTheme.trackIcon(m.room),
+                                      size: 20, color: VisualTheme.nova),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(m.name,
+                                          style: VisualTheme.heading(15.5,
+                                              color: VisualTheme.inkOf(context),
+                                              w: FontWeight.w700)),
+                                      Text(
+                                        '${m.code} · $count/${m.capacity}${count >= m.capacity ? ' · at target' : ''}',
+                                        style: VisualTheme.body(12.5,
+                                            color: VisualTheme.mutedOf(context)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Icon(
+                                  on
+                                      ? Icons.radio_button_checked_rounded
+                                      : Icons.radio_button_off_rounded,
+                                  color: on
+                                      ? VisualTheme.nova
+                                      : VisualTheme.mutedOf(context).withValues(alpha: 0.5),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    const SectionHead(title: 'Why the move?'),
+                    BentoTile(
+                      child: TextField(
+                        key: const ValueKey('move_notes_field'),
+                        controller: _notesController,
+                        maxLines: 2,
+                        decoration: const InputDecoration(
+                          labelText: 'Note (optional)',
+                          hintText: 'e.g. regrouping for the Friday quiz',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    FilledButton(
+                      key: const ValueKey('confirm_move_button'),
+                      onPressed: _picked == null ? null : _move,
+                      style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
+                      child: const Text('Log the reassign'),
+                    ),
+                  ],
+                ),
+        ),
+      ),
     );
   }
 }

@@ -1,27 +1,50 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:user_screen_example/main.dart';
+import 'package:user_screen/user_screen.dart';
 
 void main() {
-  testWidgets('Verify Platform version', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that platform version is retrieved.
-    expect(
-      find.byWidgetPredicate(
-        (Widget widget) => widget is Text &&
-                           widget.data!.startsWith('Running on:'),
+  testWidgets('the dock shows five tabs and reports taps', (tester) async {
+    var picked = -1;
+    await tester.pumpWidget(MaterialApp(
+      theme: VisualTheme.lightTheme,
+      home: Scaffold(
+        body: Align(
+          alignment: Alignment.bottomCenter,
+          child: OrbitDock(index: 0, onSelect: (i) => picked = i),
+        ),
       ),
-      findsOneWidget,
-    );
+    ));
+
+    expect(find.byIcon(Icons.dashboard_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.rocket_launch_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.bolt_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.insights_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.tune_rounded), findsOneWidget);
+
+    // Only the active tab shows its label.
+    expect(find.text('Deck'), findsOneWidget);
+    expect(find.text('Missions'), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.bolt_rounded));
+    expect(picked, 2);
+  });
+
+  testWidgets('a cue tile renders its recall level', (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      theme: VisualTheme.lightTheme,
+      home: Scaffold(
+        body: CueTile(
+          kind: 'Image',
+          title: 'The rusty red planet',
+          meta: 'Image · 3 reps',
+          recall: 'Shaky',
+          accent: VisualTheme.flare,
+          onTap: () {},
+        ),
+      ),
+    ));
+
+    expect(find.text('The rusty red planet'), findsOneWidget);
+    expect(find.text('Shaky'), findsOneWidget);
   });
 }

@@ -1,3 +1,3 @@
 # Listing notes
 
-This project is Star Loci (`com.app.starloci.build`), an astronomy memory-palace catalog. Copy, palette, icon, bundle ID, and onboarding are original to this product.
+This project is Orbit Recall (`com.app.orbitrecall.build`), an offline memory-training app for astronomy topics. Name, copy, palette, typography, icon, navigation shape, bundle ID and onboarding are original to this product.

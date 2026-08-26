@@ -1,5 +1,5 @@
-name: star_loci_example
-description: "Star Loci - Space memory log"
+name: orbit_recall_example
+description: "Orbit Recall - Space memory drills"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

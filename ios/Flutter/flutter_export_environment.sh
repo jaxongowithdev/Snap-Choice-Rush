@@ -1,7 +1,8 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/opt/homebrew/Caskroom/flutter/3.32.2/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/user/Desktop/cloned_app"
+export "FLUTTER_APPLICATION_PATH=/Users/user/Desktop/cloned_app copy"
+export "FLUTTER_FRAMEWORK_SWIFT_PACKAGE_PATH=/Users/user/Desktop/cloned_app copy/ios/Flutter/ephemeral/Packages/.packages/FlutterFramework"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"

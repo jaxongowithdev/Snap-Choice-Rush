@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
+import '../models/user_preferences.dart';
+import '../utils/visual_theme.dart';
 import 'dashboard_view.dart';
 import 'welcome_view.dart';
-import '../utils/visual_theme.dart';
-import '../models/user_preferences.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -17,7 +16,6 @@ class _UserScreenState extends State<UserScreen> {
   final _storage = StorageManager.instance;
   bool _isInitialized = false;
   UserPreferences? _preferences;
-  String? _errorMessage;
 
   @override
   void initState() {
@@ -27,7 +25,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Star Loci initialization...');
+      debugPrint('Orbit Recall booting…');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -40,7 +38,6 @@ class _UserScreenState extends State<UserScreen> {
       setState(() {
         _preferences = UserPreferences();
         _isInitialized = true;
-        _errorMessage = e.toString();
       });
     }
   }
@@ -71,7 +68,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Star Loci',
+      title: 'Orbit Recall',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -79,23 +76,7 @@ class _UserScreenState extends State<UserScreen> {
       home: Builder(
         builder: (context) {
           if (!_isInitialized || _preferences == null) {
-            return Scaffold(
-              backgroundColor: VisualTheme.voidNavy,
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Star Loci', style: GoogleFonts.cinzel(color: VisualTheme.secondaryColor, fontSize: 32, letterSpacing: 2)),
-                    const SizedBox(height: 8),
-                    Text('Opening the dome…', style: GoogleFonts.spaceGrotesk(color: VisualTheme.chart.withValues(alpha: 0.7))),
-                    if (_errorMessage != null) ...[
-                      const SizedBox(height: 20),
-                      Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),
-                    ],
-                  ],
-                ),
-              ),
-            );
+            return const _BootScreen();
           }
           return _preferences!.showOnboarding
               ? const WelcomeView()
@@ -105,6 +86,40 @@ class _UserScreenState extends State<UserScreen> {
       routes: {
         '/dashboard': (context) => DashboardView(onSettingsChanged: _reloadPreferences),
       },
+    );
+  }
+}
+
+class _BootScreen extends StatelessWidget {
+  const _BootScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: VisualTheme.nova,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 92,
+              height: 92,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.16),
+                borderRadius: BorderRadius.circular(32),
+              ),
+              child: const Icon(Icons.bolt_rounded, size: 46, color: Colors.white),
+            ),
+            const SizedBox(height: 22),
+            Text('Orbit Recall', style: VisualTheme.display(34, color: Colors.white)),
+            const SizedBox(height: 6),
+            Text(
+              'Spinning up the training deck…',
+              style: VisualTheme.body(15, color: Colors.white.withValues(alpha: 0.8)),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

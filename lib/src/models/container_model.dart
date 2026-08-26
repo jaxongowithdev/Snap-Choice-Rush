@@ -1,4 +1,7 @@
-// Memory-palace room / astronomy wing
+// A Mission — one themed set of cues the cadet is training on.
+// `room`  -> track (Planets, Moons, Deep Sky ...)
+// `shelf` -> stage (Launch, Orbit, Cruise, Landing, Docked)
+// `capacity` -> target number of cues
 class ContainerModel {
   final int? id;
   final String name;

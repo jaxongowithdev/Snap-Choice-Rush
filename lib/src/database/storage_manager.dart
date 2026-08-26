@@ -13,7 +13,7 @@ class StorageManager {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('star_loci.db');
+    _database = await _initDB('orbit_recall.db');
     return _database!;
   }
 
@@ -52,7 +52,7 @@ class StorageManager {
         name TEXT NOT NULL,
         category TEXT NOT NULL,
         quantity INTEGER NOT NULL DEFAULT 1,
-        condition TEXT NOT NULL DEFAULT 'New',
+        condition TEXT NOT NULL DEFAULT 'Fresh',
         purchaseDate TEXT,
         estimatedValue REAL,
         notes TEXT,
@@ -84,8 +84,8 @@ class StorageManager {
         id INTEGER PRIMARY KEY CHECK (id = 1),
         theme TEXT NOT NULL DEFAULT 'system',
         language TEXT NOT NULL DEFAULT 'en',
-        capacityUnit TEXT NOT NULL DEFAULT 'loci',
-        defaultBoxPrefix TEXT NOT NULL DEFAULT 'LOC',
+        capacityUnit TEXT NOT NULL DEFAULT 'cues',
+        defaultBoxPrefix TEXT NOT NULL DEFAULT 'MSN',
         showOnboarding INTEGER NOT NULL DEFAULT 1
       )
     ''');
@@ -351,6 +351,70 @@ class StorageManager {
       limit: limit,
     );
     return maps;
+  }
+
+
+  // ============ Drill helpers ============
+
+  /// Cues that need work first: Faded, then Shaky, then Fresh.
+  Future<List<InventoryItemModel>> getWeakCues({int limit = 30, int? containerId}) async {
+    final db = await database;
+    final where = containerId == null ? '' : 'WHERE containerId = $containerId';
+    final maps = await db.rawQuery('''
+      SELECT * FROM items
+      $where
+      ORDER BY CASE condition
+        WHEN 'Faded' THEN 0
+        WHEN 'Shaky' THEN 1
+        WHEN 'Fresh' THEN 2
+        WHEN 'Steady' THEN 3
+        ELSE 4 END, updatedAt ASC
+      LIMIT $limit
+    ''');
+    return maps.map((m) => InventoryItemModel.fromMap(m)).toList();
+  }
+
+  Future<Map<String, int>> getRecallBreakdown() async {
+    final db = await database;
+    final rows = await db.rawQuery(
+      'SELECT condition, COUNT(*) as count FROM items GROUP BY condition');
+    final out = <String, int>{};
+    for (final r in rows) {
+      out[r['condition'] as String] = r['count'] as int;
+    }
+    return out;
+  }
+
+  Future<int> getLockedCount() async {
+    final db = await database;
+    return Sqflite.firstIntValue(await db.rawQuery(
+          "SELECT COUNT(*) FROM items WHERE condition = 'Locked'",
+        )) ??
+        0;
+  }
+
+  Future<int> getTotalReps() async {
+    final db = await database;
+    return Sqflite.firstIntValue(
+          await db.rawQuery('SELECT SUM(quantity) FROM items'),
+        ) ??
+        0;
+  }
+
+  Future<List<InventoryItemModel>> getRecentCues({int limit = 5}) async {
+    final db = await database;
+    final maps = await db.query('items', orderBy: 'updatedAt DESC', limit: limit);
+    return maps.map((m) => InventoryItemModel.fromMap(m)).toList();
+  }
+
+  /// Records one drill answer: bumps reps, sets recall level and last-drilled date.
+  Future<void> logDrill(InventoryItemModel cue, String newRecall, double mastery) async {
+    await updateItem(cue.copyWith(
+      condition: newRecall,
+      quantity: cue.quantity + 1,
+      estimatedValue: mastery,
+      purchaseDate: DateTime.now().toIso8601String(),
+    ));
   }
 
   // ============ Settings ============

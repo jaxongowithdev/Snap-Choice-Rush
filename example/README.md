@@ -1,4 +1,4 @@
-# Star Loci
+# Orbit Recall — example app
 
 ```bash
 flutter run

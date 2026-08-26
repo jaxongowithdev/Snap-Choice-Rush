@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
+import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/loci_chrome.dart';
+import '../widgets/cosmo_chrome.dart';
 import 'item_detail_view.dart';
 
 class FavoritesView extends StatefulWidget {
@@ -16,93 +15,118 @@ class FavoritesView extends StatefulWidget {
 
 class _FavoritesViewState extends State<FavoritesView> {
   final _storage = StorageManager.instance;
-  List<InventoryItemModel>? _favoriteItems;
-  Map<int, ContainerModel> _containersCache = {};
+  List<InventoryItemModel>? _deck;
+  Map<int, ContainerModel> _missions = {};
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadFavorites();
+    _load();
   }
 
-  Future<void> _loadFavorites() async {
+  Future<void> _load() async {
     setState(() => _isLoading = true);
     try {
-      final favorites = await _storage.getFavoriteItems();
-      final containers = <int, ContainerModel>{};
-      for (final item in favorites) {
-        if (!containers.containsKey(item.containerId)) {
-          final c = await _storage.getContainer(item.containerId);
-          if (c != null) containers[item.containerId] = c;
+      final deck = await _storage.getFavoriteItems();
+      final missions = <int, ContainerModel>{};
+      for (final cue in deck) {
+        if (!missions.containsKey(cue.containerId)) {
+          final m = await _storage.getContainer(cue.containerId);
+          if (m != null) missions[cue.containerId] = m;
         }
       }
-      setState(() { _favoriteItems = favorites; _containersCache = containers; _isLoading = false; });
+      if (!mounted) return;
+      setState(() {
+        _deck = deck;
+        _missions = missions;
+        _isLoading = false;
+      });
     } catch (e) {
-      debugPrint('Error loading favorites: $e');
-      setState(() => _isLoading = false);
+      debugPrint('Error loading drill deck: $e');
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('PIN')),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: VisualTheme.secondaryColor))
-          : _favoriteItems == null || _favoriteItems!.isEmpty
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.auto_awesome_outlined, size: 48, color: VisualTheme.secondaryColor),
-                        const SizedBox(height: 8),
-                        Text('Nothing pinned', style: GoogleFonts.cinzel(fontSize: 22)),
-                        const SizedBox(height: 8),
-                        const Text('Pin the loci you will recall at the quiz.', textAlign: TextAlign.center),
-                      ],
+      body: StarDust(
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18, 4, 18, 0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_rounded),
+                      onPressed: () => Navigator.pop(context),
                     ),
-                  ),
-                )
-              : RefreshIndicator(
-                  onRefresh: _loadFavorites,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 8, 20),
-                    itemCount: _favoriteItems!.length,
-                    itemBuilder: (_, i) {
-                      final item = _favoriteItems![i];
-                      final room = _containersCache[item.containerId];
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: StarPlate(
-                              kind: item.category,
-                              title: item.name,
-                              meta: '${item.quantity}${room != null ? '  ·  ${room.name}' : ''}',
-                              accent: VisualTheme.getCategoryColor(item.category),
-                              onTap: () async {
-                                await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemDetailView(itemId: item.id!)));
-                                _loadFavorites();
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text('Drill deck',
+                          style: VisualTheme.display(28, color: VisualTheme.inkOf(context))),
+                    ),
+                    if (_deck != null)
+                      TinyPill(label: '${_deck!.length} starred', color: VisualTheme.sun),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : (_deck == null || _deck!.isEmpty)
+                        ? const EmptyOrbit(
+                            icon: Icons.star_rounded,
+                            tint: VisualTheme.sun,
+                            title: 'Deck is empty',
+                            body:
+                                'Star the cues you want in tonight’s run — they queue up in the drill room.',
+                          )
+                        : RefreshIndicator(
+                            onRefresh: _load,
+                            child: ListView.builder(
+                              padding: const EdgeInsets.fromLTRB(18, 12, 18, 40),
+                              itemCount: _deck!.length,
+                              itemBuilder: (_, i) {
+                                final cue = _deck![i];
+                                final mission = _missions[cue.containerId];
+                                return CueTile(
+                                  kind: cue.category,
+                                  title: cue.name,
+                                  meta: mission == null
+                                      ? cue.category
+                                      : '${mission.name} · ${cue.quantity} reps',
+                                  recall: cue.condition,
+                                  accent: VisualTheme.getCategoryColor(cue.category),
+                                  trailing: IconButton(
+                                    key: ValueKey('favorite_toggle_${cue.id}'),
+                                    icon: const Icon(Icons.star_rounded,
+                                        color: VisualTheme.sun),
+                                    onPressed: () async {
+                                      await _storage
+                                          .updateItem(cue.copyWith(isFavorite: false));
+                                      _load();
+                                    },
+                                  ),
+                                  onTap: () async {
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => ItemDetailView(itemId: cue.id!)));
+                                    _load();
+                                  },
+                                );
                               },
                             ),
                           ),
-                          IconButton(
-                            key: ValueKey('favorite_toggle_${item.id}'),
-                            icon: Icon(item.isFavorite ? Icons.auto_awesome : Icons.auto_awesome_outlined, color: item.isFavorite ? VisualTheme.secondaryColor : null),
-                            onPressed: () async {
-                              await _storage.updateItem(item.copyWith(isFavorite: !item.isFavorite));
-                              _loadFavorites();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

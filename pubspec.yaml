@@ -1,5 +1,5 @@
 name: user_screen
-description: "Star Loci - File memory palaces, constellation kits, and planet cards, then find any locus before the quiz. Completely offline."
+description: "Orbit Recall - Build missions of space facts, anchor each cue to a picture, then drill the weakest ones first. Completely offline."
 version: 1.0.0+2
 
 environment:

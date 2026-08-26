@@ -1,4 +1,4 @@
-// Transfer/move history for items
+// Reassign log — a cue moving from one mission to another
 class TransferHistoryModel {
   final int? id;
   final int itemId;
