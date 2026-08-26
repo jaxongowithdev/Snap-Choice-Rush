@@ -1,3 +1,3 @@
-# Cone Yard — feature set
+# Star Loci — feature set
 
-Bottom running-track lanes, maple gym floor with court lines, traffic-cone home, clipboard cards, twelve PE kinds, checkout log, cover photos, search, JSON backup, offline SQLite (`cone_yard.db`).
+Top Cassiopeia constellation nav, star-field chart paper, planet orbs, locus plates, twelve sky kinds, transfer log, cover photos, search, JSON backup, offline SQLite (`star_loci.db`).

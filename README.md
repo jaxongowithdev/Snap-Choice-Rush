@@ -1,21 +1,21 @@
-# Cone Yard
+# Star Loci
 
-A private PE journal. File gym cages, station kits, and PE gear, then find any piece before the period — fully offline.
+A private memory palace for the night sky. File palace rooms, constellation kits, and planet cards, then find any locus before the quiz — fully offline.
 
-**App Name:** Cone Yard
-**Subtitle:** Gym class log
+**App Name:** Star Loci
+**Subtitle:** Space memory log
 **Category:** Education
-**Bundle ID:** com.app.coneyard.build
-**Database:** `cone_yard.db`
+**Bundle ID:** com.app.starloci.build
+**Database:** `star_loci.db`
 
 ## Navigation
 
-A painted running track at the bottom — five lanes with starting blocks — not a Material tab bar, catalog drawers, or drafting tools.
+A Cassiopeia constellation across the top planetarium dome — five uneven stars, not a Material tab bar, running track, or catalog drawers.
 
-- YARD — this period’s station
-- CAGES — every cart and hook
-- STAR — kits for the period
-- LOG — checkouts between cages
+- DOME — tonight’s palace
+- ROOMS — every wing and alcove
+- PIN — loci for recall
+- LOG — transfers between rooms
 - DESK — light and backup
 
 Listing copy lives in `meta-data-apple-store.txt`.

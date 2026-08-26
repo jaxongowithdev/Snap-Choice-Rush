@@ -1,14 +1,14 @@
 APP NAME
-Cone Yard
+Star Loci
 
 SUBTITLE
-Gym class log
+Space memory log
 
 KEYWORDS
-gym,pe,lesson,class,sport,teacher,cone,station,offline,kit
+space,star,lesson,class,memory,teacher,cosmos,planet,offline,loci
 
 PROMOTION
-File gym cages, station kits, and PE gear, then find any piece before the period. Private, offline.
+File memory palaces, constellation kits, and planet cards, then find any locus before the quiz. Private, offline.
 
 DESCRIPTION
-Cone Yard is a private offline PE journal — file gym cages, station kits, and PE gear, then find any piece before the period.
+Star Loci is a private offline astronomy journal — file memory palaces, constellation kits, and planet cards, then find any locus before the quiz.

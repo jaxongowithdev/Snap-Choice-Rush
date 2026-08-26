@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
-import '../widgets/yard_chrome.dart';
+import '../widgets/loci_chrome.dart';
 import '../utils/visual_theme.dart';
 
 class AnalyticsView extends StatefulWidget {
@@ -40,23 +40,23 @@ class _AnalyticsViewState extends State<AnalyticsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Census')),
+      appBar: AppBar(title: const Text('CENSUS')),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
+          ? const Center(child: CircularProgressIndicator(color: VisualTheme.secondaryColor))
           : RefreshIndicator(
               onRefresh: _loadData,
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
                 children: [
                   if (_stats != null)
-                    Text('${_stats!['totalItems']} pieces   ·   ${_stats!['totalContainers']} cages', style: GoogleFonts.oswald(fontSize: 22)),
+                    Text('${_stats!['totalItems']} loci   ·   ${_stats!['totalContainers']} rooms', textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 20, fontWeight: FontWeight.w700)),
                   if (_categoryStats != null && _categoryStats!.isNotEmpty) ...[
-                    const LaneStamp(label: 'BY KIND'),
-                    ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
+                    const SkyStamp(label: 'BY KIND'),
+                    ..._categoryStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}', textAlign: TextAlign.center)),
                   ],
                   if (_roomStats != null && _roomStats!.isNotEmpty) ...[
-                    const LaneStamp(label: 'BY GYM'),
-                    ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}')),
+                    const SkyStamp(label: 'BY WING'),
+                    ..._roomStats!.entries.map((e) => Text('${e.key}  ·  ${e.value}', textAlign: TextAlign.center)),
                   ],
                 ],
               ),

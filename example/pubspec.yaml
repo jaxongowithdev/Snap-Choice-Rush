@@ -1,5 +1,5 @@
-name: cone_yard_example
-description: "Cone Yard - Gym class log"
+name: star_loci_example
+description: "Star Loci - Space memory log"
 publish_to: 'none'
 version: 1.0.0+1
 environment:
@@ -20,3 +20,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  config:
+    enable-swift-package-manager: false

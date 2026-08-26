@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Starting Cone Yard initialization...');
+      debugPrint('Starting Star Loci initialization...');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       setState(() {
@@ -71,7 +71,7 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return MaterialApp(
-      title: 'Cone Yard',
+      title: 'Star Loci',
       debugShowCheckedModeBanner: false,
       theme: VisualTheme.lightTheme,
       darkTheme: VisualTheme.darkTheme,
@@ -80,14 +80,14 @@ class _UserScreenState extends State<UserScreen> {
         builder: (context) {
           if (!_isInitialized || _preferences == null) {
             return Scaffold(
-              backgroundColor: VisualTheme.primaryColor,
+              backgroundColor: VisualTheme.voidNavy,
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Cone Yard', style: GoogleFonts.oswald(color: VisualTheme.court, fontSize: 36, letterSpacing: 1.4)),
+                    Text('Star Loci', style: GoogleFonts.cinzel(color: VisualTheme.secondaryColor, fontSize: 32, letterSpacing: 2)),
                     const SizedBox(height: 8),
-                    Text('Lining up the stations…', style: GoogleFonts.karla(color: VisualTheme.court.withValues(alpha: 0.75))),
+                    Text('Opening the dome…', style: GoogleFonts.spaceGrotesk(color: VisualTheme.chart.withValues(alpha: 0.7))),
                     if (_errorMessage != null) ...[
                       const SizedBox(height: 20),
                       Text('Error: $_errorMessage', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),

@@ -1,3 +1,3 @@
-# Cone Yard
+# Star Loci
 
-Offline PE journal. Navy / cone orange / track red UI, Oswald + Karla, running-track lanes, gym floor, traffic cones. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Offline astronomy memory journal. Void navy / gold / nebula violet UI, Cinzel + Space Grotesk, planetarium dome, constellation stars, planet orbs. Education App Store category. Listing copy in `meta-data-apple-store.txt`.

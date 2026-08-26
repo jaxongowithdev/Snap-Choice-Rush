@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/inventory_item_model.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/yard_chrome.dart';
+import '../widgets/loci_chrome.dart';
 
 class MoveItemView extends StatefulWidget {
   final InventoryItemModel item;
@@ -53,7 +53,7 @@ class _MoveItemViewState extends State<MoveItemView> {
 
   Future<void> _moveItem() async {
     if (_selectedContainer == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination cage')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pick a destination room')));
       return;
     }
     final destCount = _itemCounts[_selectedContainer!.id] ?? 0;
@@ -61,8 +61,8 @@ class _MoveItemViewState extends State<MoveItemView> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('That cage is full'),
-          content: Text('"${_selectedContainer!.name}" has no open slots. File it anyway?'),
+          title: const Text('That room is full'),
+          content: Text('"${_selectedContainer!.name}" has no open loci. File it anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
             FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('File anyway')),
@@ -81,36 +81,36 @@ class _MoveItemViewState extends State<MoveItemView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Checkout')),
+      appBar: AppBar(title: const Text('TRANSFER')),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
+          ? const Center(child: CircularProgressIndicator(color: VisualTheme.secondaryColor))
           : ListView(
               padding: const EdgeInsets.fromLTRB(22, 8, 22, 32),
               children: [
-                Text('MOVING', style: GoogleFonts.oswald(letterSpacing: 2, fontSize: 12, color: VisualTheme.secondaryColor)),
-                Text(widget.item.name, style: GoogleFonts.oswald(fontSize: 26)),
-                Text('${widget.item.category}  ·  ${widget.item.quantity}'),
-                const LaneStamp(label: 'NOW IN'),
-                Text(_currentContainer == null ? 'Unknown cage' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}'),
-                const LaneStamp(label: 'MOVE INTO'),
+                Text('MOVING', textAlign: TextAlign.center, style: GoogleFonts.cinzel(letterSpacing: 2, fontSize: 12, fontWeight: FontWeight.w700, color: VisualTheme.secondaryColor)),
+                Text(widget.item.name, textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 24, fontWeight: FontWeight.w700)),
+                Text('${widget.item.category}  ·  ${widget.item.quantity}', textAlign: TextAlign.center),
+                const SkyStamp(label: 'NOW IN'),
+                Text(_currentContainer == null ? 'Unknown room' : '${_currentContainer!.name}  ·  ${_currentContainer!.room}', textAlign: TextAlign.center),
+                const SkyStamp(label: 'MOVE INTO'),
                 if (_containers == null || _containers!.isEmpty)
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other cages yet'))
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 16), child: Text('No other rooms yet', textAlign: TextAlign.center))
                 else
                   ..._containers!.map((c) {
                     final count = _itemCounts[c.id] ?? 0;
                     final selected = _selectedContainer?.id == c.id;
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
-                      leading: Text(selected ? '●' : '○', style: TextStyle(color: selected ? VisualTheme.secondaryColor : null, fontSize: 16)),
-                      title: Text(c.name, style: GoogleFonts.oswald(fontSize: 18)),
+                      leading: Text(selected ? '★' : '☆', style: TextStyle(color: selected ? VisualTheme.secondaryColor : null, fontSize: 16)),
+                      title: Text(c.name, style: GoogleFonts.cinzel(fontSize: 16, fontWeight: FontWeight.w700)),
                       subtitle: Text('${c.room}  ·  $count/${c.capacity}${count >= c.capacity ? '  ·  full' : ''}'),
                       onTap: () => setState(() => _selectedContainer = c),
                     );
                   }),
                 const SizedBox(height: 12),
-                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going to station three'), maxLines: 2),
+                TextField(key: const ValueKey('move_notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Why the move?', hintText: 'e.g., Going into the myth gallery'), maxLines: 2),
                 const SizedBox(height: 22),
-                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Log the checkout')),
+                FilledButton(key: const ValueKey('confirm_move_button'), onPressed: _selectedContainer == null ? null : _moveItem, child: const Text('Log the transfer')),
               ],
             ),
     );

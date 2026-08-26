@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/yard_chrome.dart';
+import '../widgets/loci_chrome.dart';
 import 'container_detail_view.dart';
 import 'container_form_view.dart';
 
@@ -51,20 +51,20 @@ class _ContainerListViewState extends State<ContainerListView> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Cages'),
+        title: const Text('ROOMS'),
         actions: [
           PopupMenuButton<String>(
             onSelected: (v) { setState(() => _sortBy = v); _loadContainers(); },
             itemBuilder: (_) => const [
               PopupMenuItem(value: 'name', child: Text('By name')),
-              PopupMenuItem(value: 'room', child: Text('By gym')),
+              PopupMenuItem(value: 'room', child: Text('By wing')),
               PopupMenuItem(value: 'updated', child: Text('Last opened')),
             ],
           ),
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor))
+          ? const Center(child: CircularProgressIndicator(color: VisualTheme.secondaryColor))
           : _containers == null || _containers!.isEmpty
               ? Center(
                   child: Padding(
@@ -72,11 +72,11 @@ class _ContainerListViewState extends State<ContainerListView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.sports_outlined, size: 48, color: VisualTheme.secondaryColor),
+                        Icon(Icons.auto_awesome_outlined, size: 48, color: VisualTheme.secondaryColor),
                         const SizedBox(height: 8),
-                        Text('No cages labeled', style: GoogleFonts.oswald(fontSize: 24)),
+                        Text('No rooms opened', style: GoogleFonts.cinzel(fontSize: 22)),
                         const SizedBox(height: 8),
-                        const Text('Start a ball cage, a cone cart, or the pinnie hook.', textAlign: TextAlign.center),
+                        const Text('Start a planet hall, a myth gallery, or the number vault.', textAlign: TextAlign.center),
                       ],
                     ),
                   ),
@@ -89,10 +89,10 @@ class _ContainerListViewState extends State<ContainerListView> {
                     itemBuilder: (_, i) {
                       final c = _containers![i];
                       final count = _itemCounts[c.id] ?? 0;
-                      return ClipboardCard(
+                      return StarPlate(
                         kind: c.code,
                         title: c.name,
-                        meta: '${c.room}  ·  $count/${c.capacity} pieces',
+                        meta: '${c.room}  ·  $count/${c.capacity} loci',
                         accent: VisualTheme.primaryColor,
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (_) => ContainerDetailView(containerId: c.id!)));

@@ -4,7 +4,7 @@ import '../database/storage_manager.dart';
 import '../models/container_model.dart';
 import '../models/inventory_item_model.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/yard_chrome.dart';
+import '../widgets/loci_chrome.dart';
 import 'container_form_view.dart';
 import 'item_form_view.dart';
 import 'item_detail_view.dart';
@@ -49,11 +49,11 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Clear this cage?'),
-        content: const Text('Every piece filed here will be removed.'),
+        title: const Text('Close this room?'),
+        content: const Text('Every locus filed here will be removed.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Clear')),
+          FilledButton(onPressed: () => Navigator.pop(context, true), style: FilledButton.styleFrom(backgroundColor: Colors.red), child: const Text('Close')),
         ],
       ),
     );
@@ -65,8 +65,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator(color: VisualTheme.primaryColor)));
-    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Cage not found')));
+    if (_isLoading) return Scaffold(appBar: AppBar(), body: const Center(child: CircularProgressIndicator(color: VisualTheme.secondaryColor)));
+    if (_container == null) return Scaffold(appBar: AppBar(), body: const Center(child: Text('Room not found')));
 
     final count = _items?.length ?? 0;
 
@@ -76,8 +76,8 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
         actions: [
           PopupMenuButton(
             itemBuilder: (_) => const [
-              PopupMenuItem(value: 'edit', child: Text('Edit cage')),
-              PopupMenuItem(value: 'delete', child: Text('Clear cage')),
+              PopupMenuItem(value: 'edit', child: Text('Edit room')),
+              PopupMenuItem(value: 'delete', child: Text('Close room')),
             ],
             onSelected: (v) {
               if (v == 'edit') {
@@ -94,25 +94,25 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
           children: [
-            Text(_container!.name, style: GoogleFonts.oswald(fontSize: 32, height: 1.05)),
+            Text(_container!.name, textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 28, fontWeight: FontWeight.w700, height: 1.15)),
             const SizedBox(height: 6),
-            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} pieces', style: GoogleFonts.karla(fontSize: 13)),
-            const LaneStamp(label: 'PIECES'),
+            Text('${_container!.room}  ·  ${_container!.shelf}  ·  $count / ${_container!.capacity} loci', textAlign: TextAlign.center, style: GoogleFonts.spaceGrotesk(fontSize: 13)),
+            const SkyStamp(label: 'LOCI'),
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: TextButton(
                 key: const ValueKey('add_item_button'),
                 onPressed: () async {
                   final r = await Navigator.push(context, MaterialPageRoute(builder: (_) => ItemFormView(preselectedContainerId: widget.containerId)));
                   if (r == true) _loadData();
                 },
-                child: Text('+ FILE A PIECE', style: GoogleFonts.oswald(fontSize: 16, letterSpacing: 0.8, color: VisualTheme.primaryColor)),
+                child: Text('+ FILE A LOCUS', style: GoogleFonts.cinzel(fontSize: 14, letterSpacing: 1.4, fontWeight: FontWeight.w700, color: VisualTheme.primaryColor)),
               ),
             ),
             if (_items == null || _items!.isEmpty)
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed in this cage yet'))
+              const Padding(padding: EdgeInsets.symmetric(vertical: 20), child: Text('Nothing filed in this room yet', textAlign: TextAlign.center))
             else
-              ..._items!.map((item) => ClipboardCard(
+              ..._items!.map((item) => StarPlate(
                     kind: item.category,
                     title: item.name,
                     meta: '${item.quantity}  ·  ${item.condition}',

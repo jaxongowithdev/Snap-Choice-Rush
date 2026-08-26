@@ -29,8 +29,8 @@ class _ItemFormViewState extends State<ItemFormView> {
   String _selectedCondition = 'New';
   String? _photoPath;
   final _imagePicker = ImagePicker();
-  final _conditions = ['New', 'Out', 'Worn', 'Stored'];
-  final _categories = ['Ball', 'Cone', 'Pinnie', 'Rope', 'Mat', 'Hula', 'Bat', 'Net', 'Whistle', 'Timer', 'First-aid', 'Other'];
+  final _conditions = ['New', 'Recalled', 'Faded', 'Filed'];
+  final _categories = ['Planet', 'Star', 'Moon', 'Galaxy', 'Nebula', 'Comet', 'Constellation', 'Myth', 'Number', 'Voyage', 'Teacher', 'Other'];
 
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _ItemFormViewState extends State<ItemFormView> {
       final photo = await _imagePicker.pickImage(source: source, maxWidth: 1024, maxHeight: 1024, imageQuality: 85);
       if (photo == null) return;
       final appDir = await getApplicationDocumentsDirectory();
-      final fileName = 'yard_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
+      final fileName = 'loci_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
       final savedPath = path_pkg.join(appDir.path, 'photos', fileName);
       await Directory(path_pkg.join(appDir.path, 'photos')).create(recursive: true);
       await File(photo.path).copy(savedPath);
@@ -95,7 +95,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Future<void> _saveItem() async {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedContainerId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a cage first')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose a room first')));
       return;
     }
     final item = InventoryItemModel(
@@ -121,7 +121,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.item != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit piece' : 'File a piece')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit locus' : 'File a locus')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -130,7 +130,10 @@ class _ItemFormViewState extends State<ItemFormView> {
             if (_photoPath != null)
               Stack(
                 children: [
-                  Image.file(File(_photoPath!), height: 180, width: double.infinity, fit: BoxFit.cover),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(28),
+                    child: Image.file(File(_photoPath!), height: 180, width: double.infinity, fit: BoxFit.cover),
+                  ),
                   Positioned(top: 8, right: 8, child: IconButton(icon: const Icon(Icons.delete, color: Colors.white), style: IconButton.styleFrom(backgroundColor: Colors.red), onPressed: _removePhoto)),
                 ],
               )
@@ -143,25 +146,25 @@ class _ItemFormViewState extends State<ItemFormView> {
                 ],
               ),
             const SizedBox(height: 16),
-            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Piece name', hintText: 'e.g., Size 4 soccer, Orange cones'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this piece' : null),
+            TextFormField(key: const ValueKey('item_name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Locus name', hintText: 'e.g., Saturn’s rings, Orion’s belt'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this locus' : null),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(key: const ValueKey('category_dropdown'), value: _categories.contains(_categoryController.text) ? _categoryController.text : null, decoration: const InputDecoration(labelText: 'Kind'), items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) _categoryController.text = v; }, validator: (_) => _categoryController.text.isEmpty ? 'Pick a kind' : null),
             const SizedBox(height: 12),
-            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Cage'), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a cage' : null),
+            DropdownButtonFormField<int>(key: const ValueKey('container_dropdown'), value: _selectedContainerId, decoration: const InputDecoration(labelText: 'Room'), items: _containers?.map((c) => DropdownMenuItem(value: c.id, child: Text('${c.name} (${c.code})'))).toList(), onChanged: (v) => setState(() => _selectedContainerId = v), validator: (v) => v == null ? 'Choose a room' : null),
             const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(child: TextFormField(key: const ValueKey('quantity_field'), controller: _quantityController, decoration: const InputDecoration(labelText: 'Count'), keyboardType: TextInputType.number, validator: (v) => int.tryParse(v?.trim() ?? '') == null ? 'Invalid' : null)),
                 const SizedBox(width: 12),
-                Expanded(child: DropdownButtonFormField<String>(key: const ValueKey('condition_dropdown'), value: _selectedCondition, decoration: const InputDecoration(labelText: 'Wear'), items: _conditions.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) setState(() => _selectedCondition = v); })),
+                Expanded(child: DropdownButtonFormField<String>(key: const ValueKey('condition_dropdown'), value: _selectedCondition, decoration: const InputDecoration(labelText: 'Recall'), items: _conditions.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(), onChanged: (v) { if (v != null) setState(() => _selectedCondition = v); })),
               ],
             ),
             const SizedBox(height: 12),
             TextFormField(key: const ValueKey('value_field'), controller: _valueController, decoration: const InputDecoration(labelText: 'Replacement cost (optional)'), keyboardType: TextInputType.number),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Coach note', hintText: 'Last checkout, leak, or station'), maxLines: 3),
+            TextFormField(key: const ValueKey('notes_field'), controller: _notesController, decoration: const InputDecoration(labelText: 'Mnemonic note', hintText: 'Image, hook, or last recall'), maxLines: 3),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save piece' : 'File piece')),
+            FilledButton(key: const ValueKey('save_item_button'), onPressed: _saveItem, child: Text(isEditing ? 'Save locus' : 'File locus')),
           ],
         ),
       ),

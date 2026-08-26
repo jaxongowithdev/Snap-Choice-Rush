@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import '../database/storage_manager.dart';
 import '../models/user_preferences.dart';
 import '../utils/visual_theme.dart';
-import '../widgets/yard_chrome.dart';
+import '../widgets/loci_chrome.dart';
 
 class ConfigView extends StatefulWidget {
   final VoidCallback onSettingsChanged;
@@ -49,8 +49,8 @@ class _ConfigViewState extends State<ConfigView> {
       final data = await _storage.exportData();
       final jsonString = const JsonEncoder.withIndent('  ').convert(data);
       await Share.shareXFiles(
-        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'cone_yard_${DateTime.now().millisecondsSinceEpoch}.json')],
-        text: 'Cone Yard catalog',
+        [XFile.fromData(Uint8List.fromList(jsonString.codeUnits), mimeType: 'application/json', name: 'star_loci_${DateTime.now().millisecondsSinceEpoch}.json')],
+        text: 'Star Loci catalog',
       );
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Catalog exported')));
     } catch (e) {
@@ -63,7 +63,7 @@ class _ConfigViewState extends State<ConfigView> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Restore a catalog?'),
-        content: const Text('The current cages will be replaced by the file you pick.'),
+        content: const Text('The current rooms will be replaced by the file you pick.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Restore')),
@@ -86,28 +86,28 @@ class _ConfigViewState extends State<ConfigView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('Desk')),
+      appBar: AppBar(title: const Text('DESK')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
         children: [
-          Text('Cone Yard', style: GoogleFonts.oswald(fontSize: 36, height: 1)),
+          Text('Star Loci', textAlign: TextAlign.center, style: GoogleFonts.cinzel(fontSize: 32, fontWeight: FontWeight.w700)),
           const SizedBox(height: 6),
-          Text('A private PE journal. Nothing leaves this phone.', style: GoogleFonts.karla(height: 1.4, fontSize: 16)),
-          const LaneStamp(label: 'LIGHT'),
-          for (final e in const [('light', 'Gym daylight'), ('dark', 'After the last bell'), ('system', 'Match the phone')])
+          Text('A private memory palace. Nothing leaves this phone.', textAlign: TextAlign.center, style: GoogleFonts.spaceGrotesk(height: 1.4, fontSize: 16)),
+          const SkyStamp(label: 'LIGHT'),
+          for (final e in const [('light', 'Chart daylight'), ('dark', 'Dome after hours'), ('system', 'Match the phone')])
             ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: Text((_preferences?.theme ?? 'system') == e.$1 ? '●' : '○', style: const TextStyle(color: VisualTheme.secondaryColor)),
+              leading: Text((_preferences?.theme ?? 'system') == e.$1 ? '★' : '☆', style: const TextStyle(color: VisualTheme.secondaryColor)),
               title: Text(e.$2),
               onTap: () => _updateTheme(e.$1),
             ),
-          const LaneStamp(label: 'CATALOG'),
+          const SkyStamp(label: 'CATALOG'),
           ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('backup_button'), title: const Text('Export catalog'), trailing: const Text('JSON →'), onTap: _exportData),
           ListTile(contentPadding: EdgeInsets.zero, key: const ValueKey('import_button'), title: const Text('Restore catalog'), trailing: const Text('← FILE'), onTap: _importData),
-          const LaneStamp(label: 'COLOPHON'),
-          Text('Version 1.0.0  ·  Offline gym inventory', style: GoogleFonts.karla(fontSize: 13)),
+          const SkyStamp(label: 'COLOPHON'),
+          Text('Version 1.0.0  ·  Offline astronomy memory', textAlign: TextAlign.center, style: GoogleFonts.spaceGrotesk(fontSize: 13)),
           const SizedBox(height: 6),
-          Text('No account. No tracking. Local only.', style: GoogleFonts.karla(fontSize: 13)),
+          Text('No account. No tracking. Local only.', textAlign: TextAlign.center, style: GoogleFonts.spaceGrotesk(fontSize: 13)),
         ],
       ),
     );

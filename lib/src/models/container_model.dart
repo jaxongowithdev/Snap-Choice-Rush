@@ -1,4 +1,4 @@
-// Gym cage / PE station cart
+// Memory-palace room / astronomy wing
 class ContainerModel {
   final int? id;
   final String name;

@@ -61,23 +61,23 @@ class _ContainerFormViewState extends State<ContainerFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.container != null;
     return Scaffold(
-      appBar: AppBar(title: Text(isEditing ? 'Edit cage' : 'New cage')),
+      appBar: AppBar(title: Text(isEditing ? 'Edit room' : 'New room')),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 16, 22, 32),
           children: [
-            TextFormField(key: const ValueKey('name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Cage name', hintText: 'e.g., Ball cage, Cone cart'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this cage' : null),
+            TextFormField(key: const ValueKey('name_field'), controller: _nameController, decoration: const InputDecoration(labelText: 'Room name', hintText: 'e.g., Planet hall, Myth gallery'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Name this room' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('code_field'), controller: _codeController, decoration: const InputDecoration(labelText: 'Lane mark', hintText: 'e.g., YRD-01, ST3'), textCapitalization: TextCapitalization.characters, validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a lane mark' : null),
+            TextFormField(key: const ValueKey('code_field'), controller: _codeController, decoration: const InputDecoration(labelText: 'Locus mark', hintText: 'e.g., LOC-01, ORI'), textCapitalization: TextCapitalization.characters, validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a locus mark' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('room_field'), controller: _roomController, decoration: const InputDecoration(labelText: 'Gym / field', hintText: 'e.g., Main gym, Blacktop'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Where does this cage live?' : null),
+            TextFormField(key: const ValueKey('room_field'), controller: _roomController, decoration: const InputDecoration(labelText: 'Wing / palace', hintText: 'e.g., North wing, Homeschool dome'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Where does this room live?' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('shelf_field'), controller: _shelfController, decoration: const InputDecoration(labelText: 'Cart / hook', hintText: 'e.g., Rolling cart, Wall hook'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a cart or hook' : null),
+            TextFormField(key: const ValueKey('shelf_field'), controller: _shelfController, decoration: const InputDecoration(labelText: 'Wall / alcove', hintText: 'e.g., East wall, Window alcove'), validator: (v) => (v == null || v.trim().isEmpty) ? 'Add a wall or alcove' : null),
             const SizedBox(height: 12),
-            TextFormField(key: const ValueKey('capacity_field'), controller: _capacityController, decoration: const InputDecoration(labelText: 'Piece / slot count'), keyboardType: TextInputType.number, validator: (v) { final n = int.tryParse(v?.trim() ?? ''); return (n == null || n <= 0) ? 'Use a positive number' : null; }),
+            TextFormField(key: const ValueKey('capacity_field'), controller: _capacityController, decoration: const InputDecoration(labelText: 'Locus / slot count'), keyboardType: TextInputType.number, validator: (v) { final n = int.tryParse(v?.trim() ?? ''); return (n == null || n <= 0) ? 'Use a positive number' : null; }),
             const SizedBox(height: 22),
-            FilledButton(key: const ValueKey('save_button'), onPressed: _saveContainer, child: Text(isEditing ? 'Save cage' : 'Label cage')),
+            FilledButton(key: const ValueKey('save_button'), onPressed: _saveContainer, child: Text(isEditing ? 'Save room' : 'Open room')),
           ],
         ),
       ),
