@@ -2,20 +2,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:user_screen/src/engine/local_composer.dart';
 
 void main() {
-  test('compose a caption from a seed without a network', () {
+  test('compose an aroma note from a seed without a network', () {
     final draft = LocalComposer.compose(
-      title: 'Saturday market opener',
-      seed: 'Heirloom tomatoes, still warm. Close at two.',
-      form: 'Caption',
-      tags: 'warm, shop',
+      title: 'Longjing, west lake',
+      seed: 'Chestnut dry leaf. 80C, 45 seconds, glass.',
+      form: 'Aroma',
+      tags: 'green, chestnut',
     );
-    expect(draft, contains('Saturday market opener'));
-    expect(draft.toLowerCase(), contains('tomato'));
+    expect(draft, contains('Longjing'));
+    expect(draft.toLowerCase(), contains('chestnut'));
   });
 
   test('tighten drops filler words', () {
     final out = LocalComposer.rewrite(
-      'This is really very actually a draft.',
+      'This is really very actually a cup.',
       'Tighten',
     );
     expect(out.toLowerCase().contains('really'), isFalse);
@@ -24,10 +24,7 @@ void main() {
   });
 
   test('shorter keeps the first two sentences', () {
-    final out = LocalComposer.rewrite(
-      'One. Two. Three. Four.',
-      'Shorter',
-    );
+    final out = LocalComposer.rewrite('One. Two. Three. Four.', 'Shorter');
     expect(out, contains('One'));
     expect(out, contains('Two'));
     expect(out.contains('Four'), isFalse);
@@ -35,22 +32,22 @@ void main() {
 
   test('every form returns a non-empty draft', () {
     for (final form in [
-      'Caption',
-      'Hook',
-      'Outline',
-      'Scene',
-      'Letter',
-      'Lesson',
-      'Product',
-      'Poem',
-      'Brief',
-      'Journal',
-      'Script',
+      'Aroma',
+      'Liquor',
+      'Body',
+      'Origin',
+      'Blend',
+      'Steep',
+      'Pairing',
+      'Story',
+      'Note',
+      'Garden',
+      'Ceremony',
       'Other',
     ]) {
       final draft = LocalComposer.compose(
-        title: 'Test job',
-        seed: 'A wooden table and a cold cup.',
+        title: 'Test leaf',
+        seed: '80C, one minute, glass cup.',
         form: form,
       );
       expect(draft.trim(), isNotEmpty, reason: form);

@@ -25,7 +25,7 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Quietforge opening the desk…');
+      debugPrint('Kettleleaf opening the desk…');
       await _storage.database;
       final prefs = await _storage.getPreferences();
       AppAppearance.apply(prefs.theme);
@@ -60,7 +60,7 @@ class _UserScreenState extends State<UserScreen> {
       valueListenable: AppAppearance.listenable,
       builder: (context, themeMode, _) {
         return MaterialApp(
-          title: 'Quietforge',
+          title: 'Kettleleaf',
           debugShowCheckedModeBanner: false,
           theme: VisualTheme.lightTheme,
           darkTheme: VisualTheme.darkTheme,
@@ -102,10 +102,10 @@ class _BootScreen extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.14),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.edit_note_rounded, size: 44, color: Colors.white),
+              child: const Icon(Icons.emoji_food_beverage_rounded, size: 44, color: Colors.white),
             ),
             const SizedBox(height: 22),
-            Text('Quietforge', style: VisualTheme.display(34, color: Colors.white)),
+            Text('Kettleleaf', style: VisualTheme.display(34, color: Colors.white)),
             const SizedBox(height: 6),
             Text(
               'Laying out the paper…',

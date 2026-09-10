@@ -22,27 +22,27 @@ class AppAppearance {
   }
 }
 
-/// Quietforge — a paper atelier.
-/// Warm cream, charcoal, terracotta and forest. Serif display, hairline cards.
+/// Kettleleaf — a celadon tea journal.
+/// Steam-green ground, tea-amber accents. Literata display, Karla body.
 class VisualTheme {
-  static const Color clay = Color(0xFFB85C38); // terracotta — primary
-  static const Color moss = Color(0xFF3D6B4F); // forest — secondary
-  static const Color inkBlue = Color(0xFF2C4A6E); // slate blue
-  static const Color rust = Color(0xFF9A3412);
-  static const Color ochre = Color(0xFFC7923E);
-  static const Color sage = Color(0xFF6B8F71);
-  static const Color wine = Color(0xFF8B3A4A);
+  static const Color clay = Color(0xFF2F6F62); // celadon — primary
+  static const Color moss = Color(0xFFC4783A); // amber liquor — secondary
+  static const Color inkBlue = Color(0xFF3D5A73);
+  static const Color rust = Color(0xFF9A4A2A);
+  static const Color ochre = Color(0xFFD4A056);
+  static const Color sage = Color(0xFF5E8A72);
+  static const Color wine = Color(0xFF8B4A5A);
 
-  static const Color paper = Color(0xFFF6F0E6);
-  static const Color surface = Color(0xFFFFFBF5);
-  static const Color veil = Color(0xFFEDE4D4);
-  static const Color ink = Color(0xFF1C1916);
-  static const Color muted = Color(0xFF6B6258);
+  static const Color paper = Color(0xFFEEF3EF);
+  static const Color surface = Color(0xFFF7FBF8);
+  static const Color veil = Color(0xFFDCE8E2);
+  static const Color ink = Color(0xFF1A2420);
+  static const Color muted = Color(0xFF5C6B64);
 
-  static const Color night = Color(0xFF161310);
-  static const Color nightSurface = Color(0xFF221E1A);
-  static const Color nightVeil = Color(0xFF2C2722);
-  static const Color nightInk = Color(0xFFF3EBE0);
+  static const Color night = Color(0xFF121916);
+  static const Color nightSurface = Color(0xFF1C2622);
+  static const Color nightVeil = Color(0xFF27332E);
+  static const Color nightInk = Color(0xFFE8F0EC);
 
   static const double rXL = 12;
   static const double rL = 10;
@@ -67,7 +67,7 @@ class VisualTheme {
       : muted;
 
   static TextStyle display(double size, {Color? color, FontWeight w = FontWeight.w600}) =>
-      GoogleFonts.fraunces(
+      GoogleFonts.literata(
         fontSize: size,
         fontWeight: w,
         height: 1.12,
@@ -76,7 +76,7 @@ class VisualTheme {
       );
 
   static TextStyle heading(double size, {Color? color, FontWeight w = FontWeight.w600}) =>
-      GoogleFonts.fraunces(
+      GoogleFonts.literata(
         fontSize: size,
         fontWeight: w,
         height: 1.25,
@@ -85,10 +85,10 @@ class VisualTheme {
       );
 
   static TextStyle body(double size, {Color? color, FontWeight w = FontWeight.w400}) =>
-      GoogleFonts.sourceSans3(fontSize: size, fontWeight: w, height: 1.45, color: color);
+      GoogleFonts.karla(fontSize: size, fontWeight: w, height: 1.45, color: color);
 
   static TextStyle tag(double size, {Color? color, FontWeight w = FontWeight.w700}) =>
-      GoogleFonts.sourceSans3(
+      GoogleFonts.karla(
         fontSize: size,
         fontWeight: w,
         letterSpacing: 1.1,
@@ -112,7 +112,7 @@ class VisualTheme {
       scaffoldBackgroundColor: paper,
       dividerColor: const Color(0x332C241C),
       splashFactory: InkRipple.splashFactory,
-      textTheme: GoogleFonts.sourceSans3TextTheme(ThemeData.light().textTheme)
+      textTheme: GoogleFonts.karlaTextTheme(ThemeData.light().textTheme)
           .apply(bodyColor: ink, displayColor: ink),
       cardTheme: CardThemeData(
         elevation: 0,
@@ -163,7 +163,7 @@ class VisualTheme {
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(rM)),
-          textStyle: GoogleFonts.sourceSans3(fontWeight: FontWeight.w700, fontSize: 16),
+          textStyle: GoogleFonts.karla(fontWeight: FontWeight.w700, fontSize: 16),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -172,13 +172,13 @@ class VisualTheme {
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           side: const BorderSide(color: Color(0x55B85C38), width: 1.2),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(rM)),
-          textStyle: GoogleFonts.sourceSans3(fontWeight: FontWeight.w700, fontSize: 15),
+          textStyle: GoogleFonts.karla(fontWeight: FontWeight.w700, fontSize: 15),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: clay,
-          textStyle: GoogleFonts.sourceSans3(fontWeight: FontWeight.w700, fontSize: 15),
+          textStyle: GoogleFonts.karla(fontWeight: FontWeight.w700, fontSize: 15),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
@@ -201,7 +201,7 @@ class VisualTheme {
     final scheme = ColorScheme.fromSeed(
       seedColor: clay,
       brightness: Brightness.dark,
-      primary: const Color(0xFFE08A68),
+      primary: const Color(0xFF7AB8A8),
       secondary: sage,
       tertiary: ochre,
       surface: nightSurface,
@@ -212,9 +212,9 @@ class VisualTheme {
       brightness: Brightness.dark,
       colorScheme: scheme,
       scaffoldBackgroundColor: night,
-      dividerColor: const Color(0x33E08A68),
+      dividerColor: const Color(0x337AB8A8),
       splashFactory: InkRipple.splashFactory,
-      textTheme: GoogleFonts.sourceSans3TextTheme(ThemeData.dark().textTheme)
+      textTheme: GoogleFonts.karlaTextTheme(ThemeData.dark().textTheme)
           .apply(bodyColor: nightInk, displayColor: nightInk),
       cardTheme: CardThemeData(
         elevation: 0,
@@ -222,7 +222,7 @@ class VisualTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(rL),
-          side: const BorderSide(color: Color(0x22E08A68)),
+          side: const BorderSide(color: Color(0x227AB8A8)),
         ),
       ),
       appBarTheme: AppBarTheme(
@@ -235,7 +235,7 @@ class VisualTheme {
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         elevation: 0,
-        backgroundColor: Color(0xFFE08A68),
+        backgroundColor: Color(0xFF7AB8A8),
         foregroundColor: Color(0xFF161310),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
         extendedPadding: EdgeInsets.symmetric(horizontal: 20),
@@ -255,32 +255,32 @@ class VisualTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(rM),
-          borderSide: const BorderSide(color: Color(0xFFE08A68), width: 1.6),
+          borderSide: const BorderSide(color: Color(0xFF7AB8A8), width: 1.6),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: const Color(0xFFE08A68),
+          backgroundColor: const Color(0xFF7AB8A8),
           foregroundColor: night,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(rM)),
-          textStyle: GoogleFonts.sourceSans3(fontWeight: FontWeight.w700, fontSize: 16),
+          textStyle: GoogleFonts.karla(fontWeight: FontWeight.w700, fontSize: 16),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: const Color(0xFFE08A68),
+          foregroundColor: const Color(0xFF7AB8A8),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-          side: const BorderSide(color: Color(0x55E08A68), width: 1.2),
+          side: const BorderSide(color: Color(0x557AB8A8), width: 1.2),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(rM)),
-          textStyle: GoogleFonts.sourceSans3(fontWeight: FontWeight.w700, fontSize: 15),
+          textStyle: GoogleFonts.karla(fontWeight: FontWeight.w700, fontSize: 15),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: const Color(0xFFE08A68),
-          textStyle: GoogleFonts.sourceSans3(fontWeight: FontWeight.w700, fontSize: 15),
+          foregroundColor: const Color(0xFF7AB8A8),
+          textStyle: GoogleFonts.karla(fontWeight: FontWeight.w700, fontSize: 15),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
@@ -295,54 +295,54 @@ class VisualTheme {
         titleTextStyle: heading(20, color: nightInk, w: FontWeight.w600),
         contentTextStyle: body(15, color: nightInk.withValues(alpha: 0.7)),
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(color: Color(0xFFE08A68)),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(color: Color(0xFF7AB8A8)),
     );
   }
 
-  /// Writing forms a recipe can take.
+  /// Cupping forms a leaf note can take.
   static const List<String> cueTypes = [
-    'Caption',
-    'Hook',
-    'Outline',
-    'Scene',
-    'Letter',
-    'Lesson',
-    'Product',
-    'Poem',
-    'Brief',
-    'Journal',
-    'Script',
+    'Aroma',
+    'Liquor',
+    'Body',
+    'Origin',
+    'Blend',
+    'Steep',
+    'Pairing',
+    'Story',
+    'Note',
+    'Garden',
+    'Ceremony',
     'Other',
   ];
 
-  /// Draft stages, earliest first.
-  static const List<String> recallLevels = ['Seed', 'Rough', 'Tuned', 'Ready', 'Shelved'];
+  /// Steep stages, earliest first.
+  static const List<String> recallLevels = ['Dry', 'First', 'Settled', 'Cellared', 'Flat'];
 
-  /// Crafts a workshop belongs to.
+  /// Families a caddy belongs to.
   static const List<String> tracks = [
-    'Newsletter',
-    'Product',
-    'Classroom',
-    'Fiction',
-    'Social',
-    'Personal',
-    'Speech',
+    'Green',
+    'Oolong',
+    'Black',
+    'Puerh',
+    'White',
+    'Herbal',
+    'Matcha',
     'General',
   ];
 
   static Color getCategoryColor(String category) {
     const map = {
-      'Caption': clay,
-      'Hook': ochre,
-      'Outline': inkBlue,
-      'Scene': wine,
-      'Letter': moss,
-      'Lesson': sage,
-      'Product': rust,
-      'Poem': Color(0xFF7A5C9E),
-      'Brief': inkBlue,
-      'Journal': Color(0xFF5C7A6E),
-      'Script': Color(0xFFC46B4A),
+      'Aroma': clay,
+      'Liquor': ochre,
+      'Body': inkBlue,
+      'Origin': wine,
+      'Blend': moss,
+      'Steep': sage,
+      'Pairing': rust,
+      'Story': Color(0xFF5C7A9E),
+      'Note': inkBlue,
+      'Garden': Color(0xFF5C8A6E),
+      'Ceremony': Color(0xFFC46B4A),
       'Other': muted,
     };
     return map[category] ?? muted;
@@ -350,15 +350,15 @@ class VisualTheme {
 
   static Color getConditionColor(String condition) {
     switch (condition.toLowerCase()) {
-      case 'seed':
+      case 'dry':
         return inkBlue;
-      case 'rough':
+      case 'first':
         return ochre;
-      case 'tuned':
+      case 'settled':
         return sage;
-      case 'ready':
+      case 'cellared':
         return moss;
-      case 'shelved':
+      case 'flat':
         return wine;
       default:
         return muted;
@@ -367,15 +367,15 @@ class VisualTheme {
 
   static double recallStrength(String condition) {
     switch (condition.toLowerCase()) {
-      case 'seed':
+      case 'dry':
         return 0.22;
-      case 'rough':
+      case 'first':
         return 0.45;
-      case 'tuned':
+      case 'settled':
         return 0.72;
-      case 'ready':
+      case 'cellared':
         return 1.0;
-      case 'shelved':
+      case 'flat':
         return 0.10;
       default:
         return 0.3;
@@ -384,22 +384,22 @@ class VisualTheme {
 
   static IconData trackIcon(String track) {
     switch (track) {
-      case 'Newsletter':
-        return Icons.mail_outline_rounded;
-      case 'Product':
-        return Icons.storefront_outlined;
-      case 'Classroom':
-        return Icons.school_outlined;
-      case 'Fiction':
-        return Icons.auto_stories_outlined;
-      case 'Social':
-        return Icons.forum_outlined;
-      case 'Personal':
-        return Icons.favorite_border_rounded;
-      case 'Speech':
-        return Icons.record_voice_over_outlined;
+      case 'Green':
+        return Icons.eco_outlined;
+      case 'Oolong':
+        return Icons.local_florist_outlined;
+      case 'Black':
+        return Icons.coffee_outlined;
+      case 'Puerh':
+        return Icons.inventory_2_outlined;
+      case 'White':
+        return Icons.cloud_outlined;
+      case 'Herbal':
+        return Icons.spa_outlined;
+      case 'Matcha':
+        return Icons.grass_outlined;
       default:
-        return Icons.edit_note_rounded;
+        return Icons.emoji_food_beverage_outlined;
     }
   }
 }

@@ -120,7 +120,7 @@ class _HomeViewState extends State<HomeView> {
                                   style: VisualTheme.body(13.5,
                                       color: VisualTheme.mutedOf(context), w: FontWeight.w600)),
                               const SizedBox(height: 2),
-                              Text('Desk',
+                              Text('Bench',
                                   style: VisualTheme.display(32, color: VisualTheme.inkOf(context))),
                             ],
                           ),
@@ -213,7 +213,7 @@ class _HomeViewState extends State<HomeView> {
                         Expanded(
                           child: StatBlock(
                             value: '$workshopCount',
-                            label: 'Workshops',
+                            label: 'Caddies',
                             caption: '${_stats?['emptyContainers'] ?? 0} still empty',
                             icon: Icons.folder_open_rounded,
                             tint: VisualTheme.moss,
@@ -453,7 +453,7 @@ class _SquareIcon extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: Theme.of(context).brightness == Brightness.dark
-                ? const Color(0x22E08A68)
+                ? const Color(0x227AB8A8)
                 : const Color(0x1A1C1916),
           ),
         ),

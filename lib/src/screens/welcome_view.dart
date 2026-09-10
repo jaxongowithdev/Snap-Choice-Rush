@@ -21,32 +21,32 @@ class _WelcomeViewState extends State<WelcomeView> {
 
   static const _pages = [
     (
-      'Quietforge',
-      'A private writing studio that lives on this phone. Workshops hold the jobs. Recipes hold the brief. Spark composes the draft — with no signal.',
-      Icons.edit_note_rounded,
+      'Kettleleaf',
+      'A private tea journal on this phone. Caddies hold the families. Leaves hold the cup notes. Cupping writes the tasting — with no signal.',
+      Icons.emoji_food_beverage_rounded,
       VisualTheme.clay,
     ),
     (
-      'Workshops',
-      'One workshop per craft — shop windows, classroom openers, a weekly letter. Give it a code and a recipe target.',
-      Icons.folder_open_rounded,
+      'Caddies',
+      'One caddy per family — morning greens, evening oolongs, a travel tin. Give it a code and a leaf target.',
+      Icons.inventory_2_outlined,
       VisualTheme.moss,
     ),
     (
-      'Recipes',
-      'A recipe is a title, a seed, a form, and optional tags. Attach a mood photo if it helps the voice.',
-      Icons.notes_rounded,
+      'Leaves',
+      'A leaf is a name, a steeping seed, a form (aroma, liquor, body…), and tags. Attach a photo of the dry leaf if you like.',
+      Icons.eco_outlined,
       VisualTheme.inkBlue,
     ),
     (
-      'Spark on the phone',
-      'The local composer fills the form from your seed, then you rewrite: tighten, expand, warmer, formal, shorter. Grade what to keep.',
-      Icons.local_fire_department_rounded,
+      'Cupping on the phone',
+      'The local note-writer fills the form from your seed. Rewrite, then grade the steep: Flat, First, Settled, Cellared.',
+      Icons.local_cafe_outlined,
       VisualTheme.ochre,
     ),
     (
       'Yours alone',
-      'No account, no cloud, no tracking. Workshops, recipes and drafts stay in this app’s storage and export as one file.',
+      'No account, no cloud, no tracking. Caddies, leaves and cupping notes stay in this app’s storage and export as one file.',
       Icons.lock_outline_rounded,
       VisualTheme.sage,
     ),
@@ -72,87 +72,81 @@ class _WelcomeViewState extends State<WelcomeView> {
   }
 
   Future<void> _seedStarterPack(StorageManager storage) async {
-    final shopId = await storage.createContainer(ContainerModel(
-      name: 'Shop window copy',
-      code: 'WKS-01',
-      room: 'Product',
-      shelf: 'Drafting',
+    final greenId = await storage.createContainer(ContainerModel(
+      name: 'Morning greens',
+      code: 'CAD-01',
+      room: 'Green',
+      shelf: 'First flush',
       capacity: 6,
     ));
 
-    const shopSeeds = [
+    const greenLeaves = [
       (
-        'Saturday market opener',
-        'Heirloom tomatoes, still warm. Neighbourhood stall, cash or tap. We close at two.',
-        'Caption',
-        'shop, warm, Saturday'
+        'Longjing, west lake',
+        'Chestnut dry leaf. 80°C, 45 seconds, glass. Second steep sweeter.',
+        'Aroma',
+        'green, chestnut, morning'
       ),
       (
-        'Welcome note for first-time buyers',
-        'They found us from a friend. Thank them. One care tip for the first week. No coupon dump.',
-        'Letter',
-        'buyer, warm'
+        'Sencha asatsuyu',
+        'Steam-green, seaweed snap. Kyusu, 70°C, one minute. Pair with rice.',
+        'Steep',
+        'green, japan, steam'
       ),
       (
-        'One-line product hook',
-        'A linen apron that actually lasts the dinner rush. Made in small batches.',
-        'Hook',
-        'product, bold'
-      ),
-      (
-        'Care card inside the box',
-        'Wash cold, hang dry, linen softens. If a stitch opens, send a photo and we mend it.',
-        'Product',
-        'product, calm'
+        'Gunpowder for travel',
+        'Rolled pellets in a tin. Hotel kettle, lid on, three minutes. No milk.',
+        'Note',
+        'green, travel'
       ),
     ];
 
-    for (final s in shopSeeds) {
+    for (final s in greenLeaves) {
       await storage.createItem(InventoryItemModel(
-        containerId: shopId,
+        containerId: greenId,
         name: s.$1,
         category: s.$3,
         notes: s.$2,
-        condition: 'Seed',
+        condition: 'Dry',
         quantity: 0,
         keywords: s.$4,
-        estimatedValue: VisualTheme.recallStrength('Seed') * 100,
+        estimatedValue: VisualTheme.recallStrength('Dry') * 100,
       ));
     }
 
-    final classId = await storage.createContainer(ContainerModel(
-      name: 'Classroom openers',
-      code: 'WKS-02',
-      room: 'Classroom',
-      shelf: 'Brief',
+    final oolongId = await storage.createContainer(ContainerModel(
+      name: 'Evening oolongs',
+      code: 'CAD-02',
+      room: 'Oolong',
+      shelf: 'Roast',
       capacity: 5,
     ));
 
-    const classSeeds = [
+    const oolongLeaves = [
       (
-        'Five-minute freewrite',
-        'Grade 7. Topic: a place that smells like rain. Share one sentence, not the whole page.',
-        'Lesson',
-        'student, calm, class'
+        'Tieguanyin, light roast',
+        'Orchid on the lid. Gaiwan, 95°C, flash rinse, 20 seconds.',
+        'Ceremony',
+        'oolong, orchid'
       ),
       (
-        'Parent note after the field trip',
-        'Museum was loud and good. Ask what object they would steal for the classroom shelf.',
-        'Letter',
-        'parent, warm'
+        'Dong ding, charcoal',
+        'Warm wood, thick liquor. Small cup. Stop before the roast shouts.',
+        'Liquor',
+        'oolong, roast'
       ),
     ];
 
-    for (final s in classSeeds) {
+    for (final s in oolongLeaves) {
       await storage.createItem(InventoryItemModel(
-        containerId: classId,
+        containerId: oolongId,
         name: s.$1,
         category: s.$3,
         notes: s.$2,
-        condition: 'Seed',
+        condition: 'Dry',
         quantity: 0,
         keywords: s.$4,
-        estimatedValue: VisualTheme.recallStrength('Seed') * 100,
+        estimatedValue: VisualTheme.recallStrength('Dry') * 100,
       ));
     }
   }
@@ -248,13 +242,13 @@ class _WelcomeViewState extends State<WelcomeView> {
                             height: 22,
                             child: CircularProgressIndicator(strokeWidth: 2.4, color: Colors.white),
                           )
-                        : const Text('Load the starter workshops'),
+                        : const Text('Load the morning greens'),
                   ),
                   const SizedBox(height: 10),
                   OutlinedButton(
                     onPressed: _seeding ? null : () => _finish(),
                     style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(50)),
-                    child: const Text('Start with a blank desk'),
+                    child: const Text('Start with a blank bench'),
                   ),
                 ] else
                   FilledButton(

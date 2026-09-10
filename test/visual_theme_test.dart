@@ -6,18 +6,18 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('draft stages', () {
-    test('strength rises from shelved to ready', () {
-      final shelved = VisualTheme.recallStrength('Shelved');
-      final seed = VisualTheme.recallStrength('Seed');
-      final rough = VisualTheme.recallStrength('Rough');
-      final tuned = VisualTheme.recallStrength('Tuned');
-      final ready = VisualTheme.recallStrength('Ready');
+    test('strength rises from flat to cellared', () {
+      final flat = VisualTheme.recallStrength('Flat');
+      final dry = VisualTheme.recallStrength('Dry');
+      final first = VisualTheme.recallStrength('First');
+      final settled = VisualTheme.recallStrength('Settled');
+      final cellared = VisualTheme.recallStrength('Cellared');
 
-      expect(shelved, lessThan(seed));
-      expect(seed, lessThan(rough));
-      expect(rough, lessThan(tuned));
-      expect(tuned, lessThan(ready));
-      expect(ready, 1.0);
+      expect(flat, lessThan(dry));
+      expect(dry, lessThan(first));
+      expect(first, lessThan(settled));
+      expect(settled, lessThan(cellared));
+      expect(cellared, 1.0);
     });
 
     test('every stage has its own colour', () {

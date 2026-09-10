@@ -1,42 +1,28 @@
 APP NAME
-Quietforge
+Kettleleaf
 
 SUBTITLE
-On-device writing studio
+Tea notes, fully offline
 
 KEYWORDS
-writing,draft,offline,prompt,workshop,copy,lesson,caption,journal,rewrite,studio,notes,private
+tea,tasting,oolong,green,puerh,cupping,steep,caddy,leaves,aroma,journal,offline,private
 
 PROMOTION
-File a recipe, spark a draft on this phone, then rewrite it — tighten, expand, warmer, formal, shorter. Keep what you would send. No account, no Wi-Fi.
+File a leaf, cup it on this phone, then rewrite the note. Keep what you’d steep again. No account, no Wi-Fi.
 
 DESCRIPTION
-Quietforge is a private writing studio that lives on your phone.
+Kettleleaf is a private tea journal that lives on your phone.
 
-A workshop is one craft you write for — shop windows, classroom openers, a weekly letter. Give it a code, pick a craft, and set how many recipes you are aiming for.
+A caddy is one family you drink — morning greens, evening oolongs, a travel tin. Give it a code, pick a family, and set how many leaves you are aiming for.
 
-A recipe is the job: a title, a seed of facts, a form (caption, hook, letter, lesson, product, poem and more), optional tags for voice and audience, and a mood picture if it helps.
+A leaf is the cup: a name, a steeping seed, a form (aroma, liquor, body, origin, blend, steep, pairing and more), optional tags, and a photo of the dry leaf if it helps.
 
-Spark composes on the device. It fills the form from your seed and tags, then you apply rewrite moves — Tighten, Expand, Warmer, Formal, Shorter. Grade the draft: Shelve, Rough, Tuned, or Ready. Kept drafts are saved on the recipe.
+Cupping writes on the device. It fills the form from your seed, then you rewrite. Grade the steep: Flat, First, Settled, or Cellared. Kept notes are saved on the leaf.
 
-There is no cloud model and no network call. Quietforge is a studio and a local composer, not a chatbot.
-
-WHAT YOU GET
-
-• Workshops grouped by craft — newsletter, product, classroom, fiction, social, personal, speech
-• Recipes with a seed, a form, tags and an optional mood photo
-• An on-device composer with twelve forms and five rewrite moves
-• Spark sessions that queue seeds first, or only the recipes you pinned to the hearth
-• Five draft stages — Seed, Rough, Tuned, Ready, Shelved — with a keep-rate at the end of every session
-• A hearth for the pieces you would actually send
-• Ledger with draft-stage spread, breakdown by craft and by form, and total sparks
-• Move log recording every time a recipe is filed under another workshop
-• Search across titles, seeds, tags and forms
-• Paper daylight, lamp light, or match the phone
-• Export everything to a single JSON file and restore it whenever you want
+There is no cloud model and no network call.
 
 PRIVATE BY DESIGN
 
-There is no account and no sign-in. Quietforge makes no network calls at all — workshops, recipes, photos and spark history live in this app's own storage on your phone. Camera and photo library access are optional and used only when you attach a picture to a recipe.
+No account and no sign-in. Kettleleaf makes no network calls. Camera and photo library are optional and used only when you attach a picture to a leaf.
 
-Good for shop owners writing a window card, teachers drafting a lesson opener, and anyone who wants a draft without handing the brief to a server.
+Good for people who steep at the desk, pack a travel tin, or want tasting notes without handing the garden to a server.

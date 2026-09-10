@@ -1,4 +1,4 @@
-# Quietforge — example app
+# Kettleleaf — example app
 
 Run the studio from this folder:
 

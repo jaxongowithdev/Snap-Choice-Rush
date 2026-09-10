@@ -38,10 +38,10 @@ class _DrillViewState extends State<DrillView> {
   String _draft = '';
   bool _composed = false;
   final Map<String, int> _tally = {
-    'Shelved': 0,
-    'Rough': 0,
-    'Tuned': 0,
-    'Ready': 0,
+    'Flat': 0,
+    'First': 0,
+    'Settled': 0,
+    'Cellared': 0,
   };
 
   @override
@@ -65,7 +65,7 @@ class _DrillViewState extends State<DrillView> {
         _workshops = workshops;
         _counts = counts;
         _hearthCount = hearth.length;
-        _needCount = weak.where((c) => c.condition != 'Ready').length;
+        _needCount = weak.where((c) => c.condition != 'Cellared').length;
         _isLoading = false;
       });
     } catch (e) {
@@ -129,7 +129,7 @@ class _DrillViewState extends State<DrillView> {
     var notes = recipe.notes;
     if (_composed &&
         _draft.trim().isNotEmpty &&
-        (level == 'Ready' || level == 'Tuned' || level == 'Rough')) {
+        (level == 'Cellared' || level == 'Settled' || level == 'First')) {
       final seed = (recipe.notes ?? '').split(RegExp(r'\n— SPARK —\n')).first.trim();
       notes = '$seed\n\n— SPARK —\n$_draft'.trim();
     }
@@ -174,7 +174,7 @@ class _DrillViewState extends State<DrillView> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(18, 6, 18, 28),
       children: [
-        Text('Spark', style: VisualTheme.display(32, color: VisualTheme.inkOf(context))),
+        Text('Cupping', style: VisualTheme.display(32, color: VisualTheme.inkOf(context))),
         const SizedBox(height: 4),
         Text('Compose on this phone. Rewrite. Keep what you would actually send.',
             style: VisualTheme.body(14.5, color: VisualTheme.mutedOf(context))),
@@ -184,7 +184,7 @@ class _DrillViewState extends State<DrillView> {
             icon: Icons.local_fire_department_rounded,
             tint: VisualTheme.clay,
             title: 'Nothing to spark yet',
-            body: 'File a recipe into a workshop. Spark uses the title, seed, form and tags.',
+            body: 'File a leaf into a caddy. Cupping uses the name, seed, form and tags.',
           )
         else ...[
           Row(
@@ -403,10 +403,10 @@ class _DrillViewState extends State<DrillView> {
                     Row(
                       children: [
                         for (final g in const [
-                          ('Shelved', 'Shelve'),
-                          ('Rough', 'Rough'),
-                          ('Tuned', 'Tuned'),
-                          ('Ready', 'Ready'),
+                          ('Flat', 'Flat'),
+                          ('First', 'First'),
+                          ('Settled', 'Settled'),
+                          ('Cellared', 'Keep'),
                         ]) ...[
                           Expanded(
                             child: _GradeButton(
@@ -415,7 +415,7 @@ class _DrillViewState extends State<DrillView> {
                               onTap: () => _grade(g.$1),
                             ),
                           ),
-                          if (g.$1 != 'Ready') const SizedBox(width: 8),
+                          if (g.$1 != 'Cellared') const SizedBox(width: 8),
                         ],
                       ],
                     ),
@@ -431,8 +431,8 @@ class _DrillViewState extends State<DrillView> {
 
   Widget _buildSummary() {
     final done = _queue.length;
-    final ready = _tally['Ready'] ?? 0;
-    final tuned = _tally['Tuned'] ?? 0;
+    final ready = _tally['Cellared'] ?? 0;
+    final tuned = _tally['Settled'] ?? 0;
     final score = done == 0 ? 0.0 : (ready + tuned * 0.6) / done;
 
     return ListView(
@@ -468,7 +468,7 @@ class _DrillViewState extends State<DrillView> {
         SheetCard(
           child: Column(
             children: [
-              for (final entry in const ['Ready', 'Tuned', 'Rough', 'Shelved'])
+              for (final entry in const ['Cellared', 'Settled', 'First', 'Flat'])
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 7),
                   child: Row(
@@ -506,7 +506,7 @@ class _DrillViewState extends State<DrillView> {
             backgroundColor: VisualTheme.clay,
             minimumSize: const Size.fromHeight(54),
           ),
-          child: const Text('Back to Spark'),
+          child: const Text('Back to Cupping'),
         ),
         const SizedBox(height: 10),
         OutlinedButton(

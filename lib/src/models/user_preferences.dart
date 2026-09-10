@@ -1,4 +1,4 @@
-// Quietforge — local preferences
+// Kettleleaf — local preferences
 class UserPreferences {
   final String theme; // 'light', 'dark', 'system'
   final String language; // 'en', 'vi', etc.
@@ -9,8 +9,8 @@ class UserPreferences {
   UserPreferences({
     this.theme = 'system',
     this.language = 'en',
-    this.capacityUnit = 'recipes',
-    this.defaultBoxPrefix = 'WKS',
+    this.capacityUnit = 'leaves',
+    this.defaultBoxPrefix = 'CAD',
     this.showOnboarding = true,
   });
 
@@ -28,8 +28,8 @@ class UserPreferences {
     return UserPreferences(
       theme: map['theme'] as String? ?? 'system',
       language: map['language'] as String? ?? 'en',
-      capacityUnit: map['capacityUnit'] as String? ?? 'recipes',
-      defaultBoxPrefix: map['defaultBoxPrefix'] as String? ?? 'WKS',
+      capacityUnit: map['capacityUnit'] as String? ?? 'leaves',
+      defaultBoxPrefix: map['defaultBoxPrefix'] as String? ?? 'CAD',
       showOnboarding: (map['showOnboarding'] as int? ?? 1) == 1,
     );
   }

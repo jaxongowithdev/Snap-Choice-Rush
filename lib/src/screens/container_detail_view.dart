@@ -78,7 +78,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
 
     final w = _workshop!;
     final recipes = _recipes ?? [];
-    final ready = recipes.where((c) => c.condition == 'Ready').length;
+    final ready = recipes.where((c) => c.condition == 'Cellared').length;
     final pct = w.capacity == 0 ? 0.0 : (recipes.length / w.capacity).clamp(0.0, 1.0);
 
     return Scaffold(

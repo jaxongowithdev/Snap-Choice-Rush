@@ -1,12 +1,12 @@
-# Quietforge
+# Kettleleaf
 
 A private writing studio that lives on your phone. Build **workshops** around one craft, file **recipes** with a seed and a form, then **spark** a draft on-device and rewrite it.
 
-**App Name:** Quietforge
+**App Name:** Kettleleaf
 **Subtitle:** On-device writing studio
 **Category:** Productivity
-**Bundle ID:** com.app.quietforge.studio
-**Database:** `quietforge.db`
+**Bundle ID:** com.app.kettleleaf.notes
+**Database:** `kettleleaf.db`
 
 ## Shape of the app
 

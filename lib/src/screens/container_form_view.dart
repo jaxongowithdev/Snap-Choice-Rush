@@ -119,7 +119,7 @@ class _ContainerFormViewState extends State<ContainerFormView> {
                         textCapitalization: TextCapitalization.characters,
                         decoration: const InputDecoration(
                           labelText: 'Workshop code',
-                          hintText: 'e.g. WKS-04',
+                          hintText: 'e.g. CAD-04',
                         ),
                         validator: (v) =>
                             (v == null || v.trim().isEmpty) ? 'Add a short code' : null,

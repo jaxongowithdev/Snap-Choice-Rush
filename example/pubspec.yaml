@@ -1,5 +1,5 @@
-name: quietforge_example
-description: "Quietforge - On-device writing studio"
+name: kettleleaf_example
+description: "Kettleleaf - On-device writing studio"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

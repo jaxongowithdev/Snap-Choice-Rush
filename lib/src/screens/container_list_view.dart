@@ -91,7 +91,7 @@ class _ContainerListViewState extends State<ContainerListView> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: Text('Workshops',
+                                  child: Text('Caddies',
                                       style: VisualTheme.display(32,
                                           color: VisualTheme.inkOf(context))),
                                 ),

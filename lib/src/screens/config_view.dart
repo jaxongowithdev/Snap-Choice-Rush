@@ -53,10 +53,10 @@ class _ConfigViewState extends State<ConfigView> {
           XFile.fromData(
             Uint8List.fromList(utf8.encode(jsonString)),
             mimeType: 'application/json',
-            name: 'quietforge_${DateTime.now().millisecondsSinceEpoch}.json',
+            name: 'kettleleaf_${DateTime.now().millisecondsSinceEpoch}.json',
           )
         ],
-        text: 'Quietforge backup',
+        text: 'Kettleleaf backup',
       );
       if (mounted) {
         ScaffoldMessenger.of(context)
@@ -139,7 +139,7 @@ class _ConfigViewState extends State<ConfigView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Quietforge',
+                        Text('Kettleleaf',
                             style: VisualTheme.display(22, color: Colors.white)),
                         const SizedBox(height: 3),
                         Text('Version 1.0.0 · on-device',
@@ -205,18 +205,18 @@ class _ConfigViewState extends State<ConfigView> {
               ),
             ),
 
-            const DeskHead(title: 'How Spark grades a draft'),
+            const DeskHead(title: 'How Cupping grades a steep'),
             SheetCard(
               fill: VisualTheme.veilOf(context),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   for (final line in const [
-                    ('Seed', 'Filed, not yet composed.'),
-                    ('Rough', 'Usable bones. Needs a pass.'),
-                    ('Tuned', 'You would send it after one check.'),
-                    ('Ready', 'You would send it as written.'),
-                    ('Shelved', 'Not this. Back of the queue.'),
+                    ('Dry', 'In the tin — not yet cupped.'),
+                    ('First', 'First steep written.'),
+                    ('Settled', 'You would steep it for a guest.'),
+                    ('Cellared', 'A cup you keep going back to.'),
+                    ('Flat', 'Past it — back of the queue.'),
                   ])
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 6),

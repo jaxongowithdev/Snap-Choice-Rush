@@ -15,36 +15,36 @@ void main() {
       ),
     ));
 
-    expect(find.byIcon(Icons.desk_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.folder_open_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.local_fire_department_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.table_restaurant_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.inventory_2_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.emoji_food_beverage_rounded), findsOneWidget);
     expect(find.byIcon(Icons.bar_chart_rounded), findsOneWidget);
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
 
-    expect(find.text('Desk'), findsOneWidget);
-    expect(find.text('Workshops'), findsOneWidget);
-    expect(find.text('Spark'), findsOneWidget);
+    expect(find.text('Bench'), findsOneWidget);
+    expect(find.text('Caddies'), findsOneWidget);
+    expect(find.text('Cupping'), findsOneWidget);
 
-    await tester.tap(find.byIcon(Icons.local_fire_department_rounded));
+    await tester.tap(find.byIcon(Icons.emoji_food_beverage_rounded));
     expect(picked, 2);
   });
 
-  testWidgets('a recipe row renders its draft stage', (tester) async {
+  testWidgets('a leaf row renders its steep stage', (tester) async {
     await tester.pumpWidget(MaterialApp(
       theme: VisualTheme.lightTheme,
       home: Scaffold(
         body: RecipeRow(
-          kind: 'Caption',
-          title: 'Saturday market opener',
-          meta: 'Caption · 3 sparks',
-          recall: 'Rough',
+          kind: 'Aroma',
+          title: 'Longjing, west lake',
+          meta: 'Aroma · 3 cuppings',
+          recall: 'First',
           accent: VisualTheme.clay,
           onTap: () {},
         ),
       ),
     ));
 
-    expect(find.text('Saturday market opener'), findsOneWidget);
-    expect(find.text('Rough'), findsOneWidget);
+    expect(find.text('Longjing, west lake'), findsOneWidget);
+    expect(find.text('First'), findsOneWidget);
   });
 }

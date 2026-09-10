@@ -75,11 +75,11 @@ class DeskRail extends StatelessWidget {
   final ValueChanged<int> onSelect;
   const DeskRail({super.key, required this.index, required this.onSelect});
 
-  static const _labels = ['Desk', 'Workshops', 'Spark', 'Ledger', 'Atelier'];
+  static const _labels = ['Bench', 'Caddies', 'Cupping', 'Log', 'Shelf'];
   static const _icons = [
-    Icons.desk_rounded,
-    Icons.folder_open_rounded,
-    Icons.local_fire_department_rounded,
+    Icons.table_restaurant_outlined,
+    Icons.inventory_2_outlined,
+    Icons.emoji_food_beverage_rounded,
     Icons.bar_chart_rounded,
     Icons.settings_outlined,
   ];
@@ -87,7 +87,7 @@ class DeskRail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final line = dark ? const Color(0x33E08A68) : const Color(0x221C1916);
+    final line = dark ? const Color(0x337AB8A8) : const Color(0x221C1916);
     return Material(
       color: dark ? VisualTheme.nightSurface : VisualTheme.surface,
       child: SafeArea(
@@ -276,7 +276,7 @@ class SheetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final border = dark ? const Color(0x22E08A68) : const Color(0x1A1C1916);
+    final border = dark ? const Color(0x227AB8A8) : const Color(0x1A1C1916);
     final body = Container(
       padding: padding,
       decoration: BoxDecoration(
@@ -474,7 +474,7 @@ class RecipeRow extends StatelessWidget {
             borderRadius: BorderRadius.circular(VisualTheme.rL),
             border: Border.all(
               color: Theme.of(context).brightness == Brightness.dark
-                  ? const Color(0x22E08A68)
+                  ? const Color(0x227AB8A8)
                   : const Color(0x1A1C1916),
             ),
           ),
@@ -645,7 +645,7 @@ class EmptyDesk extends StatelessWidget {
 }
 
 /// Kept so older call sites and tests that still import chrome names compile
-/// after the atelier rewrite. Prefer the Quietforge names above.
+/// after the atelier rewrite. Prefer the Kettleleaf names above.
 typedef StarDust = PaperGrain;
 typedef OrbitDock = DeskRail;
 typedef SectionHead = DeskHead;

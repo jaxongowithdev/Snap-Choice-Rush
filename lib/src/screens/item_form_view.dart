@@ -29,8 +29,8 @@ class _ItemFormViewState extends State<ItemFormView> {
 
   List<ContainerModel>? _workshops;
   int? _workshopId;
-  String _category = 'Caption';
-  String _stage = 'Seed';
+  String _category = 'Aroma';
+  String _stage = 'Dry';
   String? _photoPath;
   bool _pinned = false;
 
@@ -40,10 +40,10 @@ class _ItemFormViewState extends State<ItemFormView> {
     _nameController = TextEditingController(text: widget.item?.name);
     _notesController = TextEditingController(text: widget.item?.notes);
     _tagsController = TextEditingController(text: widget.item?.keywords);
-    _category = widget.item?.category ?? 'Caption';
+    _category = widget.item?.category ?? 'Aroma';
     if (!VisualTheme.cueTypes.contains(_category)) _category = 'Other';
-    _stage = widget.item?.condition ?? 'Seed';
-    if (!VisualTheme.recallLevels.contains(_stage)) _stage = 'Seed';
+    _stage = widget.item?.condition ?? 'Dry';
+    if (!VisualTheme.recallLevels.contains(_stage)) _stage = 'Dry';
     _workshopId = widget.item?.containerId ?? widget.preselectedContainerId;
     _photoPath = widget.item?.photoPath;
     _pinned = widget.item?.isFavorite ?? false;

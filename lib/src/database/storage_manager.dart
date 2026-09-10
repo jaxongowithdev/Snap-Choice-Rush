@@ -13,7 +13,7 @@ class StorageManager {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('quietforge.db');
+    _database = await _initDB('kettleleaf.db');
     return _database!;
   }
 
@@ -52,7 +52,7 @@ class StorageManager {
         name TEXT NOT NULL,
         category TEXT NOT NULL,
         quantity INTEGER NOT NULL DEFAULT 1,
-        condition TEXT NOT NULL DEFAULT 'Seed',
+        condition TEXT NOT NULL DEFAULT 'Dry',
         purchaseDate TEXT,
         estimatedValue REAL,
         notes TEXT,
@@ -84,8 +84,8 @@ class StorageManager {
         id INTEGER PRIMARY KEY CHECK (id = 1),
         theme TEXT NOT NULL DEFAULT 'system',
         language TEXT NOT NULL DEFAULT 'en',
-        capacityUnit TEXT NOT NULL DEFAULT 'recipes',
-        defaultBoxPrefix TEXT NOT NULL DEFAULT 'WKS',
+        capacityUnit TEXT NOT NULL DEFAULT 'leaves',
+        defaultBoxPrefix TEXT NOT NULL DEFAULT 'CAD',
         showOnboarding INTEGER NOT NULL DEFAULT 1
       )
     ''');
@@ -364,10 +364,10 @@ class StorageManager {
       SELECT * FROM items
       $where
       ORDER BY CASE condition
-        WHEN 'Shelved' THEN 0
-        WHEN 'Seed' THEN 1
-        WHEN 'Rough' THEN 2
-        WHEN 'Tuned' THEN 3
+        WHEN 'Flat' THEN 0
+        WHEN 'Dry' THEN 1
+        WHEN 'First' THEN 2
+        WHEN 'Settled' THEN 3
         ELSE 4 END, updatedAt ASC
       LIMIT $limit
     ''');
@@ -388,7 +388,7 @@ class StorageManager {
   Future<int> getLockedCount() async {
     final db = await database;
     return Sqflite.firstIntValue(await db.rawQuery(
-          "SELECT COUNT(*) FROM items WHERE condition = 'Ready'",
+          "SELECT COUNT(*) FROM items WHERE condition = 'Cellared'",
         )) ??
         0;
   }

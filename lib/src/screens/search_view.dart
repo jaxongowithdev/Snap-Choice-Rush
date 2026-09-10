@@ -82,7 +82,7 @@ class _SearchViewState extends State<SearchView> {
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: Theme.of(context).brightness == Brightness.dark
-                                ? const Color(0x22E08A68)
+                                ? const Color(0x227AB8A8)
                                 : const Color(0x1A1C1916),
                           ),
                         ),

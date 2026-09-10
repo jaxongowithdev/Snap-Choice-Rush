@@ -1,5 +1,5 @@
 name: user_screen
-description: "Quietforge - A private on-device writing studio. File recipes, spark drafts locally, rewrite and keep what you would send. Completely offline."
+description: "Kettleleaf - A private offline tea journal. File leaves, cup notes on this phone, rewrite and keep what you would steep again."
 version: 1.0.0+1
 
 environment:

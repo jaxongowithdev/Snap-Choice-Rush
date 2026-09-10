@@ -1,4 +1,4 @@
-/// Quietforge — private on-device writing studio.
+/// Kettleleaf — private on-device writing studio.
 library;
 
 export 'src/screens/user_screen.dart';
