@@ -1,16 +1,16 @@
-// Orbit Recall — local preferences
+// Quietforge — local preferences
 class UserPreferences {
   final String theme; // 'light', 'dark', 'system'
   final String language; // 'en', 'vi', etc.
-  final String capacityUnit; // label for a mission slot
-  final String defaultBoxPrefix; // mission code prefix
+  final String capacityUnit; // label for a workshop slot
+  final String defaultBoxPrefix; // workshop code prefix
   final bool showOnboarding;
 
   UserPreferences({
     this.theme = 'system',
     this.language = 'en',
-    this.capacityUnit = 'cues',
-    this.defaultBoxPrefix = 'MSN',
+    this.capacityUnit = 'recipes',
+    this.defaultBoxPrefix = 'WKS',
     this.showOnboarding = true,
   });
 
@@ -28,8 +28,8 @@ class UserPreferences {
     return UserPreferences(
       theme: map['theme'] as String? ?? 'system',
       language: map['language'] as String? ?? 'en',
-      capacityUnit: map['capacityUnit'] as String? ?? 'cues',
-      defaultBoxPrefix: map['defaultBoxPrefix'] as String? ?? 'MSN',
+      capacityUnit: map['capacityUnit'] as String? ?? 'recipes',
+      defaultBoxPrefix: map['defaultBoxPrefix'] as String? ?? 'WKS',
       showOnboarding: (map['showOnboarding'] as int? ?? 1) == 1,
     );
   }

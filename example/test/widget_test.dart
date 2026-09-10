@@ -3,48 +3,48 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:user_screen/user_screen.dart';
 
 void main() {
-  testWidgets('the dock shows five tabs and reports taps', (tester) async {
+  testWidgets('the desk rail shows five labelled tabs and reports taps', (tester) async {
     var picked = -1;
     await tester.pumpWidget(MaterialApp(
       theme: VisualTheme.lightTheme,
       home: Scaffold(
         body: Align(
           alignment: Alignment.bottomCenter,
-          child: OrbitDock(index: 0, onSelect: (i) => picked = i),
+          child: DeskRail(index: 0, onSelect: (i) => picked = i),
         ),
       ),
     ));
 
-    expect(find.byIcon(Icons.dashboard_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.rocket_launch_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.bolt_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.insights_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.tune_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.desk_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.folder_open_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.local_fire_department_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.bar_chart_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
 
-    // Only the active tab shows its label.
-    expect(find.text('Deck'), findsOneWidget);
-    expect(find.text('Missions'), findsNothing);
+    expect(find.text('Desk'), findsOneWidget);
+    expect(find.text('Workshops'), findsOneWidget);
+    expect(find.text('Spark'), findsOneWidget);
 
-    await tester.tap(find.byIcon(Icons.bolt_rounded));
+    await tester.tap(find.byIcon(Icons.local_fire_department_rounded));
     expect(picked, 2);
   });
 
-  testWidgets('a cue tile renders its recall level', (tester) async {
+  testWidgets('a recipe row renders its draft stage', (tester) async {
     await tester.pumpWidget(MaterialApp(
       theme: VisualTheme.lightTheme,
       home: Scaffold(
-        body: CueTile(
-          kind: 'Image',
-          title: 'The rusty red planet',
-          meta: 'Image · 3 reps',
-          recall: 'Shaky',
-          accent: VisualTheme.flare,
+        body: RecipeRow(
+          kind: 'Caption',
+          title: 'Saturday market opener',
+          meta: 'Caption · 3 sparks',
+          recall: 'Rough',
+          accent: VisualTheme.clay,
           onTap: () {},
         ),
       ),
     ));
 
-    expect(find.text('The rusty red planet'), findsOneWidget);
-    expect(find.text('Shaky'), findsOneWidget);
+    expect(find.text('Saturday market opener'), findsOneWidget);
+    expect(find.text('Rough'), findsOneWidget);
   });
 }

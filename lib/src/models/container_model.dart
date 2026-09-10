@@ -1,7 +1,7 @@
-// A Mission — one themed set of cues the cadet is training on.
-// `room`  -> track (Planets, Moons, Deep Sky ...)
-// `shelf` -> stage (Launch, Orbit, Cruise, Landing, Docked)
-// `capacity` -> target number of cues
+// A Workshop — one writing project that holds recipes.
+// `room`  -> craft (Newsletter, Product, Classroom ...)
+// `shelf` -> stage (Brief, Drafting, Revising, Polished, Archived)
+// `capacity` -> target number of recipes
 class ContainerModel {
   final int? id;
   final String name;

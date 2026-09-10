@@ -1,4 +1,4 @@
-// Reassign log — a cue moving from one mission to another
+// Relocate log — a recipe moving from one workshop to another
 class TransferHistoryModel {
   final int? id;
   final int itemId;

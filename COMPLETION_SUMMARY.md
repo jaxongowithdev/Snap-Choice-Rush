@@ -1,3 +1,3 @@
-# Orbit Recall
+# Quietforge
 
-Offline memory-training deck for astronomy topics. Light bento UI on indigo/violet with orange, mint and rose accents; Outfit + Nunito; floating pill dock with five tabs. Education App Store category. Listing copy in `meta-data-apple-store.txt`.
+Private on-device writing studio. Warm paper UI in terracotta and forest; Fraunces + Source Sans 3; full-width desk rail with five labelled tabs. Productivity App Store category. Listing copy in `meta-data-apple-store.txt`.

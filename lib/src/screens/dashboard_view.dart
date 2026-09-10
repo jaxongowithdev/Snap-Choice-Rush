@@ -33,16 +33,23 @@ class DashboardViewState extends State<DashboardView> {
   }
 
   @override
+  void didUpdateWidget(DashboardView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.onSettingsChanged != widget.onSettingsChanged) {
+      _screens[4] = ConfigView(onSettingsChanged: widget.onSettingsChanged);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
-      body: StarDust(
+      body: PaperGrain(
         child: Column(
           children: [
             Expanded(
               child: IndexedStack(index: _selectedIndex, children: _screens),
             ),
-            OrbitDock(index: _selectedIndex, onSelect: go),
+            DeskRail(index: _selectedIndex, onSelect: go),
           ],
         ),
       ),

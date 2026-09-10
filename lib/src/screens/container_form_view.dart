@@ -18,10 +18,10 @@ class _ContainerFormViewState extends State<ContainerFormView> {
   late TextEditingController _nameController;
   late TextEditingController _codeController;
   late TextEditingController _capacityController;
-  String _track = VisualTheme.tracks.first;
-  String _stage = 'Launch';
+  String _craft = VisualTheme.tracks.first;
+  String _stage = 'Brief';
 
-  static const _stages = ['Launch', 'Orbit', 'Cruise', 'Landing', 'Docked'];
+  static const _stages = ['Brief', 'Drafting', 'Revising', 'Polished', 'Archived'];
 
   @override
   void initState() {
@@ -29,13 +29,13 @@ class _ContainerFormViewState extends State<ContainerFormView> {
     _nameController = TextEditingController(text: widget.container?.name);
     _codeController = TextEditingController(text: widget.container?.code);
     _capacityController =
-        TextEditingController(text: widget.container?.capacity.toString() ?? '12');
+        TextEditingController(text: widget.container?.capacity.toString() ?? '8');
     final room = widget.container?.room;
-    _track = (room != null && VisualTheme.tracks.contains(room))
+    _craft = (room != null && VisualTheme.tracks.contains(room))
         ? room
         : VisualTheme.tracks.first;
     final shelf = widget.container?.shelf;
-    _stage = (shelf != null && _stages.contains(shelf)) ? shelf : 'Launch';
+    _stage = (shelf != null && _stages.contains(shelf)) ? shelf : 'Brief';
   }
 
   @override
@@ -48,27 +48,27 @@ class _ContainerFormViewState extends State<ContainerFormView> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    final mission = ContainerModel(
+    final workshop = ContainerModel(
       id: widget.container?.id,
       name: _nameController.text.trim(),
       code: _codeController.text.trim().toUpperCase(),
-      room: _track,
+      room: _craft,
       shelf: _stage,
       capacity: int.parse(_capacityController.text.trim()),
       createdAt: widget.container?.createdAt,
     );
     try {
       if (widget.container == null) {
-        await _storage.createContainer(mission);
+        await _storage.createContainer(workshop);
       } else {
-        await _storage.updateContainer(mission);
+        await _storage.updateContainer(workshop);
       }
       if (mounted) Navigator.pop(context, true);
     } catch (e) {
-      debugPrint('Could not save mission: $e');
+      debugPrint('Could not save workshop: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('That mission code is already in use.')),
+          const SnackBar(content: Text('That workshop code is already in use.')),
         );
       }
     }
@@ -78,7 +78,7 @@ class _ContainerFormViewState extends State<ContainerFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.container != null;
     return Scaffold(
-      body: StarDust(
+      body: PaperGrain(
         child: SafeArea(
           child: Form(
             key: _formKey,
@@ -93,24 +93,24 @@ class _ContainerFormViewState extends State<ContainerFormView> {
                     ),
                   ],
                 ),
-                Text(isEditing ? 'Edit mission' : 'New mission',
+                Text(isEditing ? 'Edit workshop' : 'New workshop',
                     style: VisualTheme.display(30, color: VisualTheme.inkOf(context))),
                 const SizedBox(height: 6),
-                Text('Name the topic, give it a code, set how many cues you are aiming for.',
+                Text('Name the craft, give it a code, set how many recipes you are aiming for.',
                     style: VisualTheme.body(14, color: VisualTheme.mutedOf(context))),
-                const SizedBox(height: 24),
-                BentoTile(
+                const SizedBox(height: 22),
+                SheetCard(
                   child: Column(
                     children: [
                       TextFormField(
                         key: const ValueKey('name_field'),
                         controller: _nameController,
                         decoration: const InputDecoration(
-                          labelText: 'Mission name',
-                          hintText: 'e.g. Moons of Jupiter',
+                          labelText: 'Workshop name',
+                          hintText: 'e.g. Shop window copy',
                         ),
                         validator: (v) =>
-                            (v == null || v.trim().isEmpty) ? 'Name this mission' : null,
+                            (v == null || v.trim().isEmpty) ? 'Name this workshop' : null,
                       ),
                       const SizedBox(height: 14),
                       TextFormField(
@@ -118,8 +118,8 @@ class _ContainerFormViewState extends State<ContainerFormView> {
                         controller: _codeController,
                         textCapitalization: TextCapitalization.characters,
                         decoration: const InputDecoration(
-                          labelText: 'Mission code',
-                          hintText: 'e.g. MSN-04',
+                          labelText: 'Workshop code',
+                          hintText: 'e.g. WKS-04',
                         ),
                         validator: (v) =>
                             (v == null || v.trim().isEmpty) ? 'Add a short code' : null,
@@ -129,7 +129,7 @@ class _ContainerFormViewState extends State<ContainerFormView> {
                         key: const ValueKey('capacity_field'),
                         controller: _capacityController,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(labelText: 'Target cue count'),
+                        decoration: const InputDecoration(labelText: 'Target recipe count'),
                         validator: (v) {
                           final n = int.tryParse(v?.trim() ?? '');
                           return (n == null || n <= 0) ? 'Use a positive number' : null;
@@ -138,7 +138,7 @@ class _ContainerFormViewState extends State<ContainerFormView> {
                     ],
                   ),
                 ),
-                const SectionHead(title: 'Track'),
+                const DeskHead(title: 'Craft'),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -146,12 +146,12 @@ class _ContainerFormViewState extends State<ContainerFormView> {
                       .map((t) => _Choice(
                             label: t,
                             icon: VisualTheme.trackIcon(t),
-                            selected: _track == t,
-                            onTap: () => setState(() => _track = t),
+                            selected: _craft == t,
+                            onTap: () => setState(() => _craft = t),
                           ))
                       .toList(),
                 ),
-                const SectionHead(title: 'Stage'),
+                const DeskHead(title: 'Stage'),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -167,8 +167,8 @@ class _ContainerFormViewState extends State<ContainerFormView> {
                 FilledButton(
                   key: const ValueKey('save_button'),
                   onPressed: _save,
-                  style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
-                  child: Text(isEditing ? 'Save mission' : 'Launch mission'),
+                  style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(54)),
+                  child: Text(isEditing ? 'Save workshop' : 'Open workshop'),
                 ),
               ],
             ),
@@ -197,24 +197,23 @@ class _Choice extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 170),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 9),
         decoration: BoxDecoration(
-          color: selected ? VisualTheme.nova : VisualTheme.surfaceOf(context),
-          borderRadius: BorderRadius.circular(18),
+          color: selected ? VisualTheme.clay : VisualTheme.surfaceOf(context),
+          borderRadius: BorderRadius.circular(6),
+          border: selected ? null : Border.all(color: const Color(0x1A1C1916)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
               Icon(icon,
-                  size: 15,
-                  color: selected ? Colors.white : VisualTheme.mutedOf(context)),
+                  size: 14, color: selected ? Colors.white : VisualTheme.mutedOf(context)),
               const SizedBox(width: 6),
             ],
             Text(label,
                 style: VisualTheme.heading(13.5,
-                    color: selected ? Colors.white : VisualTheme.inkOf(context),
-                    w: FontWeight.w700)),
+                    color: selected ? Colors.white : VisualTheme.inkOf(context))),
           ],
         ),
       ),

@@ -16,8 +16,8 @@ class TransferLogView extends StatefulWidget {
 class _TransferLogViewState extends State<TransferLogView> {
   final _storage = StorageManager.instance;
   List<TransferHistoryModel>? _logs;
-  final Map<int, String> _cueNames = {};
-  final Map<int, String> _missionNames = {};
+  final Map<int, String> _recipeNames = {};
+  final Map<int, String> _workshopNames = {};
   bool _isLoading = true;
 
   @override
@@ -31,14 +31,14 @@ class _TransferLogViewState extends State<TransferLogView> {
     try {
       final logs = await _storage.getTransferHistory();
       for (final log in logs) {
-        if (!_cueNames.containsKey(log.itemId)) {
-          final cue = await _storage.getItem(log.itemId);
-          _cueNames[log.itemId] = cue?.name ?? 'Dropped cue';
+        if (!_recipeNames.containsKey(log.itemId)) {
+          final recipe = await _storage.getItem(log.itemId);
+          _recipeNames[log.itemId] = recipe?.name ?? 'Dropped recipe';
         }
         for (final id in [log.fromContainerId, log.toContainerId]) {
-          if (!_missionNames.containsKey(id)) {
-            final m = await _storage.getContainer(id);
-            _missionNames[id] = m?.name ?? 'Scrubbed mission';
+          if (!_workshopNames.containsKey(id)) {
+            final w = await _storage.getContainer(id);
+            _workshopNames[id] = w?.name ?? 'Closed workshop';
           }
         }
       }
@@ -48,7 +48,7 @@ class _TransferLogViewState extends State<TransferLogView> {
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('Error loading flight log: $e');
+      debugPrint('Error loading move log: $e');
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -57,7 +57,7 @@ class _TransferLogViewState extends State<TransferLogView> {
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      body: StarDust(
+      body: PaperGrain(
         child: SafeArea(
           child: Column(
             children: [
@@ -71,7 +71,7 @@ class _TransferLogViewState extends State<TransferLogView> {
                     ),
                     const SizedBox(width: 4),
                     Expanded(
-                      child: Text('Flight log',
+                      child: Text('Move log',
                           style: VisualTheme.display(28, color: VisualTheme.inkOf(context))),
                     ),
                   ],
@@ -81,11 +81,11 @@ class _TransferLogViewState extends State<TransferLogView> {
                 child: _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : (_logs == null || _logs!.isEmpty)
-                        ? const EmptyOrbit(
-                            icon: Icons.route_rounded,
-                            tint: VisualTheme.sky,
-                            title: 'No reassigns yet',
-                            body: 'Every time a cue changes mission, the move lands here with its note.',
+                        ? const EmptyDesk(
+                            icon: Icons.swap_horiz_rounded,
+                            tint: VisualTheme.inkBlue,
+                            title: 'No moves yet',
+                            body: 'Every time a recipe changes workshop, the move lands here with its note.',
                           )
                         : RefreshIndicator(
                             onRefresh: _load,
@@ -101,36 +101,35 @@ class _TransferLogViewState extends State<TransferLogView> {
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       SizedBox(
-                                        width: 30,
+                                        width: 28,
                                         child: Column(
                                           children: [
                                             Container(
-                                              width: 2,
+                                              width: 1.5,
                                               height: 14,
                                               color: first
                                                   ? Colors.transparent
-                                                  : VisualTheme.sky.withValues(alpha: 0.3),
+                                                  : VisualTheme.moss.withValues(alpha: 0.35),
                                             ),
                                             Container(
-                                              width: 12,
-                                              height: 12,
+                                              width: 10,
+                                              height: 10,
                                               decoration: BoxDecoration(
-                                                color: VisualTheme.sky,
-                                                shape: BoxShape.circle,
+                                                color: VisualTheme.moss,
                                                 border: Border.all(
                                                   color: dark
                                                       ? VisualTheme.night
-                                                      : VisualTheme.canvas,
-                                                  width: 2.5,
+                                                      : VisualTheme.paper,
+                                                  width: 2,
                                                 ),
                                               ),
                                             ),
                                             Expanded(
                                               child: Container(
-                                                width: 2,
+                                                width: 1.5,
                                                 color: last
                                                     ? Colors.transparent
-                                                    : VisualTheme.sky.withValues(alpha: 0.3),
+                                                    : VisualTheme.moss.withValues(alpha: 0.35),
                                               ),
                                             ),
                                           ],
@@ -139,8 +138,8 @@ class _TransferLogViewState extends State<TransferLogView> {
                                       Expanded(
                                         child: Padding(
                                           padding: const EdgeInsets.only(bottom: 12, left: 4),
-                                          child: BentoTile(
-                                            padding: const EdgeInsets.all(15),
+                                          child: SheetCard(
+                                            padding: const EdgeInsets.all(14),
                                             onTap: () async {
                                               await Navigator.push(
                                                 context,
@@ -158,17 +157,15 @@ class _TransferLogViewState extends State<TransferLogView> {
                                                   children: [
                                                     Expanded(
                                                       child: Text(
-                                                        _cueNames[log.itemId] ?? 'Cue',
+                                                        _recipeNames[log.itemId] ?? 'Recipe',
                                                         maxLines: 1,
                                                         overflow: TextOverflow.ellipsis,
                                                         style: VisualTheme.heading(16,
-                                                            color: VisualTheme.inkOf(context),
-                                                            w: FontWeight.w700),
+                                                            color: VisualTheme.inkOf(context)),
                                                       ),
                                                     ),
                                                     Text(
-                                                      DateFormat('MMM d')
-                                                          .format(log.moveDate),
+                                                      DateFormat('MMM d').format(log.moveDate),
                                                       style: VisualTheme.tag(11,
                                                           color: VisualTheme.mutedOf(context)),
                                                     ),
@@ -178,27 +175,24 @@ class _TransferLogViewState extends State<TransferLogView> {
                                                 Row(
                                                   children: [
                                                     Flexible(
-                                                      child: TinyPill(
-                                                        label: _missionNames[
+                                                      child: InkChip(
+                                                        label: _workshopNames[
                                                                 log.fromContainerId] ??
                                                             '—',
                                                         color: VisualTheme.mutedOf(context),
                                                       ),
                                                     ),
                                                     const Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(horizontal: 6),
-                                                      child: Icon(
-                                                          Icons.arrow_forward_rounded,
-                                                          size: 14,
-                                                          color: VisualTheme.sky),
+                                                      padding: EdgeInsets.symmetric(horizontal: 6),
+                                                      child: Icon(Icons.arrow_forward_rounded,
+                                                          size: 14, color: VisualTheme.moss),
                                                     ),
                                                     Flexible(
-                                                      child: TinyPill(
+                                                      child: InkChip(
                                                         label:
-                                                            _missionNames[log.toContainerId] ??
+                                                            _workshopNames[log.toContainerId] ??
                                                                 '—',
-                                                        color: VisualTheme.sky,
+                                                        color: VisualTheme.moss,
                                                       ),
                                                     ),
                                                   ],
@@ -207,8 +201,7 @@ class _TransferLogViewState extends State<TransferLogView> {
                                                   const SizedBox(height: 8),
                                                   Text(log.notes!,
                                                       style: VisualTheme.body(13,
-                                                          color:
-                                                              VisualTheme.mutedOf(context))),
+                                                          color: VisualTheme.mutedOf(context))),
                                                 ],
                                               ],
                                             ),

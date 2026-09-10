@@ -20,8 +20,8 @@ class ItemDetailView extends StatefulWidget {
 
 class _ItemDetailViewState extends State<ItemDetailView> {
   final _storage = StorageManager.instance;
-  InventoryItemModel? _cue;
-  ContainerModel? _mission;
+  InventoryItemModel? _recipe;
+  ContainerModel? _workshop;
   bool _isLoading = true;
 
   @override
@@ -33,58 +33,58 @@ class _ItemDetailViewState extends State<ItemDetailView> {
   Future<void> _load() async {
     setState(() => _isLoading = true);
     try {
-      final cue = await _storage.getItem(widget.itemId);
-      if (cue != null) {
-        final mission = await _storage.getContainer(cue.containerId);
+      final recipe = await _storage.getItem(widget.itemId);
+      if (recipe != null) {
+        final workshop = await _storage.getContainer(recipe.containerId);
         if (!mounted) return;
         setState(() {
-          _cue = cue;
-          _mission = mission;
+          _recipe = recipe;
+          _workshop = workshop;
           _isLoading = false;
         });
       } else if (mounted) {
         setState(() => _isLoading = false);
       }
     } catch (e) {
-      debugPrint('Error loading cue: $e');
+      debugPrint('Error loading recipe: $e');
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  Future<void> _toggleStar() async {
-    if (_cue == null) return;
-    final updated = _cue!.copyWith(isFavorite: !_cue!.isFavorite);
+  Future<void> _togglePin() async {
+    if (_recipe == null) return;
+    final updated = _recipe!.copyWith(isFavorite: !_recipe!.isFavorite);
     await _storage.updateItem(updated);
-    setState(() => _cue = updated);
+    setState(() => _recipe = updated);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(updated.isFavorite ? 'Added to the drill deck' : 'Removed from the drill deck'),
+        content: Text(updated.isFavorite ? 'Pinned to the hearth' : 'Taken off the hearth'),
         duration: const Duration(seconds: 1),
       ));
     }
   }
 
-  Future<void> _setRecall(String level) async {
-    if (_cue == null) return;
-    final updated = _cue!.copyWith(
+  Future<void> _setStage(String level) async {
+    if (_recipe == null) return;
+    final updated = _recipe!.copyWith(
       condition: level,
       estimatedValue: VisualTheme.recallStrength(level) * 100,
     );
     await _storage.updateItem(updated);
-    setState(() => _cue = updated);
+    setState(() => _recipe = updated);
   }
 
   Future<void> _delete() async {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Drop this cue?'),
-        content: const Text('It leaves the mission and the drill deck.'),
+        title: const Text('Drop this recipe?'),
+        content: const Text('It leaves the workshop and the hearth.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: VisualTheme.rose),
+            style: FilledButton.styleFrom(backgroundColor: VisualTheme.wine),
             child: const Text('Drop'),
           ),
         ],
@@ -101,21 +101,22 @@ class _ItemDetailViewState extends State<ItemDetailView> {
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-    if (_cue == null) {
-      return Scaffold(appBar: AppBar(), body: const Center(child: Text('Cue not found')));
+    if (_recipe == null) {
+      return Scaffold(appBar: AppBar(), body: const Center(child: Text('Recipe not found')));
     }
 
-    final cue = _cue!;
-    final accent = VisualTheme.getCategoryColor(cue.category);
-    final mastery = (cue.estimatedValue ?? VisualTheme.recallStrength(cue.condition) * 100)
+    final recipe = _recipe!;
+    final accent = VisualTheme.getCategoryColor(recipe.category);
+    final keep = (recipe.estimatedValue ?? VisualTheme.recallStrength(recipe.condition) * 100)
         .clamp(0, 100)
         .toDouble();
-    final lastDrill = cue.purchaseDate == null
-        ? null
-        : DateTime.tryParse(cue.purchaseDate!);
+    final lastSpark = recipe.purchaseDate == null ? null : DateTime.tryParse(recipe.purchaseDate!);
+    final parts = (recipe.notes ?? '').split(RegExp(r'\n— SPARK —\n'));
+    final seed = parts.first.trim();
+    final draft = parts.length > 1 ? parts.sublist(1).join('\n— SPARK —\n').trim() : '';
 
     return Scaffold(
-      body: StarDust(
+      body: PaperGrain(
         child: SafeArea(
           bottom: false,
           child: ListView(
@@ -130,27 +131,28 @@ class _ItemDetailViewState extends State<ItemDetailView> {
                   const Spacer(),
                   IconButton(
                     key: const ValueKey('favorite_toggle'),
-                    icon: Icon(cue.isFavorite ? Icons.star_rounded : Icons.star_outline_rounded,
-                        color: cue.isFavorite ? VisualTheme.sun : null),
-                    onPressed: _toggleStar,
+                    icon: Icon(
+                        recipe.isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                        color: recipe.isFavorite ? VisualTheme.wine : null),
+                    onPressed: _togglePin,
                   ),
                   PopupMenuButton<String>(
                     icon: const Icon(Icons.more_horiz_rounded),
                     itemBuilder: (_) => const [
-                      PopupMenuItem(value: 'move', child: Text('Reassign to a mission')),
-                      PopupMenuItem(value: 'edit', child: Text('Edit cue')),
-                      PopupMenuItem(value: 'delete', child: Text('Drop cue')),
+                      PopupMenuItem(value: 'move', child: Text('Move to a workshop')),
+                      PopupMenuItem(value: 'edit', child: Text('Edit recipe')),
+                      PopupMenuItem(value: 'delete', child: Text('Drop recipe')),
                     ],
                     onSelected: (v) {
                       if (v == 'move') {
                         Navigator.push(context,
-                                MaterialPageRoute(builder: (_) => MoveItemView(item: cue)))
+                                MaterialPageRoute(builder: (_) => MoveItemView(item: recipe)))
                             .then((r) {
                           if (r == true) _load();
                         });
                       } else if (v == 'edit') {
                         Navigator.push(context,
-                                MaterialPageRoute(builder: (_) => ItemFormView(item: cue)))
+                                MaterialPageRoute(builder: (_) => ItemFormView(item: recipe)))
                             .then((r) {
                           if (r == true) _load();
                         });
@@ -161,12 +163,12 @@ class _ItemDetailViewState extends State<ItemDetailView> {
                   ),
                 ],
               ),
-              if (cue.photoPath != null && cue.photoPath!.isNotEmpty) ...[
+              if (recipe.photoPath != null && recipe.photoPath!.isNotEmpty) ...[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(VisualTheme.rXL),
+                  borderRadius: BorderRadius.circular(VisualTheme.rL),
                   child: Image.file(
-                    File(cue.photoPath!),
-                    height: 200,
+                    File(recipe.photoPath!),
+                    height: 188,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (_, __, ___) => Container(
@@ -180,42 +182,41 @@ class _ItemDetailViewState extends State<ItemDetailView> {
               ],
               Row(
                 children: [
-                  TinyPill(label: cue.category.toUpperCase(), color: accent),
+                  InkChip(label: recipe.category.toUpperCase(), color: accent),
                   const SizedBox(width: 8),
-                  TinyPill(
-                      label: cue.condition.toUpperCase(),
-                      color: VisualTheme.getConditionColor(cue.condition)),
+                  InkChip(
+                      label: recipe.condition.toUpperCase(),
+                      color: VisualTheme.getConditionColor(recipe.condition)),
                 ],
               ),
-              const SizedBox(height: 14),
-              Text(cue.name, style: VisualTheme.display(30, color: VisualTheme.inkOf(context))),
-              const SizedBox(height: 18),
-              BentoTile(
+              const SizedBox(height: 12),
+              Text(recipe.name, style: VisualTheme.display(28, color: VisualTheme.inkOf(context))),
+              const SizedBox(height: 16),
+              SheetCard(
                 child: Row(
                   children: [
-                    RingGauge(
-                      value: mastery / 100,
-                      color: VisualTheme.getConditionColor(cue.condition),
-                      size: 74,
-                      stroke: 8,
-                      center: Text('${mastery.round()}',
-                          style: VisualTheme.display(19, color: VisualTheme.inkOf(context))),
+                    InkGauge(
+                      value: keep / 100,
+                      color: VisualTheme.getConditionColor(recipe.condition),
+                      size: 68,
+                      stroke: 7,
+                      center: Text('${keep.round()}',
+                          style: VisualTheme.display(18, color: VisualTheme.inkOf(context))),
                     ),
-                    const SizedBox(width: 18),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Mastery',
-                              style: VisualTheme.heading(16,
-                                  color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                          Text('Keep score',
+                              style: VisualTheme.heading(16, color: VisualTheme.inkOf(context))),
                           const SizedBox(height: 3),
-                          Text('${cue.quantity} reps logged',
+                          Text('${recipe.quantity} sparks run',
                               style: VisualTheme.body(13, color: VisualTheme.mutedOf(context))),
                           Text(
-                            lastDrill == null
-                                ? 'never drilled'
-                                : 'last drilled ${DateFormat('MMM d').format(lastDrill)}',
+                            lastSpark == null
+                                ? 'never sparked'
+                                : 'last sparked ${DateFormat('MMM d').format(lastSpark)}',
                             style: VisualTheme.body(13, color: VisualTheme.mutedOf(context)),
                           ),
                         ],
@@ -224,90 +225,87 @@ class _ItemDetailViewState extends State<ItemDetailView> {
                   ],
                 ),
               ),
-              const SectionHead(title: 'Set recall level'),
+              const DeskHead(title: 'Set draft stage'),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: VisualTheme.recallLevels.map((lvl) {
-                  final on = cue.condition == lvl;
+                  final on = recipe.condition == lvl;
                   final c = VisualTheme.getConditionColor(lvl);
                   return GestureDetector(
-                    onTap: () => _setRecall(lvl),
+                    onTap: () => _setStage(lvl),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 170),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
                         color: on ? c : c.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(lvl,
-                          style: VisualTheme.heading(13.5,
-                              color: on ? Colors.white : c, w: FontWeight.w700)),
+                          style: VisualTheme.heading(13.5, color: on ? Colors.white : c)),
                     ),
                   );
                 }).toList(),
               ),
-              if ((cue.notes ?? '').trim().isNotEmpty) ...[
-                const SectionHead(title: 'The anchor'),
-                BentoTile(
+              if (seed.isNotEmpty) ...[
+                const DeskHead(title: 'Seed'),
+                SheetCard(
                   fill: VisualTheme.veilOf(context),
-                  child: Text(cue.notes!,
-                      style: VisualTheme.body(16,
-                          color: VisualTheme.inkOf(context), w: FontWeight.w600)),
+                  child: Text(seed,
+                      style: VisualTheme.body(15.5,
+                          color: VisualTheme.inkOf(context), w: FontWeight.w500)),
                 ),
               ],
-              if ((cue.keywords ?? '').trim().isNotEmpty) ...[
-                const SectionHead(title: 'Tags'),
+              if (draft.isNotEmpty) ...[
+                const DeskHead(title: 'Last kept draft'),
+                SheetCard(
+                  child: Text(draft,
+                      style: VisualTheme.body(15.5, color: VisualTheme.inkOf(context))),
+                ),
+              ],
+              if ((recipe.keywords ?? '').trim().isNotEmpty) ...[
+                const DeskHead(title: 'Tags'),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: cue.keywords!
+                  children: recipe.keywords!
                       .split(',')
                       .map((k) => k.trim())
                       .where((k) => k.isNotEmpty)
-                      .map((k) => TinyPill(label: k, color: VisualTheme.plum))
+                      .map((k) => InkChip(label: k, color: VisualTheme.inkBlue))
                       .toList(),
                 ),
               ],
-              const SectionHead(title: 'Filed under'),
-              BentoTile(
-                onTap: _mission == null
+              const DeskHead(title: 'Filed under'),
+              SheetCard(
+                onTap: _workshop == null
                     ? null
                     : () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => ContainerDetailView(containerId: _mission!.id!)),
+                              builder: (_) => ContainerDetailView(containerId: _workshop!.id!)),
                         ),
                 child: Row(
                   children: [
-                    Container(
-                      width: 46,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        color: VisualTheme.nova.withValues(alpha: 0.13),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Icon(VisualTheme.trackIcon(_mission?.room ?? 'General'),
-                          color: VisualTheme.nova, size: 22),
-                    ),
+                    Icon(VisualTheme.trackIcon(_workshop?.room ?? 'General'),
+                        color: VisualTheme.moss, size: 22),
                     const SizedBox(width: 14),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(_mission?.name ?? 'Unknown mission',
-                              style: VisualTheme.heading(16,
-                                  color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                          Text(_workshop?.name ?? 'Unknown workshop',
+                              style: VisualTheme.heading(16, color: VisualTheme.inkOf(context))),
                           Text(
-                            _mission == null
+                            _workshop == null
                                 ? ''
-                                : '${_mission!.code} · ${_mission!.room} · ${_mission!.shelf}',
+                                : '${_workshop!.code} · ${_workshop!.room} · ${_workshop!.shelf}',
                             style: VisualTheme.body(12.5, color: VisualTheme.mutedOf(context)),
                           ),
                         ],
                       ),
                     ),
-                    const Icon(Icons.chevron_right_rounded, color: VisualTheme.nova),
+                    const Icon(Icons.chevron_right_rounded, color: VisualTheme.clay),
                   ],
                 ),
               ),

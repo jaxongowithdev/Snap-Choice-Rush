@@ -1,3 +1,3 @@
 # Listing notes
 
-This project is Orbit Recall (`com.app.orbitrecall.build`), an offline memory-training app for astronomy topics. Name, copy, palette, typography, icon, navigation shape, bundle ID and onboarding are original to this product.
+This project is Quietforge (`com.app.quietforge.studio`), an offline writing studio with an on-device composer. Name, copy, palette, typography, icon, navigation shape, bundle ID and onboarding are original to this product. Metadata must not reuse Orbit Recall listing text, keywords, or screenshots.

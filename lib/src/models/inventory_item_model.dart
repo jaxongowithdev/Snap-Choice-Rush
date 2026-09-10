@@ -1,13 +1,13 @@
-// A Cue — one memorised card inside a mission.
-// `quantity` -> reps done, `condition` -> recall level,
-// `estimatedValue` -> mastery score 0-100, `purchaseDate` -> last drilled
+// A Recipe — one writing brief inside a workshop.
+// `quantity` -> sparks run, `condition` -> draft stage,
+// `estimatedValue` -> keep score 0-100, `purchaseDate` -> last sparked
 class InventoryItemModel {
   final int? id;
   final int containerId;
   final String name;
   final String category;
   final int quantity;
-  final String condition; // Fresh, Shaky, Steady, Locked, Faded
+  final String condition; // Seed, Rough, Tuned, Ready, Shelved
   final String? purchaseDate;
   final double? estimatedValue;
   final String? notes;
@@ -23,7 +23,7 @@ class InventoryItemModel {
     required this.name,
     required this.category,
     this.quantity = 1,
-    this.condition = 'Fresh',
+    this.condition = 'Seed',
     this.purchaseDate,
     this.estimatedValue,
     this.notes,
@@ -61,7 +61,7 @@ class InventoryItemModel {
       name: map['name'] as String,
       category: map['category'] as String,
       quantity: map['quantity'] as int? ?? 1,
-      condition: map['condition'] as String? ?? 'Fresh',
+      condition: map['condition'] as String? ?? 'Seed',
       purchaseDate: map['purchaseDate'] as String?,
       estimatedValue: map['estimatedValue'] as double?,
       notes: map['notes'] as String?,

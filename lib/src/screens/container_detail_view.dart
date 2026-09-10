@@ -18,8 +18,8 @@ class ContainerDetailView extends StatefulWidget {
 
 class _ContainerDetailViewState extends State<ContainerDetailView> {
   final _storage = StorageManager.instance;
-  ContainerModel? _mission;
-  List<InventoryItemModel>? _cues;
+  ContainerModel? _workshop;
+  List<InventoryItemModel>? _recipes;
   bool _isLoading = true;
 
   @override
@@ -31,16 +31,16 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
   Future<void> _load() async {
     setState(() => _isLoading = true);
     try {
-      final mission = await _storage.getContainer(widget.containerId);
-      final cues = await _storage.getItemsByContainer(widget.containerId);
+      final workshop = await _storage.getContainer(widget.containerId);
+      final recipes = await _storage.getItemsByContainer(widget.containerId);
       if (!mounted) return;
       setState(() {
-        _mission = mission;
-        _cues = cues;
+        _workshop = workshop;
+        _recipes = recipes;
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('Error loading mission: $e');
+      debugPrint('Error loading workshop: $e');
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -49,14 +49,14 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Scrub this mission?'),
-        content: const Text('Every cue filed under it is removed with it.'),
+        title: const Text('Close this workshop?'),
+        content: const Text('Every recipe filed under it is removed with it.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Keep')),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(backgroundColor: VisualTheme.rose),
-            child: const Text('Scrub'),
+            style: FilledButton.styleFrom(backgroundColor: VisualTheme.wine),
+            child: const Text('Close it'),
           ),
         ],
       ),
@@ -72,17 +72,17 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-    if (_mission == null) {
-      return Scaffold(appBar: AppBar(), body: const Center(child: Text('Mission not found')));
+    if (_workshop == null) {
+      return Scaffold(appBar: AppBar(), body: const Center(child: Text('Workshop not found')));
     }
 
-    final m = _mission!;
-    final cues = _cues ?? [];
-    final locked = cues.where((c) => c.condition == 'Locked').length;
-    final pct = m.capacity == 0 ? 0.0 : (cues.length / m.capacity).clamp(0.0, 1.0);
+    final w = _workshop!;
+    final recipes = _recipes ?? [];
+    final ready = recipes.where((c) => c.condition == 'Ready').length;
+    final pct = w.capacity == 0 ? 0.0 : (recipes.length / w.capacity).clamp(0.0, 1.0);
 
     return Scaffold(
-      body: StarDust(
+      body: PaperGrain(
         child: SafeArea(
           bottom: false,
           child: RefreshIndicator(
@@ -100,14 +100,14 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                     PopupMenuButton<String>(
                       icon: const Icon(Icons.more_horiz_rounded),
                       itemBuilder: (_) => const [
-                        PopupMenuItem(value: 'edit', child: Text('Edit mission')),
-                        PopupMenuItem(value: 'delete', child: Text('Scrub mission')),
+                        PopupMenuItem(value: 'edit', child: Text('Edit workshop')),
+                        PopupMenuItem(value: 'delete', child: Text('Close workshop')),
                       ],
                       onSelected: (v) {
                         if (v == 'edit') {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => ContainerFormView(container: m)),
+                            MaterialPageRoute(builder: (_) => ContainerFormView(container: w)),
                           ).then((r) {
                             if (r == true) _load();
                           });
@@ -119,42 +119,39 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                   ],
                 ),
                 const SizedBox(height: 4),
-                BentoTile(
-                  fill: VisualTheme.nova,
-                  padding: const EdgeInsets.all(22),
+                SheetCard(
+                  fill: VisualTheme.moss,
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          TinyPill(
-                            label: m.code,
+                          InkChip(
+                            label: w.code,
                             color: Colors.white.withValues(alpha: 0.22),
-                            icon: VisualTheme.trackIcon(m.room),
+                            icon: VisualTheme.trackIcon(w.room),
                             solid: true,
                           ),
                           const SizedBox(width: 8),
-                          TinyPill(
-                            label: m.shelf,
+                          InkChip(
+                            label: w.shelf,
                             color: Colors.white.withValues(alpha: 0.22),
                             solid: true,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      Text(m.name, style: VisualTheme.display(28, color: Colors.white)),
+                      const SizedBox(height: 14),
+                      Text(w.name, style: VisualTheme.display(26, color: Colors.white)),
                       const SizedBox(height: 4),
-                      Text(m.room,
-                          style: VisualTheme.body(14,
-                              color: Colors.white.withValues(alpha: 0.82))),
-                      const SizedBox(height: 18),
+                      Text(w.room,
+                          style: VisualTheme.body(14, color: Colors.white.withValues(alpha: 0.82))),
+                      const SizedBox(height: 16),
                       Row(
                         children: [
-                          Expanded(
-                            child: MeterBar(value: pct, color: Colors.white, height: 8),
-                          ),
+                          Expanded(child: InkBar(value: pct, color: Colors.white, height: 6)),
                           const SizedBox(width: 12),
-                          Text('${cues.length}/${m.capacity}',
+                          Text('${recipes.length}/${w.capacity}',
                               style: VisualTheme.heading(14, color: Colors.white)),
                         ],
                       ),
@@ -165,26 +162,26 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                 Row(
                   children: [
                     Expanded(
-                      child: StatBento(
-                        value: '$locked',
-                        label: 'Locked',
-                        icon: Icons.lock_rounded,
-                        tint: VisualTheme.mint,
+                      child: StatBlock(
+                        value: '$ready',
+                        label: 'Press-ready',
+                        icon: Icons.check_circle_outline_rounded,
+                        tint: VisualTheme.moss,
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: StatBento(
-                        value: '${cues.length - locked}',
-                        label: 'In training',
-                        icon: Icons.autorenew_rounded,
-                        tint: VisualTheme.flare,
+                      child: StatBlock(
+                        value: '${recipes.length - ready}',
+                        label: 'In draft',
+                        icon: Icons.edit_outlined,
+                        tint: VisualTheme.ochre,
                       ),
                     ),
                   ],
                 ),
-                SectionHead(
-                  title: 'Cues (${cues.length})',
+                DeskHead(
+                  title: 'Recipes (${recipes.length})',
                   action: 'Add',
                   onAction: () async {
                     final r = await Navigator.push(
@@ -196,24 +193,24 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
                     if (r == true) _load();
                   },
                 ),
-                if (cues.isEmpty)
-                  BentoTile(
+                if (recipes.isEmpty)
+                  SheetCard(
                     fill: VisualTheme.veilOf(context),
                     child: Text(
-                      'Nothing filed here yet. A cue is one fact plus the picture that makes it stick.',
+                      'Nothing filed here yet. A recipe is a title, a seed, and the form Spark should write in.',
                       style: VisualTheme.body(14, color: VisualTheme.mutedOf(context)),
                     ),
                   )
                 else
-                  ...cues.map((cue) => CueTile(
-                        kind: cue.category,
-                        title: cue.name,
-                        meta: '${cue.category} · ${cue.quantity} reps',
-                        recall: cue.condition,
-                        accent: VisualTheme.getCategoryColor(cue.category),
+                  ...recipes.map((recipe) => RecipeRow(
+                        kind: recipe.category,
+                        title: recipe.name,
+                        meta: '${recipe.category} · ${recipe.quantity} sparks',
+                        recall: recipe.condition,
+                        accent: VisualTheme.getCategoryColor(recipe.category),
                         onTap: () async {
                           await Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => ItemDetailView(itemId: cue.id!)));
+                              MaterialPageRoute(builder: (_) => ItemDetailView(itemId: recipe.id!)));
                           _load();
                         },
                       )),
@@ -224,7 +221,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         key: const ValueKey('add_item_button'),
-        heroTag: 'fab_mission_detail',
+        heroTag: 'fab_workshop_detail',
         onPressed: () async {
           final r = await Navigator.push(
             context,
@@ -235,7 +232,7 @@ class _ContainerDetailViewState extends State<ContainerDetailView> {
           if (r == true) _load();
         },
         icon: const Icon(Icons.add_rounded),
-        label: const Text('Cue'),
+        label: const Text('Recipe'),
       ),
     );
   }

@@ -1,34 +1,36 @@
-# Orbit Recall
+# Quietforge
 
-An offline memory-training deck for space and science class. Build **missions** around one topic, file **cues** with an anchor picture, then run a **drill** that queues your weakest cues first.
+A private writing studio that lives on your phone. Build **workshops** around one craft, file **recipes** with a seed and a form, then **spark** a draft on-device and rewrite it.
 
-**App Name:** Orbit Recall
-**Subtitle:** Space memory drills, offline
-**Category:** Education
-**Bundle ID:** com.app.orbitrecall.build
-**Database:** `orbit_recall.db`
+**App Name:** Quietforge
+**Subtitle:** On-device writing studio
+**Category:** Productivity
+**Bundle ID:** com.app.quietforge.studio
+**Database:** `quietforge.db`
 
 ## Shape of the app
 
-A floating rounded pill dock with five tabs; the active tab expands to show its label. Content is laid out as a bento grid of large-radius tiles on a soft nebula background — Outfit for headings, Nunito for body.
+A full-width desk rail with five labelled tabs. Content is laid out as paper sheets with hairline borders on a warm cream ground — Fraunces for headings, Source Sans 3 for body.
 
-- **Deck** — bento dashboard: memory load ring, stat tiles, mission strip, drill call-to-action, briefing
-- **Missions** — grid of mission cards with progress rings, filterable by track
-- **Drill** — pick a source and run length, flip cards, grade yourself, get a run score
-- **Stats** — recall spread, breakdown by track and cue type, total reps
-- **Base** — appearance, JSON export/restore, recall-level glossary, privacy
+- **Desk** — keep-rate, workshop strip, spark call-to-action, recent recipes
+- **Workshops** — grid of workshop cards with fill meters, filterable by craft
+- **Spark** — pick a source and session length, compose on-device, rewrite, grade the draft
+- **Ledger** — draft-stage spread, breakdown by craft and form, total sparks
+- **Atelier** — appearance, JSON export/restore, stage glossary, privacy
 
-Secondary screens: drill deck (starred cues), flight log (reassign timeline), search, cue detail, mission detail, forms, onboarding.
+Secondary screens: hearth (pinned recipes), move log, search, recipe detail, workshop detail, forms, onboarding.
 
 ## Domain
 
 | Concept | Meaning |
 | --- | --- |
-| Mission | One themed set of cues (code, track, stage, target count) |
-| Cue | One card: front question, anchor answer, type, tags, photo |
-| Recall level | Fresh → Shaky → Steady → Locked, or Faded when missed |
-| Reps | How many times the cue has been graded in a drill |
-| Flight log | Every reassign of a cue between missions |
+| Workshop | One craft you write for (code, craft, stage, target count) |
+| Recipe | One job: title, seed, form, tags, photo |
+| Draft stage | Seed → Rough → Tuned → Ready, or Shelved when you pass |
+| Sparks | How many times the recipe has been composed and graded |
+| Move log | Every refile of a recipe between workshops |
+
+The composer is local: twelve forms and five rewrite moves. It does not call a network model.
 
 Listing copy lives in `meta-data-apple-store.txt`.
 

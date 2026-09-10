@@ -17,10 +17,10 @@ class _SearchViewState extends State<SearchView> {
   final _storage = StorageManager.instance;
   final _controller = TextEditingController();
   List<InventoryItemModel>? _results;
-  Map<int, ContainerModel> _missions = {};
+  Map<int, ContainerModel> _workshops = {};
   bool _isSearching = false;
 
-  static const _suggestions = ['planet', 'moon', 'orbit', 'quiz', 'week 1', 'peg'];
+  static const _suggestions = ['caption', 'letter', 'warm', 'class', 'hook', 'shop'];
 
   @override
   void dispose() {
@@ -39,17 +39,17 @@ class _SearchViewState extends State<SearchView> {
     setState(() => _isSearching = true);
     try {
       final results = await _storage.searchItems(query);
-      final missions = <int, ContainerModel>{};
-      for (final cue in results) {
-        if (!missions.containsKey(cue.containerId)) {
-          final m = await _storage.getContainer(cue.containerId);
-          if (m != null) missions[cue.containerId] = m;
+      final workshops = <int, ContainerModel>{};
+      for (final recipe in results) {
+        if (!workshops.containsKey(recipe.containerId)) {
+          final w = await _storage.getContainer(recipe.containerId);
+          if (w != null) workshops[recipe.containerId] = w;
         }
       }
       if (!mounted) return;
       setState(() {
         _results = results;
-        _missions = missions;
+        _workshops = workshops;
         _isSearching = false;
       });
     } catch (e) {
@@ -60,9 +60,8 @@ class _SearchViewState extends State<SearchView> {
 
   @override
   Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      body: StarDust(
+      body: PaperGrain(
         child: SafeArea(
           child: Column(
             children: [
@@ -76,12 +75,16 @@ class _SearchViewState extends State<SearchView> {
                     ),
                     Expanded(
                       child: Container(
-                        height: 52,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        height: 48,
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
                         decoration: BoxDecoration(
                           color: VisualTheme.surfaceOf(context),
-                          borderRadius: BorderRadius.circular(26),
-                          boxShadow: VisualTheme.softShadow(dark),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? const Color(0x22E08A68)
+                                : const Color(0x1A1C1916),
+                          ),
                         ),
                         child: Row(
                           children: [
@@ -94,7 +97,7 @@ class _SearchViewState extends State<SearchView> {
                                 controller: _controller,
                                 autofocus: true,
                                 style: VisualTheme.body(15,
-                                    color: VisualTheme.inkOf(context), w: FontWeight.w600),
+                                    color: VisualTheme.inkOf(context), w: FontWeight.w500),
                                 decoration: InputDecoration(
                                   isDense: true,
                                   filled: false,
@@ -102,7 +105,7 @@ class _SearchViewState extends State<SearchView> {
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   contentPadding: EdgeInsets.zero,
-                                  hintText: 'cue, anchor, tag…',
+                                  hintText: 'title, seed, tag, form…',
                                   hintStyle: VisualTheme.body(15,
                                       color: VisualTheme.mutedOf(context)),
                                 ),
@@ -141,8 +144,7 @@ class _SearchViewState extends State<SearchView> {
         padding: const EdgeInsets.fromLTRB(18, 4, 18, 40),
         children: [
           Text('Try one of these',
-              style: VisualTheme.heading(17,
-                  color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+              style: VisualTheme.heading(17, color: VisualTheme.inkOf(context))),
           const SizedBox(height: 14),
           Wrap(
             spacing: 8,
@@ -154,23 +156,22 @@ class _SearchViewState extends State<SearchView> {
                         _search(s);
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
                         decoration: BoxDecoration(
-                          color: VisualTheme.nova.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(20),
+                          color: VisualTheme.clay.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(s,
-                            style: VisualTheme.heading(13.5,
-                                color: VisualTheme.nova, w: FontWeight.w700)),
+                            style: VisualTheme.heading(13.5, color: VisualTheme.clay)),
                       ),
                     ))
                 .toList(),
           ),
-          const SizedBox(height: 30),
-          BentoTile(
+          const SizedBox(height: 28),
+          SheetCard(
             fill: VisualTheme.veilOf(context),
             child: Text(
-              'Search looks inside cue fronts, anchors, tags and cue types.',
+              'Search looks inside titles, seeds, tags and forms.',
               style: VisualTheme.body(14, color: VisualTheme.mutedOf(context)),
             ),
           ),
@@ -179,11 +180,11 @@ class _SearchViewState extends State<SearchView> {
     }
 
     if (_results == null || _results!.isEmpty) {
-      return const EmptyOrbit(
-        icon: Icons.travel_explore_rounded,
-        tint: VisualTheme.plum,
+      return const EmptyDesk(
+        icon: Icons.search_off_rounded,
+        tint: VisualTheme.inkBlue,
         title: 'Nothing matched',
-        body: 'Try a shorter word, or search by cue type instead.',
+        body: 'Try a shorter word, or search by form instead.',
       );
     }
 
@@ -191,17 +192,17 @@ class _SearchViewState extends State<SearchView> {
       padding: const EdgeInsets.fromLTRB(18, 4, 18, 40),
       itemCount: _results!.length,
       itemBuilder: (_, i) {
-        final cue = _results![i];
-        final mission = _missions[cue.containerId];
-        return CueTile(
-          kind: cue.category,
-          title: cue.name,
-          meta: mission?.name ?? cue.category,
-          recall: cue.condition,
-          accent: VisualTheme.getCategoryColor(cue.category),
+        final recipe = _results![i];
+        final workshop = _workshops[recipe.containerId];
+        return RecipeRow(
+          kind: recipe.category,
+          title: recipe.name,
+          meta: workshop?.name ?? recipe.category,
+          recall: recipe.condition,
+          accent: VisualTheme.getCategoryColor(recipe.category),
           onTap: () {
             Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => ItemDetailView(itemId: cue.id!)))
+                    MaterialPageRoute(builder: (_) => ItemDetailView(itemId: recipe.id!)))
                 .then((_) => _search(_controller.text));
           },
         );

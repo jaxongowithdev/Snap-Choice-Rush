@@ -7,7 +7,8 @@ import '../widgets/cosmo_chrome.dart';
 import 'dashboard_view.dart';
 
 class WelcomeView extends StatefulWidget {
-  const WelcomeView({super.key});
+  final VoidCallback onSettingsChanged;
+  const WelcomeView({super.key, required this.onSettingsChanged});
 
   @override
   State<WelcomeView> createState() => _WelcomeViewState();
@@ -20,34 +21,34 @@ class _WelcomeViewState extends State<WelcomeView> {
 
   static const _pages = [
     (
-      'Orbit Recall',
-      'A memory-training deck for space class. Missions hold the facts, cues hold the pictures that make them stick.',
-      Icons.bolt_rounded,
-      VisualTheme.nova,
+      'Quietforge',
+      'A private writing studio that lives on this phone. Workshops hold the jobs. Recipes hold the brief. Spark composes the draft — with no signal.',
+      Icons.edit_note_rounded,
+      VisualTheme.clay,
     ),
     (
-      'Missions',
-      'One mission per topic — the eight planets, Jupiter’s moons, the Apollo timeline. Set a target and fill it.',
-      Icons.rocket_launch_rounded,
-      VisualTheme.sky,
+      'Workshops',
+      'One workshop per craft — shop windows, classroom openers, a weekly letter. Give it a code and a recipe target.',
+      Icons.folder_open_rounded,
+      VisualTheme.moss,
     ),
     (
-      'Cues and anchors',
-      'The front is what you get asked. The anchor is the strange picture that answers it. Add a photo if it helps.',
-      Icons.style_rounded,
-      VisualTheme.rose,
+      'Recipes',
+      'A recipe is a title, a seed, a form, and optional tags. Attach a mood photo if it helps the voice.',
+      Icons.notes_rounded,
+      VisualTheme.inkBlue,
     ),
     (
-      'Drill, then grade',
-      'The drill room queues your weakest cues first. Flip, answer out loud, and grade yourself honestly.',
-      Icons.psychology_rounded,
-      VisualTheme.flare,
+      'Spark on the phone',
+      'The local composer fills the form from your seed, then you rewrite: tighten, expand, warmer, formal, shorter. Grade what to keep.',
+      Icons.local_fire_department_rounded,
+      VisualTheme.ochre,
     ),
     (
       'Yours alone',
-      'No account, no signal, no tracking. Everything lives on this phone and exports as one file whenever you want.',
-      Icons.lock_rounded,
-      VisualTheme.mint,
+      'No account, no cloud, no tracking. Workshops, recipes and drafts stay in this app’s storage and export as one file.',
+      Icons.lock_outline_rounded,
+      VisualTheme.sage,
     ),
   ];
 
@@ -62,41 +63,96 @@ class _WelcomeViewState extends State<WelcomeView> {
       debugPrint('Onboarding finish error: $e');
     }
     if (!mounted) return;
+    widget.onSettingsChanged();
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => DashboardView(onSettingsChanged: () {})),
+      MaterialPageRoute(
+        builder: (_) => DashboardView(onSettingsChanged: widget.onSettingsChanged),
+      ),
     );
   }
 
   Future<void> _seedStarterPack(StorageManager storage) async {
-    final missionId = await storage.createContainer(ContainerModel(
-      name: 'The Eight Planets',
-      code: 'MSN-01',
-      room: 'Planets',
-      shelf: 'Launch',
-      capacity: 8,
+    final shopId = await storage.createContainer(ContainerModel(
+      name: 'Shop window copy',
+      code: 'WKS-01',
+      room: 'Product',
+      shelf: 'Drafting',
+      capacity: 6,
     ));
 
-    const seeds = [
-      ('Closest planet to the Sun', 'Mercury — a silver thermometer melting on my doorstep.', 'Image'),
-      ('Hottest planet in the solar system', 'Venus — a greenhouse full of steam where the porch should be.', 'Story'),
-      ('The planet we live on', 'Earth — a blue marble spinning in the hallway mirror.', 'Peg'),
-      ('The rusty red planet', 'Mars — a rusted red bicycle leaning by the stairs.', 'Image'),
-      ('Largest planet, with the Great Red Spot', 'Jupiter — a giant striped beach ball with one angry eye.', 'Image'),
-      ('The ringed planet', 'Saturn — a hula hoop resting on the kitchen table.', 'Journey'),
-      ('The planet tipped on its side', 'Uranus — a barrel rolling sideways down the corridor.', 'Story'),
-      ('Farthest planet from the Sun', 'Neptune — a deep blue ice bucket at the very end of the hall.', 'Journey'),
+    const shopSeeds = [
+      (
+        'Saturday market opener',
+        'Heirloom tomatoes, still warm. Neighbourhood stall, cash or tap. We close at two.',
+        'Caption',
+        'shop, warm, Saturday'
+      ),
+      (
+        'Welcome note for first-time buyers',
+        'They found us from a friend. Thank them. One care tip for the first week. No coupon dump.',
+        'Letter',
+        'buyer, warm'
+      ),
+      (
+        'One-line product hook',
+        'A linen apron that actually lasts the dinner rush. Made in small batches.',
+        'Hook',
+        'product, bold'
+      ),
+      (
+        'Care card inside the box',
+        'Wash cold, hang dry, linen softens. If a stitch opens, send a photo and we mend it.',
+        'Product',
+        'product, calm'
+      ),
     ];
 
-    for (final s in seeds) {
+    for (final s in shopSeeds) {
       await storage.createItem(InventoryItemModel(
-        containerId: missionId,
+        containerId: shopId,
         name: s.$1,
         category: s.$3,
         notes: s.$2,
-        condition: 'Fresh',
+        condition: 'Seed',
         quantity: 0,
-        keywords: 'planets, starter',
-        estimatedValue: VisualTheme.recallStrength('Fresh') * 100,
+        keywords: s.$4,
+        estimatedValue: VisualTheme.recallStrength('Seed') * 100,
+      ));
+    }
+
+    final classId = await storage.createContainer(ContainerModel(
+      name: 'Classroom openers',
+      code: 'WKS-02',
+      room: 'Classroom',
+      shelf: 'Brief',
+      capacity: 5,
+    ));
+
+    const classSeeds = [
+      (
+        'Five-minute freewrite',
+        'Grade 7. Topic: a place that smells like rain. Share one sentence, not the whole page.',
+        'Lesson',
+        'student, calm, class'
+      ),
+      (
+        'Parent note after the field trip',
+        'Museum was loud and good. Ask what object they would steal for the classroom shelf.',
+        'Letter',
+        'parent, warm'
+      ),
+    ];
+
+    for (final s in classSeeds) {
+      await storage.createItem(InventoryItemModel(
+        containerId: classId,
+        name: s.$1,
+        category: s.$3,
+        notes: s.$2,
+        condition: 'Seed',
+        quantity: 0,
+        keywords: s.$4,
+        estimatedValue: VisualTheme.recallStrength('Seed') * 100,
       ));
     }
   }
@@ -112,7 +168,7 @@ class _WelcomeViewState extends State<WelcomeView> {
     final last = _page == _pages.length - 1;
 
     return Scaffold(
-      body: StarDust(
+      body: PaperGrain(
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(22, 8, 22, 18),
@@ -138,32 +194,23 @@ class _WelcomeViewState extends State<WelcomeView> {
                         children: [
                           const Spacer(),
                           Container(
-                            width: 120,
-                            height: 120,
+                            width: 96,
+                            height: 96,
                             decoration: BoxDecoration(
                               color: p.$4,
-                              borderRadius: BorderRadius.circular(40),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: p.$4.withValues(alpha: 0.35),
-                                  blurRadius: 30,
-                                  offset: const Offset(0, 14),
-                                ),
-                              ],
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Icon(p.$3, size: 56, color: Colors.white),
+                            child: Icon(p.$3, size: 46, color: Colors.white),
                           ),
-                          const SizedBox(height: 34),
-                          Text('STEP ${i + 1} OF ${_pages.length}',
+                          const SizedBox(height: 28),
+                          Text('PAGE ${i + 1} OF ${_pages.length}',
                               style: VisualTheme.tag(11, color: p.$4)),
                           const SizedBox(height: 10),
                           Text(p.$1,
-                              style: VisualTheme.display(38,
-                                  color: VisualTheme.inkOf(context))),
-                          const SizedBox(height: 14),
+                              style: VisualTheme.display(36, color: VisualTheme.inkOf(context))),
+                          const SizedBox(height: 12),
                           Text(p.$2,
-                              style: VisualTheme.body(16,
-                                  color: VisualTheme.mutedOf(context))),
+                              style: VisualTheme.body(16.5, color: VisualTheme.mutedOf(context))),
                           const Spacer(),
                         ],
                       );
@@ -176,13 +223,13 @@ class _WelcomeViewState extends State<WelcomeView> {
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 220),
                         margin: const EdgeInsets.only(right: 6),
-                        width: i == _page ? 26 : 8,
-                        height: 8,
+                        width: i == _page ? 22 : 7,
+                        height: 7,
                         decoration: BoxDecoration(
                           color: i == _page
                               ? _pages[_page].$4
                               : VisualTheme.mutedOf(context).withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(2),
                         ),
                       ),
                   ],
@@ -192,24 +239,22 @@ class _WelcomeViewState extends State<WelcomeView> {
                   FilledButton(
                     onPressed: _seeding ? null : () => _finish(seed: true),
                     style: FilledButton.styleFrom(
-                      backgroundColor: VisualTheme.mint,
-                      minimumSize: const Size.fromHeight(56),
+                      backgroundColor: VisualTheme.moss,
+                      minimumSize: const Size.fromHeight(54),
                     ),
                     child: _seeding
                         ? const SizedBox(
                             width: 22,
                             height: 22,
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2.4, color: Colors.white),
+                            child: CircularProgressIndicator(strokeWidth: 2.4, color: Colors.white),
                           )
-                        : const Text('Start with the planets pack'),
+                        : const Text('Load the starter workshops'),
                   ),
                   const SizedBox(height: 10),
                   OutlinedButton(
                     onPressed: _seeding ? null : () => _finish(),
-                    style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(52)),
-                    child: const Text('Start empty'),
+                    style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(50)),
+                    child: const Text('Start with a blank desk'),
                   ),
                 ] else
                   FilledButton(
@@ -219,9 +264,9 @@ class _WelcomeViewState extends State<WelcomeView> {
                     ),
                     style: FilledButton.styleFrom(
                       backgroundColor: _pages[_page].$4,
-                      minimumSize: const Size.fromHeight(56),
+                      minimumSize: const Size.fromHeight(54),
                     ),
-                    child: const Text('Next'),
+                    child: const Text('Continue'),
                   ),
               ],
             ),

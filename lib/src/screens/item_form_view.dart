@@ -27,12 +27,12 @@ class _ItemFormViewState extends State<ItemFormView> {
   late TextEditingController _notesController;
   late TextEditingController _tagsController;
 
-  List<ContainerModel>? _missions;
-  int? _missionId;
-  String _category = 'Peg';
-  String _recall = 'Fresh';
+  List<ContainerModel>? _workshops;
+  int? _workshopId;
+  String _category = 'Caption';
+  String _stage = 'Seed';
   String? _photoPath;
-  bool _starred = false;
+  bool _pinned = false;
 
   @override
   void initState() {
@@ -40,14 +40,14 @@ class _ItemFormViewState extends State<ItemFormView> {
     _nameController = TextEditingController(text: widget.item?.name);
     _notesController = TextEditingController(text: widget.item?.notes);
     _tagsController = TextEditingController(text: widget.item?.keywords);
-    _category = widget.item?.category ?? 'Peg';
+    _category = widget.item?.category ?? 'Caption';
     if (!VisualTheme.cueTypes.contains(_category)) _category = 'Other';
-    _recall = widget.item?.condition ?? 'Fresh';
-    if (!VisualTheme.recallLevels.contains(_recall)) _recall = 'Fresh';
-    _missionId = widget.item?.containerId ?? widget.preselectedContainerId;
+    _stage = widget.item?.condition ?? 'Seed';
+    if (!VisualTheme.recallLevels.contains(_stage)) _stage = 'Seed';
+    _workshopId = widget.item?.containerId ?? widget.preselectedContainerId;
     _photoPath = widget.item?.photoPath;
-    _starred = widget.item?.isFavorite ?? false;
-    _loadMissions();
+    _pinned = widget.item?.isFavorite ?? false;
+    _loadWorkshops();
   }
 
   @override
@@ -58,16 +58,16 @@ class _ItemFormViewState extends State<ItemFormView> {
     super.dispose();
   }
 
-  Future<void> _loadMissions() async {
+  Future<void> _loadWorkshops() async {
     try {
-      final missions = await _storage.getAllContainers(sortBy: 'name');
+      final workshops = await _storage.getAllContainers(sortBy: 'name');
       if (!mounted) return;
       setState(() {
-        _missions = missions;
-        if (_missionId == null && missions.isNotEmpty) _missionId = missions.first.id;
+        _workshops = workshops;
+        if (_workshopId == null && workshops.isNotEmpty) _workshopId = workshops.first.id;
       });
     } catch (e) {
-      debugPrint('Error loading missions: $e');
+      debugPrint('Error loading workshops: $e');
     }
   }
 
@@ -78,7 +78,7 @@ class _ItemFormViewState extends State<ItemFormView> {
       if (photo == null) return;
       final appDir = await getApplicationDocumentsDirectory();
       final fileName =
-          'cue_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
+          'recipe_${DateTime.now().millisecondsSinceEpoch}${path_pkg.extension(photo.path)}';
       final savedPath = path_pkg.join(appDir.path, 'photos', fileName);
       await Directory(path_pkg.join(appDir.path, 'photos')).create(recursive: true);
       await File(photo.path).copy(savedPath);
@@ -105,32 +105,32 @@ class _ItemFormViewState extends State<ItemFormView> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    if (_missionId == null) {
+    if (_workshopId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Create a mission first, then file the cue into it.')),
+        const SnackBar(content: Text('Open a workshop first, then file the recipe into it.')),
       );
       return;
     }
     final tags = _tagsController.text.trim();
-    final cue = InventoryItemModel(
+    final recipe = InventoryItemModel(
       id: widget.item?.id,
-      containerId: _missionId!,
+      containerId: _workshopId!,
       name: _nameController.text.trim(),
       category: _category,
       quantity: widget.item?.quantity ?? 0,
-      condition: _recall,
-      estimatedValue: VisualTheme.recallStrength(_recall) * 100,
+      condition: _stage,
+      estimatedValue: VisualTheme.recallStrength(_stage) * 100,
       purchaseDate: widget.item?.purchaseDate,
       notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
       keywords: tags.isEmpty ? null : tags,
       photoPath: _photoPath,
-      isFavorite: _starred,
+      isFavorite: _pinned,
       createdAt: widget.item?.createdAt,
     );
     if (widget.item == null) {
-      await _storage.createItem(cue);
+      await _storage.createItem(recipe);
     } else {
-      await _storage.updateItem(cue);
+      await _storage.updateItem(recipe);
     }
     if (mounted) Navigator.pop(context, true);
   }
@@ -139,7 +139,7 @@ class _ItemFormViewState extends State<ItemFormView> {
   Widget build(BuildContext context) {
     final isEditing = widget.item != null;
     return Scaffold(
-      body: StarDust(
+      body: PaperGrain(
         child: SafeArea(
           child: Form(
             key: _formKey,
@@ -154,27 +154,27 @@ class _ItemFormViewState extends State<ItemFormView> {
                     ),
                   ],
                 ),
-                Text(isEditing ? 'Edit cue' : 'New cue',
+                Text(isEditing ? 'Edit recipe' : 'New recipe',
                     style: VisualTheme.display(30, color: VisualTheme.inkOf(context))),
                 const SizedBox(height: 6),
-                Text('The front is what you are asked. The anchor is the picture that answers it.',
+                Text('The title is the job. The seed is the facts Spark should write from.',
                     style: VisualTheme.body(14, color: VisualTheme.mutedOf(context))),
-                const SizedBox(height: 22),
+                const SizedBox(height: 20),
 
                 if (_photoPath != null)
                   Stack(
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(VisualTheme.rXL),
+                        borderRadius: BorderRadius.circular(VisualTheme.rL),
                         child: Image.file(File(_photoPath!),
-                            height: 180, width: double.infinity, fit: BoxFit.cover),
+                            height: 168, width: double.infinity, fit: BoxFit.cover),
                       ),
                       Positioned(
                         top: 10,
                         right: 10,
                         child: IconButton(
                           icon: const Icon(Icons.delete_rounded, color: Colors.white),
-                          style: IconButton.styleFrom(backgroundColor: VisualTheme.rose),
+                          style: IconButton.styleFrom(backgroundColor: VisualTheme.wine),
                           onPressed: _removePhoto,
                         ),
                       ),
@@ -197,34 +197,34 @@ class _ItemFormViewState extends State<ItemFormView> {
                           key: const ValueKey('gallery_button'),
                           onPressed: () => _pickPhoto(ImageSource.gallery),
                           icon: const Icon(Icons.image_rounded, size: 18),
-                          label: const Text('Gallery'),
+                          label: const Text('Library'),
                         ),
                       ),
                     ],
                   ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
 
-                BentoTile(
+                SheetCard(
                   child: Column(
                     children: [
                       TextFormField(
                         key: const ValueKey('item_name_field'),
                         controller: _nameController,
                         decoration: const InputDecoration(
-                          labelText: 'Cue front',
-                          hintText: 'e.g. Fourth planet from the Sun',
+                          labelText: 'Recipe title',
+                          hintText: 'e.g. Saturday market opener',
                         ),
                         validator: (v) =>
-                            (v == null || v.trim().isEmpty) ? 'Write the cue front' : null,
+                            (v == null || v.trim().isEmpty) ? 'Name the recipe' : null,
                       ),
                       const SizedBox(height: 14),
                       TextFormField(
                         key: const ValueKey('notes_field'),
                         controller: _notesController,
-                        maxLines: 4,
+                        maxLines: 5,
                         decoration: const InputDecoration(
-                          labelText: 'The anchor (answer + picture)',
-                          hintText: 'Mars — a rusty red bicycle parked in my hallway',
+                          labelText: 'Seed (facts, voice, constraints)',
+                          hintText: 'Heirloom tomatoes, still warm. Close at two. Cash or tap.',
                         ),
                       ),
                       const SizedBox(height: 14),
@@ -232,42 +232,42 @@ class _ItemFormViewState extends State<ItemFormView> {
                         key: const ValueKey('tags_field'),
                         controller: _tagsController,
                         decoration: const InputDecoration(
-                          labelText: 'Tags (comma separated)',
-                          hintText: 'planets, quiz, week 3',
+                          labelText: 'Tags (voice, audience)',
+                          hintText: 'warm, shop, Saturday',
                         ),
                       ),
                     ],
                   ),
                 ),
 
-                const SectionHead(title: 'Mission'),
-                if (_missions == null)
+                const DeskHead(title: 'Workshop'),
+                if (_workshops == null)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: LinearProgressIndicator(),
                   )
-                else if (_missions!.isEmpty)
-                  BentoTile(
+                else if (_workshops!.isEmpty)
+                  SheetCard(
                     fill: VisualTheme.veilOf(context),
-                    child: Text('No missions yet — create one from the Missions tab first.',
+                    child: Text('No workshops yet — open one from the Workshops tab first.',
                         style: VisualTheme.body(14, color: VisualTheme.mutedOf(context))),
                   )
                 else
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: _missions!
-                        .map((m) => _Pick(
-                              label: m.name,
-                              icon: VisualTheme.trackIcon(m.room),
-                              selected: _missionId == m.id,
-                              tint: VisualTheme.nova,
-                              onTap: () => setState(() => _missionId = m.id),
+                    children: _workshops!
+                        .map((w) => _Pick(
+                              label: w.name,
+                              icon: VisualTheme.trackIcon(w.room),
+                              selected: _workshopId == w.id,
+                              tint: VisualTheme.clay,
+                              onTap: () => setState(() => _workshopId = w.id),
                             ))
                         .toList(),
                   ),
 
-                const SectionHead(title: 'Cue type'),
+                const DeskHead(title: 'Form'),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -281,46 +281,45 @@ class _ItemFormViewState extends State<ItemFormView> {
                       .toList(),
                 ),
 
-                const SectionHead(title: 'Recall level'),
+                const DeskHead(title: 'Draft stage'),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: VisualTheme.recallLevels
                       .map((r) => _Pick(
                             label: r,
-                            selected: _recall == r,
+                            selected: _stage == r,
                             tint: VisualTheme.getConditionColor(r),
-                            onTap: () => setState(() => _recall = r),
+                            onTap: () => setState(() => _stage = r),
                           ))
                       .toList(),
                 ),
 
-                const SizedBox(height: 18),
-                BentoTile(
+                const SizedBox(height: 16),
+                SheetCard(
                   child: Row(
                     children: [
-                      const Icon(Icons.star_rounded, color: VisualTheme.sun),
+                      const Icon(Icons.favorite_rounded, color: VisualTheme.wine),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: Text('Keep in the drill deck',
-                            style: VisualTheme.heading(15.5,
-                                color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                        child: Text('Pin to the hearth',
+                            style: VisualTheme.heading(15.5, color: VisualTheme.inkOf(context))),
                       ),
                       Switch(
-                        value: _starred,
-                        activeColor: VisualTheme.sun,
-                        onChanged: (v) => setState(() => _starred = v),
+                        value: _pinned,
+                        activeTrackColor: VisualTheme.wine,
+                        onChanged: (v) => setState(() => _pinned = v),
                       ),
                     ],
                   ),
                 ),
 
-                const SizedBox(height: 26),
+                const SizedBox(height: 24),
                 FilledButton(
                   key: const ValueKey('save_item_button'),
                   onPressed: _save,
-                  style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
-                  child: Text(isEditing ? 'Save cue' : 'File the cue'),
+                  style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(54)),
+                  child: Text(isEditing ? 'Save recipe' : 'File the recipe'),
                 ),
               ],
             ),
@@ -351,21 +350,20 @@ class _Pick extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 170),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 9),
         decoration: BoxDecoration(
           color: selected ? tint : tint.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(6),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
-              Icon(icon, size: 15, color: selected ? Colors.white : tint),
+              Icon(icon, size: 14, color: selected ? Colors.white : tint),
               const SizedBox(width: 6),
             ],
             Text(label,
-                style: VisualTheme.heading(13.5,
-                    color: selected ? Colors.white : tint, w: FontWeight.w700)),
+                style: VisualTheme.heading(13.5, color: selected ? Colors.white : tint)),
           ],
         ),
       ),

@@ -3,128 +3,105 @@ import 'package:flutter/material.dart';
 import '../utils/visual_theme.dart';
 
 // =====================================================================
-//  Background — soft nebula blobs + fine star dust
+//  Background — warm paper with faint rules
 // =====================================================================
 
-class StarDust extends StatelessWidget {
+class PaperGrain extends StatelessWidget {
   final Widget child;
-  const StarDust({super.key, required this.child});
+  const PaperGrain({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
     return Stack(
       children: [
-        Positioned.fill(child: CustomPaint(painter: _DustPainter(dark: dark))),
+        Positioned.fill(child: CustomPaint(painter: _PaperPainter(dark: dark))),
         child,
       ],
     );
   }
 }
 
-class _DustPainter extends CustomPainter {
+class _PaperPainter extends CustomPainter {
   final bool dark;
-  _DustPainter({required this.dark});
+  _PaperPainter({required this.dark});
 
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawRect(
       Offset.zero & size,
-      Paint()..color = dark ? VisualTheme.night : VisualTheme.canvas,
+      Paint()..color = dark ? VisualTheme.night : VisualTheme.paper,
     );
 
-    void blob(Offset c, double r, Color color) {
-      final rect = Rect.fromCircle(center: c, radius: r);
+    void wash(Offset c, double r, Color color) {
       canvas.drawCircle(
         c,
         r,
         Paint()
           ..shader = RadialGradient(
             colors: [color, color.withValues(alpha: 0)],
-          ).createShader(rect),
+          ).createShader(Rect.fromCircle(center: c, radius: r)),
       );
     }
 
-    final a = dark ? 0.22 : 0.30;
-    blob(Offset(size.width * 0.10, size.height * 0.06), size.width * 0.62,
-        VisualTheme.nova.withValues(alpha: a));
-    blob(Offset(size.width * 1.02, size.height * 0.24), size.width * 0.55,
-        VisualTheme.rose.withValues(alpha: a * 0.7));
-    blob(Offset(size.width * 0.80, size.height * 0.92), size.width * 0.70,
-        VisualTheme.mint.withValues(alpha: a * 0.6));
-    blob(Offset(size.width * -0.05, size.height * 0.72), size.width * 0.5,
-        VisualTheme.sun.withValues(alpha: a * 0.55));
+    final a = dark ? 0.18 : 0.22;
+    wash(Offset(size.width * 0.92, size.height * 0.08), size.width * 0.55,
+        VisualTheme.clay.withValues(alpha: a));
+    wash(Offset(size.width * 0.08, size.height * 0.88), size.width * 0.62,
+        VisualTheme.moss.withValues(alpha: a * 0.7));
+    wash(Offset(size.width * 0.7, size.height * 0.72), size.width * 0.4,
+        VisualTheme.ochre.withValues(alpha: a * 0.45));
 
-    final rnd = Random(7);
-    final star = Paint()
+    final rule = Paint()
       ..color = dark
-          ? Colors.white.withValues(alpha: 0.5)
-          : VisualTheme.ink.withValues(alpha: 0.13);
-    for (var i = 0; i < 90; i++) {
-      canvas.drawCircle(
-        Offset(rnd.nextDouble() * size.width, rnd.nextDouble() * size.height),
-        rnd.nextDouble() * 1.3 + 0.35,
-        star,
-      );
+          ? Colors.white.withValues(alpha: 0.04)
+          : VisualTheme.ink.withValues(alpha: 0.045)
+      ..strokeWidth = 1;
+    for (var y = 28.0; y < size.height; y += 28) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), rule);
     }
   }
 
   @override
-  bool shouldRepaint(covariant _DustPainter old) => old.dark != dark;
+  bool shouldRepaint(covariant _PaperPainter old) => old.dark != dark;
 }
 
 // =====================================================================
-//  Bottom navigation — floating pill bar, label expands on the active tab
+//  Bottom navigation — full-width desk rail, labels always on
 // =====================================================================
 
-class OrbitDock extends StatelessWidget {
+class DeskRail extends StatelessWidget {
   final int index;
   final ValueChanged<int> onSelect;
-  const OrbitDock({super.key, required this.index, required this.onSelect});
+  const DeskRail({super.key, required this.index, required this.onSelect});
 
-  static const _labels = ['Deck', 'Missions', 'Drill', 'Stats', 'Base'];
+  static const _labels = ['Desk', 'Workshops', 'Spark', 'Ledger', 'Atelier'];
   static const _icons = [
-    Icons.dashboard_rounded,
-    Icons.rocket_launch_rounded,
-    Icons.bolt_rounded,
-    Icons.insights_rounded,
-    Icons.tune_rounded,
-  ];
-  static const _tints = [
-    VisualTheme.nova,
-    VisualTheme.sky,
-    VisualTheme.flare,
-    VisualTheme.mint,
-    VisualTheme.plum,
+    Icons.desk_rounded,
+    Icons.folder_open_rounded,
+    Icons.local_fire_department_rounded,
+    Icons.bar_chart_rounded,
+    Icons.settings_outlined,
   ];
 
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 0, 14, 12),
+    final line = dark ? const Color(0x33E08A68) : const Color(0x221C1916);
+    return Material(
+      color: dark ? VisualTheme.nightSurface : VisualTheme.surface,
+      child: SafeArea(
+        top: false,
         child: Container(
-          height: 68,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            color: dark ? VisualTheme.nightSurface : Colors.white,
-            borderRadius: BorderRadius.circular(34),
-            boxShadow: VisualTheme.softShadow(dark),
-            border: Border.all(
-              color: dark ? const Color(0x229C8CFF) : const Color(0x14382C7A),
-            ),
-          ),
+          decoration: BoxDecoration(border: Border(top: BorderSide(color: line))),
+          padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
           child: Row(
             children: [
               for (var i = 0; i < 5; i++)
                 Expanded(
-                  flex: i == index ? 5 : 3,
-                  child: _DockItem(
+                  child: _RailItem(
                     icon: _icons[i],
                     label: _labels[i],
-                    tint: _tints[i],
                     active: i == index,
                     onTap: () => onSelect(i),
                   ),
@@ -137,16 +114,14 @@ class OrbitDock extends StatelessWidget {
   }
 }
 
-class _DockItem extends StatelessWidget {
+class _RailItem extends StatelessWidget {
   final IconData icon;
   final String label;
-  final Color tint;
   final bool active;
   final VoidCallback onTap;
-  const _DockItem({
+  const _RailItem({
     required this.icon,
     required this.label,
-    required this.tint,
     required this.active,
     required this.onTap,
   });
@@ -154,43 +129,32 @@ class _DockItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    final tint = VisualTheme.clay;
+    final idle = dark
+        ? VisualTheme.nightInk.withValues(alpha: 0.42)
+        : VisualTheme.muted.withValues(alpha: 0.7);
+    return InkWell(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 240),
-        curve: Curves.easeOutCubic,
-        margin: const EdgeInsets.symmetric(vertical: 9, horizontal: 3),
-        decoration: BoxDecoration(
-          color: active ? tint.withValues(alpha: dark ? 0.26 : 0.14) : Colors.transparent,
-          borderRadius: BorderRadius.circular(26),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: active ? 21 : 20,
-              color: active
-                  ? tint
-                  : (dark
-                      ? VisualTheme.nightInk.withValues(alpha: 0.42)
-                      : VisualTheme.muted.withValues(alpha: 0.65)),
+            Icon(icon, size: 22, color: active ? tint : idle),
+            const SizedBox(height: 3),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: VisualTheme.tag(9.5, color: active ? tint : idle),
             ),
-            if (active)
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 6),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      style: VisualTheme.heading(13, color: tint, w: FontWeight.w700),
-                    ),
-                  ),
-                ),
-              ),
+            const SizedBox(height: 4),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              height: 2,
+              width: active ? 22 : 0,
+              color: tint,
+            ),
           ],
         ),
       ),
@@ -202,17 +166,17 @@ class _DockItem extends StatelessWidget {
 //  Section header
 // =====================================================================
 
-class SectionHead extends StatelessWidget {
+class DeskHead extends StatelessWidget {
   final String title;
   final String? action;
   final VoidCallback? onAction;
   final EdgeInsets padding;
-  const SectionHead({
+  const DeskHead({
     super.key,
     required this.title,
     this.action,
     this.onAction,
-    this.padding = const EdgeInsets.fromLTRB(2, 26, 2, 12),
+    this.padding = const EdgeInsets.fromLTRB(2, 24, 2, 10),
   });
 
   @override
@@ -224,16 +188,16 @@ class SectionHead extends StatelessWidget {
         children: [
           Expanded(
             child: Text(title,
-                style: VisualTheme.heading(19, color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                style: VisualTheme.heading(18, color: VisualTheme.inkOf(context), w: FontWeight.w600)),
           ),
           if (action != null)
             GestureDetector(
               onTap: onAction,
               child: Row(
                 children: [
-                  Text(action!, style: VisualTheme.heading(13, color: VisualTheme.nova)),
+                  Text(action!, style: VisualTheme.heading(13, color: VisualTheme.clay)),
                   const SizedBox(width: 2),
-                  const Icon(Icons.chevron_right_rounded, size: 18, color: VisualTheme.nova),
+                  const Icon(Icons.chevron_right_rounded, size: 18, color: VisualTheme.clay),
                 ],
               ),
             ),
@@ -244,15 +208,15 @@ class SectionHead extends StatelessWidget {
 }
 
 // =====================================================================
-//  Small pill / chip
+//  Small chip
 // =====================================================================
 
-class TinyPill extends StatelessWidget {
+class InkChip extends StatelessWidget {
   final String label;
   final Color color;
   final IconData? icon;
   final bool solid;
-  const TinyPill({
+  const InkChip({
     super.key,
     required this.label,
     required this.color,
@@ -263,16 +227,17 @@ class TinyPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: icon == null ? 11 : 9, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: icon == null ? 10 : 8, vertical: 4),
       decoration: BoxDecoration(
         color: solid ? color : color.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(4),
+        border: solid ? null : Border.all(color: color.withValues(alpha: 0.28)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 13, color: solid ? Colors.white : color),
+            Icon(icon, size: 12, color: solid ? Colors.white : color),
             const SizedBox(width: 4),
           ],
           Flexible(
@@ -280,7 +245,7 @@ class TinyPill extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: VisualTheme.tag(11, color: solid ? Colors.white : color),
+              style: VisualTheme.tag(10.5, color: solid ? Colors.white : color),
             ),
           ),
         ],
@@ -290,32 +255,34 @@ class TinyPill extends StatelessWidget {
 }
 
 // =====================================================================
-//  Bento tile — the layout primitive of the whole app
+//  Paper sheet — layout primitive
 // =====================================================================
 
-class BentoTile extends StatelessWidget {
+class SheetCard extends StatelessWidget {
   final Widget child;
   final Color? fill;
   final EdgeInsets padding;
   final VoidCallback? onTap;
   final double radius;
-  const BentoTile({
+  const SheetCard({
     super.key,
     required this.child,
     this.fill,
-    this.padding = const EdgeInsets.all(18),
+    this.padding = const EdgeInsets.all(16),
     this.onTap,
-    this.radius = VisualTheme.rXL,
+    this.radius = VisualTheme.rL,
   });
 
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
+    final border = dark ? const Color(0x22E08A68) : const Color(0x1A1C1916);
     final body = Container(
       padding: padding,
       decoration: BoxDecoration(
         color: fill ?? VisualTheme.surfaceOf(context),
         borderRadius: BorderRadius.circular(radius),
+        border: fill == null ? Border.all(color: border) : null,
         boxShadow: fill == null ? VisualTheme.softShadow(dark) : null,
       ),
       child: child,
@@ -329,15 +296,14 @@ class BentoTile extends StatelessWidget {
   }
 }
 
-/// A stat square: big number, label, icon badge.
-class StatBento extends StatelessWidget {
+class StatBlock extends StatelessWidget {
   final String value;
   final String label;
   final String? caption;
   final IconData icon;
   final Color tint;
   final VoidCallback? onTap;
-  const StatBento({
+  const StatBlock({
     super.key,
     required this.value,
     required this.label,
@@ -349,40 +315,31 @@ class StatBento extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BentoTile(
+    return SheetCard(
       onTap: onTap,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: tint.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(13),
-            ),
-            child: Icon(icon, size: 20, color: tint),
-          ),
-          const SizedBox(height: 14),
+          Icon(icon, size: 20, color: tint),
+          const SizedBox(height: 12),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
-            child: Text(value,
-                style: VisualTheme.display(30, color: VisualTheme.inkOf(context))),
+            child: Text(value, style: VisualTheme.display(28, color: VisualTheme.inkOf(context))),
           ),
           const SizedBox(height: 2),
           Text(label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: VisualTheme.body(13, color: VisualTheme.mutedOf(context), w: FontWeight.w700)),
+              style: VisualTheme.body(13, color: VisualTheme.mutedOf(context), w: FontWeight.w600)),
           if (caption != null) ...[
             const SizedBox(height: 2),
             Text(caption!,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: VisualTheme.body(11, color: tint, w: FontWeight.w800)),
+                style: VisualTheme.body(11, color: tint, w: FontWeight.w700)),
           ],
         ],
       ),
@@ -391,21 +348,21 @@ class StatBento extends StatelessWidget {
 }
 
 // =====================================================================
-//  Ring gauge + meter bar
+//  Gauge + meter
 // =====================================================================
 
-class RingGauge extends StatelessWidget {
-  final double value; // 0..1
+class InkGauge extends StatelessWidget {
+  final double value;
   final double size;
   final double stroke;
   final Color color;
   final Widget? center;
-  const RingGauge({
+  const InkGauge({
     super.key,
     required this.value,
     required this.color,
     this.size = 62,
-    this.stroke = 7,
+    this.stroke = 6,
     this.center,
   });
 
@@ -416,11 +373,11 @@ class RingGauge extends StatelessWidget {
       width: size,
       height: size,
       child: CustomPaint(
-        painter: _RingPainter(
+        painter: _GaugePainter(
           value: value.clamp(0.0, 1.0),
           color: color,
           stroke: stroke,
-          track: dark ? const Color(0x33FFFFFF) : const Color(0x14382C7A),
+          track: dark ? const Color(0x33FFFFFF) : const Color(0x221C1916),
         ),
         child: center == null ? null : Center(child: center),
       ),
@@ -428,12 +385,12 @@ class RingGauge extends StatelessWidget {
   }
 }
 
-class _RingPainter extends CustomPainter {
+class _GaugePainter extends CustomPainter {
   final double value;
   final Color color;
   final Color track;
   final double stroke;
-  _RingPainter({required this.value, required this.color, required this.track, required this.stroke});
+  _GaugePainter({required this.value, required this.color, required this.track, required this.stroke});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -442,42 +399,38 @@ class _RingPainter extends CustomPainter {
       ..color = track
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.butt;
     canvas.drawArc(rect, 0, 2 * pi, false, base);
 
     if (value <= 0) return;
     final arc = Paint()
-      ..shader = SweepGradient(
-        startAngle: -pi / 2,
-        endAngle: 3 * pi / 2,
-        colors: [color.withValues(alpha: 0.55), color],
-      ).createShader(rect)
+      ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.butt;
     canvas.drawArc(rect, -pi / 2, 2 * pi * value, false, arc);
   }
 
   @override
-  bool shouldRepaint(covariant _RingPainter old) =>
+  bool shouldRepaint(covariant _GaugePainter old) =>
       old.value != value || old.color != color || old.track != track;
 }
 
-class MeterBar extends StatelessWidget {
-  final double value; // 0..1
+class InkBar extends StatelessWidget {
+  final double value;
   final Color color;
   final double height;
-  const MeterBar({super.key, required this.value, required this.color, this.height = 7});
+  const InkBar({super.key, required this.value, required this.color, this.height = 6});
 
   @override
   Widget build(BuildContext context) {
     final dark = Theme.of(context).brightness == Brightness.dark;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(height),
+      borderRadius: BorderRadius.circular(1),
       child: LinearProgressIndicator(
         value: value.clamp(0.0, 1.0),
         minHeight: height,
-        backgroundColor: dark ? const Color(0x33FFFFFF) : const Color(0x14382C7A),
+        backgroundColor: dark ? const Color(0x33FFFFFF) : const Color(0x221C1916),
         valueColor: AlwaysStoppedAnimation(color),
       ),
     );
@@ -485,10 +438,10 @@ class MeterBar extends StatelessWidget {
 }
 
 // =====================================================================
-//  Cue tile (list row) and Mission tile (grid card)
+//  Recipe row + workshop card
 // =====================================================================
 
-class CueTile extends StatelessWidget {
+class RecipeRow extends StatelessWidget {
   final String kind;
   final String title;
   final String meta;
@@ -496,7 +449,7 @@ class CueTile extends StatelessWidget {
   final Color accent;
   final VoidCallback onTap;
   final Widget? trailing;
-  const CueTile({
+  const RecipeRow({
     super.key,
     required this.kind,
     required this.title,
@@ -509,36 +462,33 @@ class CueTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(VisualTheme.rL),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(14, 14, 12, 14),
+          padding: const EdgeInsets.fromLTRB(12, 12, 10, 12),
           decoration: BoxDecoration(
             color: VisualTheme.surfaceOf(context),
             borderRadius: BorderRadius.circular(VisualTheme.rL),
-            boxShadow: VisualTheme.softShadow(dark),
+            border: Border.all(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? const Color(0x22E08A68)
+                  : const Color(0x1A1C1916),
+            ),
           ),
           child: Row(
             children: [
               Container(
-                width: 46,
-                height: 46,
+                width: 4,
+                height: 44,
                 decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Center(
-                  child: Text(
-                    kind.isEmpty ? '?' : kind.characters.first.toUpperCase(),
-                    style: VisualTheme.display(20, color: accent),
-                  ),
+                  color: accent,
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const SizedBox(width: 13),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -546,7 +496,7 @@ class CueTile extends StatelessWidget {
                     Text(title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: VisualTheme.heading(16.5, color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                        style: VisualTheme.heading(16, color: VisualTheme.inkOf(context))),
                     const SizedBox(height: 3),
                     Text(meta,
                         maxLines: 1,
@@ -556,13 +506,13 @@ class CueTile extends StatelessWidget {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          TinyPill(label: recall!, color: VisualTheme.getConditionColor(recall!)),
+                          InkChip(label: recall!, color: VisualTheme.getConditionColor(recall!)),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: MeterBar(
+                            child: InkBar(
                               value: VisualTheme.recallStrength(recall!),
                               color: VisualTheme.getConditionColor(recall!),
-                              height: 5,
+                              height: 4,
                             ),
                           ),
                         ],
@@ -580,7 +530,7 @@ class CueTile extends StatelessWidget {
   }
 }
 
-class MissionTile extends StatelessWidget {
+class WorkshopCard extends StatelessWidget {
   final String code;
   final String name;
   final String track;
@@ -588,7 +538,7 @@ class MissionTile extends StatelessWidget {
   final int target;
   final Color accent;
   final VoidCallback onTap;
-  const MissionTile({
+  const WorkshopCard({
     super.key,
     required this.code,
     required this.name,
@@ -602,35 +552,40 @@ class MissionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pct = target == 0 ? 0.0 : (filled / target).clamp(0.0, 1.0);
-    return BentoTile(
+    return SheetCard(
       onTap: onTap,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: TinyPill(label: code, color: accent, icon: VisualTheme.trackIcon(track))),
+              Icon(VisualTheme.trackIcon(track), size: 16, color: accent),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(code,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: VisualTheme.tag(10.5, color: accent)),
+              ),
             ],
           ),
           const SizedBox(height: 14),
-          RingGauge(
+          InkGauge(
             value: pct,
             color: accent,
-            size: 58,
-            stroke: 6,
-            center: Text('$filled',
-                style: VisualTheme.display(17, color: VisualTheme.inkOf(context))),
+            size: 52,
+            stroke: 5,
+            center: Text('$filled', style: VisualTheme.display(16, color: VisualTheme.inkOf(context))),
           ),
           const SizedBox(height: 12),
           Text(name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: VisualTheme.heading(16, color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+              style: VisualTheme.heading(15.5, color: VisualTheme.inkOf(context))),
           const SizedBox(height: 3),
-          Text('$track · $filled/$target cues',
+          Text('$track · $filled/$target recipes',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: VisualTheme.body(12, color: VisualTheme.mutedOf(context))),
@@ -644,21 +599,21 @@ class MissionTile extends StatelessWidget {
 //  Empty state
 // =====================================================================
 
-class EmptyOrbit extends StatelessWidget {
+class EmptyDesk extends StatelessWidget {
   final IconData icon;
   final String title;
   final String body;
   final String? actionLabel;
   final VoidCallback? onAction;
   final Color tint;
-  const EmptyOrbit({
+  const EmptyDesk({
     super.key,
     required this.icon,
     required this.title,
     required this.body,
     this.actionLabel,
     this.onAction,
-    this.tint = VisualTheme.nova,
+    this.tint = VisualTheme.clay,
   });
 
   @override
@@ -669,25 +624,17 @@ class EmptyOrbit extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 86,
-              height: 86,
-              decoration: BoxDecoration(
-                color: tint.withValues(alpha: 0.13),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Icon(icon, size: 38, color: tint),
-            ),
-            const SizedBox(height: 20),
+            Icon(icon, size: 40, color: tint),
+            const SizedBox(height: 16),
             Text(title,
                 textAlign: TextAlign.center,
-                style: VisualTheme.heading(21, color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                style: VisualTheme.heading(20, color: VisualTheme.inkOf(context))),
             const SizedBox(height: 8),
             Text(body,
                 textAlign: TextAlign.center,
                 style: VisualTheme.body(14.5, color: VisualTheme.mutedOf(context))),
             if (actionLabel != null) ...[
-              const SizedBox(height: 22),
+              const SizedBox(height: 20),
               FilledButton(onPressed: onAction, child: Text(actionLabel!)),
             ],
           ],
@@ -696,3 +643,17 @@ class EmptyOrbit extends StatelessWidget {
     );
   }
 }
+
+/// Kept so older call sites and tests that still import chrome names compile
+/// after the atelier rewrite. Prefer the Quietforge names above.
+typedef StarDust = PaperGrain;
+typedef OrbitDock = DeskRail;
+typedef SectionHead = DeskHead;
+typedef TinyPill = InkChip;
+typedef BentoTile = SheetCard;
+typedef StatBento = StatBlock;
+typedef RingGauge = InkGauge;
+typedef MeterBar = InkBar;
+typedef CueTile = RecipeRow;
+typedef MissionTile = WorkshopCard;
+typedef EmptyOrbit = EmptyDesk;

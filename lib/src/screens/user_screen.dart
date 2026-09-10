@@ -25,9 +25,10 @@ class _UserScreenState extends State<UserScreen> {
 
   Future<void> _initializeApp() async {
     try {
-      debugPrint('Orbit Recall booting…');
+      debugPrint('Quietforge opening the desk…');
       await _storage.database;
       final prefs = await _storage.getPreferences();
+      AppAppearance.apply(prefs.theme);
       setState(() {
         _preferences = prefs;
         _isInitialized = true;
@@ -35,6 +36,7 @@ class _UserScreenState extends State<UserScreen> {
     } catch (e, stackTrace) {
       debugPrint('Error initializing app: $e');
       debugPrint('Stack trace: $stackTrace');
+      AppAppearance.apply('system');
       setState(() {
         _preferences = UserPreferences();
         _isInitialized = true;
@@ -45,6 +47,7 @@ class _UserScreenState extends State<UserScreen> {
   Future<void> _reloadPreferences() async {
     try {
       final prefs = await _storage.getPreferences();
+      AppAppearance.apply(prefs.theme);
       setState(() => _preferences = prefs);
     } catch (e) {
       debugPrint('Error reloading preferences: $e');
@@ -53,38 +56,29 @@ class _UserScreenState extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeMode themeMode = ThemeMode.system;
-    if (_preferences != null) {
-      switch (_preferences!.theme) {
-        case 'light':
-          themeMode = ThemeMode.light;
-          break;
-        case 'dark':
-          themeMode = ThemeMode.dark;
-          break;
-        default:
-          themeMode = ThemeMode.system;
-      }
-    }
-
-    return MaterialApp(
-      title: 'Orbit Recall',
-      debugShowCheckedModeBanner: false,
-      theme: VisualTheme.lightTheme,
-      darkTheme: VisualTheme.darkTheme,
-      themeMode: themeMode,
-      home: Builder(
-        builder: (context) {
-          if (!_isInitialized || _preferences == null) {
-            return const _BootScreen();
-          }
-          return _preferences!.showOnboarding
-              ? const WelcomeView()
-              : DashboardView(onSettingsChanged: _reloadPreferences);
-        },
-      ),
-      routes: {
-        '/dashboard': (context) => DashboardView(onSettingsChanged: _reloadPreferences),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: AppAppearance.listenable,
+      builder: (context, themeMode, _) {
+        return MaterialApp(
+          title: 'Quietforge',
+          debugShowCheckedModeBanner: false,
+          theme: VisualTheme.lightTheme,
+          darkTheme: VisualTheme.darkTheme,
+          themeMode: themeMode,
+          home: Builder(
+            builder: (context) {
+              if (!_isInitialized || _preferences == null) {
+                return const _BootScreen();
+              }
+              return _preferences!.showOnboarding
+                  ? WelcomeView(onSettingsChanged: _reloadPreferences)
+                  : DashboardView(onSettingsChanged: _reloadPreferences);
+            },
+          ),
+          routes: {
+            '/dashboard': (context) => DashboardView(onSettingsChanged: _reloadPreferences),
+          },
+        );
       },
     );
   }
@@ -96,25 +90,25 @@ class _BootScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: VisualTheme.nova,
+      backgroundColor: VisualTheme.clay,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 92,
-              height: 92,
+              width: 88,
+              height: 88,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.16),
-                borderRadius: BorderRadius.circular(32),
+                color: Colors.white.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.bolt_rounded, size: 46, color: Colors.white),
+              child: const Icon(Icons.edit_note_rounded, size: 44, color: Colors.white),
             ),
             const SizedBox(height: 22),
-            Text('Orbit Recall', style: VisualTheme.display(34, color: Colors.white)),
+            Text('Quietforge', style: VisualTheme.display(34, color: Colors.white)),
             const SizedBox(height: 6),
             Text(
-              'Spinning up the training deck…',
+              'Laying out the paper…',
               style: VisualTheme.body(15, color: Colors.white.withValues(alpha: 0.8)),
             ),
           ],

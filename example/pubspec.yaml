@@ -1,5 +1,5 @@
-name: orbit_recall_example
-description: "Orbit Recall - Space memory drills"
+name: quietforge_example
+description: "Quietforge - On-device writing studio"
 publish_to: 'none'
 version: 1.0.0+1
 environment:

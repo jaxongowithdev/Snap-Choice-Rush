@@ -15,10 +15,10 @@ class AnalyticsView extends StatefulWidget {
 class _AnalyticsViewState extends State<AnalyticsView> {
   final _storage = StorageManager.instance;
   Map<String, int>? _stats;
-  Map<String, int>? _byType;
-  Map<String, int>? _byTrack;
-  Map<String, int>? _byRecall;
-  int _reps = 0;
+  Map<String, int>? _byForm;
+  Map<String, int>? _byCraft;
+  Map<String, int>? _byStage;
+  int _sparks = 0;
   bool _isLoading = true;
 
   @override
@@ -31,21 +31,21 @@ class _AnalyticsViewState extends State<AnalyticsView> {
     setState(() => _isLoading = true);
     try {
       final stats = await _storage.getStatistics();
-      final byType = await _storage.getItemsByCategory();
-      final byTrack = await _storage.getItemsByRoom();
-      final byRecall = await _storage.getRecallBreakdown();
-      final reps = await _storage.getTotalReps();
+      final byForm = await _storage.getItemsByCategory();
+      final byCraft = await _storage.getItemsByRoom();
+      final byStage = await _storage.getRecallBreakdown();
+      final sparks = await _storage.getTotalReps();
       if (!mounted) return;
       setState(() {
         _stats = stats;
-        _byType = byType;
-        _byTrack = byTrack;
-        _byRecall = byRecall;
-        _reps = reps;
+        _byForm = byForm;
+        _byCraft = byCraft;
+        _byStage = byStage;
+        _sparks = sparks;
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('Error loading stats: $e');
+      debugPrint('Error loading ledger: $e');
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -65,38 +65,38 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(18, 6, 18, 28),
                   children: [
-                    Text('Progress',
+                    Text('Ledger',
                         style: VisualTheme.display(32, color: VisualTheme.inkOf(context))),
                     const SizedBox(height: 4),
-                    Text('Where the memory load sits right now.',
+                    Text('Where the desk sits right now.',
                         style: VisualTheme.body(14.5, color: VisualTheme.mutedOf(context))),
                     const SizedBox(height: 20),
 
                     if (total == 0)
-                      const EmptyOrbit(
-                        icon: Icons.insights_rounded,
-                        tint: VisualTheme.mint,
-                        title: 'No data yet',
-                        body: 'File a few cues and this page fills in with your recall spread.',
+                      const EmptyDesk(
+                        icon: Icons.bar_chart_rounded,
+                        tint: VisualTheme.moss,
+                        title: 'No numbers yet',
+                        body: 'File a few recipes and this page fills in with draft stages.',
                       )
                     else ...[
                       Row(
                         children: [
                           Expanded(
-                            child: StatBento(
+                            child: StatBlock(
                               value: '$total',
-                              label: 'Total cues',
-                              icon: Icons.style_rounded,
-                              tint: VisualTheme.nova,
+                              label: 'Recipes',
+                              icon: Icons.notes_rounded,
+                              tint: VisualTheme.clay,
                             ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: StatBento(
-                              value: '$_reps',
-                              label: 'Reps logged',
-                              icon: Icons.repeat_rounded,
-                              tint: VisualTheme.flare,
+                            child: StatBlock(
+                              value: '$_sparks',
+                              label: 'Sparks run',
+                              icon: Icons.local_fire_department_rounded,
+                              tint: VisualTheme.ochre,
                             ),
                           ),
                         ],
@@ -105,33 +105,33 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                       Row(
                         children: [
                           Expanded(
-                            child: StatBento(
+                            child: StatBlock(
                               value: '${_stats?['totalContainers'] ?? 0}',
-                              label: 'Missions',
-                              icon: Icons.rocket_launch_rounded,
-                              tint: VisualTheme.sky,
+                              label: 'Workshops',
+                              icon: Icons.folder_open_rounded,
+                              tint: VisualTheme.moss,
                             ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: StatBento(
+                            child: StatBlock(
                               value: '${_stats?['emptyContainers'] ?? 0}',
-                              label: 'Empty missions',
-                              icon: Icons.inbox_rounded,
-                              tint: VisualTheme.plum,
+                              label: 'Empty workshops',
+                              icon: Icons.inbox_outlined,
+                              tint: VisualTheme.inkBlue,
                             ),
                           ),
                         ],
                       ),
 
-                      const SectionHead(title: 'Recall spread'),
-                      BentoTile(
+                      const DeskHead(title: 'Draft stages'),
+                      SheetCard(
                         child: Column(
                           children: [
                             for (final lvl in VisualTheme.recallLevels)
                               _Bar(
                                 label: lvl,
-                                value: _byRecall?[lvl] ?? 0,
+                                value: _byStage?[lvl] ?? 0,
                                 total: total,
                                 color: VisualTheme.getConditionColor(lvl),
                               ),
@@ -139,17 +139,17 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                         ),
                       ),
 
-                      if ((_byTrack ?? {}).isNotEmpty) ...[
-                        const SectionHead(title: 'By track'),
-                        BentoTile(
+                      if ((_byCraft ?? {}).isNotEmpty) ...[
+                        const DeskHead(title: 'By craft'),
+                        SheetCard(
                           child: Column(
                             children: [
-                              for (final e in _byTrack!.entries)
+                              for (final e in _byCraft!.entries)
                                 _Bar(
                                   label: e.key,
                                   value: e.value,
                                   total: total,
-                                  color: VisualTheme.nova,
+                                  color: VisualTheme.moss,
                                   icon: VisualTheme.trackIcon(e.key),
                                 ),
                             ],
@@ -157,30 +157,28 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                         ),
                       ],
 
-                      if ((_byType ?? {}).isNotEmpty) ...[
-                        const SectionHead(title: 'By cue type'),
+                      if ((_byForm ?? {}).isNotEmpty) ...[
+                        const DeskHead(title: 'By form'),
                         Wrap(
                           spacing: 10,
                           runSpacing: 10,
-                          children: _byType!.entries.map((e) {
+                          children: _byForm!.entries.map((e) {
                             final c = VisualTheme.getCategoryColor(e.key);
                             return Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                               decoration: BoxDecoration(
-                                color: c.withValues(alpha: 0.13),
+                                color: c.withValues(alpha: 0.12),
                                 borderRadius: BorderRadius.circular(VisualTheme.rM),
+                                border: Border.all(color: c.withValues(alpha: 0.22)),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text('${e.value}',
-                                      style: VisualTheme.display(19, color: c)),
+                                  Text('${e.value}', style: VisualTheme.display(18, color: c)),
                                   const SizedBox(width: 8),
                                   Text(e.key,
                                       style: VisualTheme.heading(13.5,
-                                          color: VisualTheme.inkOf(context),
-                                          w: FontWeight.w700)),
+                                          color: VisualTheme.inkOf(context))),
                                 ],
                               ),
                             );
@@ -189,11 +187,11 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                       ],
                     ],
 
-                    const SectionHead(title: 'Jump to'),
+                    const DeskHead(title: 'Jump to'),
                     Row(
                       children: [
                         Expanded(
-                          child: BentoTile(
+                          child: SheetCard(
                             onTap: () async {
                               await Navigator.push(context,
                                   MaterialPageRoute(builder: (_) => const FavoritesView()));
@@ -203,20 +201,19 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(Icons.star_rounded,
-                                    color: VisualTheme.sun, size: 24),
+                                const Icon(Icons.favorite_rounded,
+                                    color: VisualTheme.wine, size: 22),
                                 const SizedBox(height: 10),
-                                Text('Drill deck',
+                                Text('Hearth',
                                     style: VisualTheme.heading(15.5,
-                                        color: VisualTheme.inkOf(context),
-                                        w: FontWeight.w700)),
+                                        color: VisualTheme.inkOf(context))),
                               ],
                             ),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: BentoTile(
+                          child: SheetCard(
                             onTap: () async {
                               await Navigator.push(context,
                                   MaterialPageRoute(builder: (_) => const TransferLogView()));
@@ -226,13 +223,12 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(Icons.route_rounded,
-                                    color: VisualTheme.sky, size: 24),
+                                const Icon(Icons.swap_horiz_rounded,
+                                    color: VisualTheme.inkBlue, size: 22),
                                 const SizedBox(height: 10),
-                                Text('Flight log',
+                                Text('Move log',
                                     style: VisualTheme.heading(15.5,
-                                        color: VisualTheme.inkOf(context),
-                                        w: FontWeight.w700)),
+                                        color: VisualTheme.inkOf(context))),
                               ],
                             ),
                           ),
@@ -265,11 +261,11 @@ class _Bar extends StatelessWidget {
   Widget build(BuildContext context) {
     final pct = total == 0 ? 0.0 : value / total;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 7),
       child: Row(
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 16, color: color),
+            Icon(icon, size: 15, color: color),
             const SizedBox(width: 8),
           ],
           SizedBox(
@@ -277,16 +273,15 @@ class _Bar extends StatelessWidget {
             child: Text(label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: VisualTheme.body(13, color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                style: VisualTheme.body(13, color: VisualTheme.inkOf(context), w: FontWeight.w600)),
           ),
-          Expanded(child: MeterBar(value: pct, color: color, height: 9)),
+          Expanded(child: InkBar(value: pct, color: color, height: 8)),
           const SizedBox(width: 12),
           SizedBox(
             width: 28,
             child: Text('$value',
                 textAlign: TextAlign.right,
-                style: VisualTheme.heading(14.5,
-                    color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                style: VisualTheme.heading(14, color: VisualTheme.inkOf(context))),
           ),
         ],
       ),

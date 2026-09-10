@@ -13,7 +13,7 @@ class StorageManager {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('orbit_recall.db');
+    _database = await _initDB('quietforge.db');
     return _database!;
   }
 
@@ -52,7 +52,7 @@ class StorageManager {
         name TEXT NOT NULL,
         category TEXT NOT NULL,
         quantity INTEGER NOT NULL DEFAULT 1,
-        condition TEXT NOT NULL DEFAULT 'Fresh',
+        condition TEXT NOT NULL DEFAULT 'Seed',
         purchaseDate TEXT,
         estimatedValue REAL,
         notes TEXT,
@@ -84,8 +84,8 @@ class StorageManager {
         id INTEGER PRIMARY KEY CHECK (id = 1),
         theme TEXT NOT NULL DEFAULT 'system',
         language TEXT NOT NULL DEFAULT 'en',
-        capacityUnit TEXT NOT NULL DEFAULT 'cues',
-        defaultBoxPrefix TEXT NOT NULL DEFAULT 'MSN',
+        capacityUnit TEXT NOT NULL DEFAULT 'recipes',
+        defaultBoxPrefix TEXT NOT NULL DEFAULT 'WKS',
         showOnboarding INTEGER NOT NULL DEFAULT 1
       )
     ''');
@@ -356,7 +356,7 @@ class StorageManager {
 
   // ============ Drill helpers ============
 
-  /// Cues that need work first: Faded, then Shaky, then Fresh.
+  /// Recipes that still need a spark: Shelved, then Seed, then Rough.
   Future<List<InventoryItemModel>> getWeakCues({int limit = 30, int? containerId}) async {
     final db = await database;
     final where = containerId == null ? '' : 'WHERE containerId = $containerId';
@@ -364,10 +364,10 @@ class StorageManager {
       SELECT * FROM items
       $where
       ORDER BY CASE condition
-        WHEN 'Faded' THEN 0
-        WHEN 'Shaky' THEN 1
-        WHEN 'Fresh' THEN 2
-        WHEN 'Steady' THEN 3
+        WHEN 'Shelved' THEN 0
+        WHEN 'Seed' THEN 1
+        WHEN 'Rough' THEN 2
+        WHEN 'Tuned' THEN 3
         ELSE 4 END, updatedAt ASC
       LIMIT $limit
     ''');
@@ -388,7 +388,7 @@ class StorageManager {
   Future<int> getLockedCount() async {
     final db = await database;
     return Sqflite.firstIntValue(await db.rawQuery(
-          "SELECT COUNT(*) FROM items WHERE condition = 'Locked'",
+          "SELECT COUNT(*) FROM items WHERE condition = 'Ready'",
         )) ??
         0;
   }
@@ -407,7 +407,7 @@ class StorageManager {
     return maps.map((m) => InventoryItemModel.fromMap(m)).toList();
   }
 
-  /// Records one drill answer: bumps reps, sets recall level and last-drilled date.
+  /// Records one spark: bumps runs, sets draft stage and last-sparked date.
   Future<void> logDrill(InventoryItemModel cue, String newRecall, double mastery) async {
     await updateItem(cue.copyWith(
       condition: newRecall,

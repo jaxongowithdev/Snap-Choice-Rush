@@ -39,11 +39,11 @@ class _MoveItemViewState extends State<MoveItemView> {
     try {
       final current = await _storage.getContainer(widget.item.containerId);
       final others = (await _storage.getAllContainers())
-          .where((m) => m.id != widget.item.containerId)
+          .where((w) => w.id != widget.item.containerId)
           .toList();
       final counts = <int, int>{};
-      for (final m in others) {
-        counts[m.id!] = await _storage.getItemCountInContainer(m.id!);
+      for (final w in others) {
+        counts[w.id!] = await _storage.getItemCountInContainer(w.id!);
       }
       if (!mounted) return;
       setState(() {
@@ -53,7 +53,7 @@ class _MoveItemViewState extends State<MoveItemView> {
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('Error loading missions: $e');
+      debugPrint('Error loading workshops: $e');
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -65,11 +65,11 @@ class _MoveItemViewState extends State<MoveItemView> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('Mission is at target'),
-          content: Text('"${_picked!.name}" already holds ${_picked!.capacity} cues. Reassign anyway?'),
+          title: const Text('Workshop is at target'),
+          content: Text('"${_picked!.name}" already holds ${_picked!.capacity} recipes. Move anyway?'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
-            FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Reassign')),
+            FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Move')),
           ],
         ),
       );
@@ -83,7 +83,7 @@ class _MoveItemViewState extends State<MoveItemView> {
     );
     if (mounted) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Reassigned to ${_picked!.name}')));
+          .showSnackBar(SnackBar(content: Text('Moved to ${_picked!.name}')));
       Navigator.pop(context, true);
     }
   }
@@ -91,7 +91,7 @@ class _MoveItemViewState extends State<MoveItemView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StarDust(
+      body: PaperGrain(
         child: SafeArea(
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -106,10 +106,10 @@ class _MoveItemViewState extends State<MoveItemView> {
                         ),
                       ],
                     ),
-                    Text('Reassign cue',
+                    Text('Move recipe',
                         style: VisualTheme.display(30, color: VisualTheme.inkOf(context))),
-                    const SizedBox(height: 18),
-                    BentoTile(
+                    const SizedBox(height: 16),
+                    SheetCard(
                       fill: VisualTheme.getCategoryColor(widget.item.category),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,53 +122,44 @@ class _MoveItemViewState extends State<MoveItemView> {
                               style: VisualTheme.display(22, color: Colors.white)),
                           const SizedBox(height: 8),
                           Text(
-                            'now in ${_current?.name ?? 'an unknown mission'}',
+                            'now in ${_current?.name ?? 'an unknown workshop'}',
                             style: VisualTheme.body(13.5,
                                 color: Colors.white.withValues(alpha: 0.85)),
                           ),
                         ],
                       ),
                     ),
-                    const SectionHead(title: 'Destination mission'),
+                    const DeskHead(title: 'Destination workshop'),
                     if (_targets == null || _targets!.isEmpty)
-                      BentoTile(
+                      SheetCard(
                         fill: VisualTheme.veilOf(context),
-                        child: Text('No other mission to move into yet.',
+                        child: Text('No other workshop to move into yet.',
                             style: VisualTheme.body(14, color: VisualTheme.mutedOf(context))),
                       )
                     else
-                      ..._targets!.map((m) {
-                        final count = _counts[m.id] ?? 0;
-                        final on = _picked?.id == m.id;
+                      ..._targets!.map((w) {
+                        final count = _counts[w.id] ?? 0;
+                        final on = _picked?.id == w.id;
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: BentoTile(
-                            fill: on ? VisualTheme.nova.withValues(alpha: 0.12) : null,
-                            onTap: () => setState(() => _picked = m),
+                          child: SheetCard(
+                            fill: on ? VisualTheme.clay.withValues(alpha: 0.12) : null,
+                            onTap: () => setState(() => _picked = w),
                             padding: const EdgeInsets.all(14),
                             child: Row(
                               children: [
-                                Container(
-                                  width: 42,
-                                  height: 42,
-                                  decoration: BoxDecoration(
-                                    color: VisualTheme.nova.withValues(alpha: 0.14),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Icon(VisualTheme.trackIcon(m.room),
-                                      size: 20, color: VisualTheme.nova),
-                                ),
+                                Icon(VisualTheme.trackIcon(w.room),
+                                    size: 20, color: VisualTheme.clay),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(m.name,
+                                      Text(w.name,
                                           style: VisualTheme.heading(15.5,
-                                              color: VisualTheme.inkOf(context),
-                                              w: FontWeight.w700)),
+                                              color: VisualTheme.inkOf(context))),
                                       Text(
-                                        '${m.code} · $count/${m.capacity}${count >= m.capacity ? ' · at target' : ''}',
+                                        '${w.code} · $count/${w.capacity}${count >= w.capacity ? ' · at target' : ''}',
                                         style: VisualTheme.body(12.5,
                                             color: VisualTheme.mutedOf(context)),
                                       ),
@@ -180,7 +171,7 @@ class _MoveItemViewState extends State<MoveItemView> {
                                       ? Icons.radio_button_checked_rounded
                                       : Icons.radio_button_off_rounded,
                                   color: on
-                                      ? VisualTheme.nova
+                                      ? VisualTheme.clay
                                       : VisualTheme.mutedOf(context).withValues(alpha: 0.5),
                                 ),
                               ],
@@ -188,15 +179,15 @@ class _MoveItemViewState extends State<MoveItemView> {
                           ),
                         );
                       }),
-                    const SectionHead(title: 'Why the move?'),
-                    BentoTile(
+                    const DeskHead(title: 'Why the move?'),
+                    SheetCard(
                       child: TextField(
                         key: const ValueKey('move_notes_field'),
                         controller: _notesController,
                         maxLines: 2,
                         decoration: const InputDecoration(
                           labelText: 'Note (optional)',
-                          hintText: 'e.g. regrouping for the Friday quiz',
+                          hintText: 'e.g. this belongs with the classroom set',
                         ),
                       ),
                     ),
@@ -204,8 +195,8 @@ class _MoveItemViewState extends State<MoveItemView> {
                     FilledButton(
                       key: const ValueKey('confirm_move_button'),
                       onPressed: _picked == null ? null : _move,
-                      style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
-                      child: const Text('Log the reassign'),
+                      style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(54)),
+                      child: const Text('Log the move'),
                     ),
                   ],
                 ),

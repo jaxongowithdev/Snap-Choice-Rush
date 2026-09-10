@@ -1,39 +1,42 @@
 APP NAME
-Orbit Recall
+Quietforge
 
 SUBTITLE
-Space memory drills, offline
+On-device writing studio
 
 KEYWORDS
-recall,flashcard,astronomy,planets,study,revision,science,mnemonic,school,quiz,cards,learn,mars
+writing,draft,offline,prompt,workshop,copy,lesson,caption,journal,rewrite,studio,notes,private
 
 PROMOTION
-Build missions of space facts, anchor each one to a picture you can't forget, then drill your weakest cues first. Grade yourself and watch the ring fill. Private, offline.
+File a recipe, spark a draft on this phone, then rewrite it — tighten, expand, warmer, formal, shorter. Keep what you would send. No account, no Wi-Fi.
 
 DESCRIPTION
-Orbit Recall is an offline memory-training deck for space and science class.
+Quietforge is a private writing studio that lives on your phone.
 
-Everything starts with a mission — one topic you actually need to know. The eight planets. Jupiter's moons. The Apollo flights. Give it a code, pick a track, and set how many cues you are aiming for.
+A workshop is one craft you write for — shop windows, classroom openers, a weekly letter. Give it a code, pick a craft, and set how many recipes you are aiming for.
 
-Inside a mission you file cues. The front of a cue is what you get asked; the anchor is the strange picture that answers it — a rusty red bicycle in the hallway for Mars, a hula hoop on the kitchen table for Saturn. Add a photo, tag it, and it is ready to train.
+A recipe is the job: a title, a seed of facts, a form (caption, hook, letter, lesson, product, poem and more), optional tags for voice and audience, and a mood picture if it helps.
 
-The drill room queues your weakest cues first: faded, then shaky, then fresh. Flip a card, say the answer out loud, and grade yourself honestly — Missed, Shaky, Got it, or Locked. Every grade updates the cue's recall level, bumps its rep count, and feeds the progress rings on your deck.
+Spark composes on the device. It fills the form from your seed and tags, then you apply rewrite moves — Tighten, Expand, Warmer, Formal, Shorter. Grade the draft: Shelve, Rough, Tuned, or Ready. Kept drafts are saved on the recipe.
+
+There is no cloud model and no network call. Quietforge is a studio and a local composer, not a chatbot.
 
 WHAT YOU GET
 
-• Missions grouped by track — planets, moons, deep sky, space tech, physics, numbers, timeline
-• Cues with an anchor, a photo, tags and twelve cue types (peg, journey, story, image, number, acronym and more)
-• A drill room with weakest-first or starred-only runs, in blocks of 5, 10, 20 or 40
-• Five recall levels — Fresh, Shaky, Steady, Locked, Faded — with a run score at the end of every session
-• A starred drill deck for the cues you want in tonight's run
-• Progress page with recall spread, breakdown by track and by cue type, and total reps
-• Flight log recording every time a cue is reassigned to another mission, with your note
-• Search across cue fronts, anchors, tags and types
-• Light and dark appearance, or match your phone
+• Workshops grouped by craft — newsletter, product, classroom, fiction, social, personal, speech
+• Recipes with a seed, a form, tags and an optional mood photo
+• An on-device composer with twelve forms and five rewrite moves
+• Spark sessions that queue seeds first, or only the recipes you pinned to the hearth
+• Five draft stages — Seed, Rough, Tuned, Ready, Shelved — with a keep-rate at the end of every session
+• A hearth for the pieces you would actually send
+• Ledger with draft-stage spread, breakdown by craft and by form, and total sparks
+• Move log recording every time a recipe is filed under another workshop
+• Search across titles, seeds, tags and forms
+• Paper daylight, lamp light, or match the phone
 • Export everything to a single JSON file and restore it whenever you want
 
 PRIVATE BY DESIGN
 
-There is no account and no sign-in. Orbit Recall makes no network calls at all — missions, cues, photos and drill history live in this app's own storage on your phone. Camera and photo library access are optional and used only when you attach a picture to a cue.
+There is no account and no sign-in. Quietforge makes no network calls at all — workshops, recipes, photos and spark history live in this app's own storage on your phone. Camera and photo library access are optional and used only when you attach a picture to a recipe.
 
-Good for students revising for a science test, teachers building a class set of cues, and anyone who wants their astronomy facts to stick.
+Good for shop owners writing a window card, teachers drafting a lesson opener, and anyone who wants a draft without handing the brief to a server.

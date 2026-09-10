@@ -1,6 +1,6 @@
 name: user_screen
-description: "Orbit Recall - Build missions of space facts, anchor each cue to a picture, then drill the weakest ones first. Completely offline."
-version: 1.0.0+2
+description: "Quietforge - A private on-device writing studio. File recipes, spark drafts locally, rewrite and keep what you would send. Completely offline."
+version: 1.0.0+1
 
 environment:
   sdk: '>=3.4.0 <4.0.0'

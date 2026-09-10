@@ -38,8 +38,9 @@ class _ConfigViewState extends State<ConfigView> {
   Future<void> _setTheme(String theme) async {
     if (_prefs == null) return;
     final updated = _prefs!.copyWith(theme: theme);
-    await _storage.updatePreferences(updated);
+    AppAppearance.apply(theme);
     setState(() => _prefs = updated);
+    await _storage.updatePreferences(updated);
     widget.onSettingsChanged();
   }
 
@@ -52,10 +53,10 @@ class _ConfigViewState extends State<ConfigView> {
           XFile.fromData(
             Uint8List.fromList(utf8.encode(jsonString)),
             mimeType: 'application/json',
-            name: 'orbit_recall_${DateTime.now().millisecondsSinceEpoch}.json',
+            name: 'quietforge_${DateTime.now().millisecondsSinceEpoch}.json',
           )
         ],
-        text: 'Orbit Recall backup',
+        text: 'Quietforge backup',
       );
       if (mounted) {
         ScaffoldMessenger.of(context)
@@ -74,7 +75,7 @@ class _ConfigViewState extends State<ConfigView> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Restore from a backup?'),
-        content: const Text('Every mission and cue on this phone is replaced by the file you pick.'),
+        content: const Text('Every workshop and recipe on this phone is replaced by the file you pick.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Restore')),
@@ -112,36 +113,36 @@ class _ConfigViewState extends State<ConfigView> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(18, 6, 18, 28),
           children: [
-            Text('Base',
+            Text('Atelier',
                 style: VisualTheme.display(32, color: VisualTheme.inkOf(context))),
             const SizedBox(height: 4),
             Text('Everything here stays on this phone.',
                 style: VisualTheme.body(14.5, color: VisualTheme.mutedOf(context))),
             const SizedBox(height: 20),
 
-            BentoTile(
-              fill: VisualTheme.nova,
-              padding: const EdgeInsets.all(22),
+            SheetCard(
+              fill: VisualTheme.clay,
+              padding: const EdgeInsets.all(20),
               child: Row(
                 children: [
                   Container(
-                    width: 56,
-                    height: 56,
+                    width: 52,
+                    height: 52,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.18),
-                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white.withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.bolt_rounded, color: Colors.white, size: 30),
+                    child: const Icon(Icons.edit_note_rounded, color: Colors.white, size: 28),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Orbit Recall',
-                            style: VisualTheme.display(24, color: Colors.white)),
+                        Text('Quietforge',
+                            style: VisualTheme.display(22, color: Colors.white)),
                         const SizedBox(height: 3),
-                        Text('Version 1.0.0 · offline',
+                        Text('Version 1.0.0 · on-device',
                             style: VisualTheme.body(13,
                                 color: Colors.white.withValues(alpha: 0.85))),
                       ],
@@ -151,26 +152,26 @@ class _ConfigViewState extends State<ConfigView> {
               ),
             ),
 
-            const SectionHead(title: 'Appearance'),
-            BentoTile(
+            const DeskHead(title: 'Appearance'),
+            SheetCard(
               padding: const EdgeInsets.all(8),
               child: Column(
                 children: [
                   for (final e in const [
-                    ('light', 'Daylight', Icons.light_mode_rounded),
-                    ('dark', 'Night watch', Icons.dark_mode_rounded),
-                    ('system', 'Match my phone', Icons.smartphone_rounded),
+                    ('light', 'Paper daylight', Icons.light_mode_outlined),
+                    ('dark', 'Lamp light', Icons.dark_mode_outlined),
+                    ('system', 'Match this phone', Icons.smartphone_outlined),
                   ])
                     _Row(
                       icon: e.$3,
                       label: e.$2,
-                      tint: VisualTheme.nova,
+                      tint: VisualTheme.clay,
                       trailing: Icon(
                         theme == e.$1
                             ? Icons.radio_button_checked_rounded
                             : Icons.radio_button_off_rounded,
                         color: theme == e.$1
-                            ? VisualTheme.nova
+                            ? VisualTheme.clay
                             : VisualTheme.mutedOf(context).withValues(alpha: 0.5),
                       ),
                       onTap: () => _setTheme(e.$1),
@@ -179,8 +180,8 @@ class _ConfigViewState extends State<ConfigView> {
               ),
             ),
 
-            const SectionHead(title: 'Your data'),
-            BentoTile(
+            const DeskHead(title: 'Your data'),
+            SheetCard(
               padding: const EdgeInsets.all(8),
               child: Column(
                 children: [
@@ -188,8 +189,8 @@ class _ConfigViewState extends State<ConfigView> {
                     key: const ValueKey('backup_button'),
                     icon: Icons.ios_share_rounded,
                     label: 'Export a backup',
-                    sub: 'One JSON file with every mission and cue',
-                    tint: VisualTheme.mint,
+                    sub: 'One JSON file with every workshop and recipe',
+                    tint: VisualTheme.moss,
                     onTap: _export,
                   ),
                   _Row(
@@ -197,25 +198,25 @@ class _ConfigViewState extends State<ConfigView> {
                     icon: Icons.download_rounded,
                     label: 'Restore a backup',
                     sub: 'Replaces what is on this phone',
-                    tint: VisualTheme.flare,
+                    tint: VisualTheme.ochre,
                     onTap: _import,
                   ),
                 ],
               ),
             ),
 
-            const SectionHead(title: 'How the drill works'),
-            BentoTile(
+            const DeskHead(title: 'How Spark grades a draft'),
+            SheetCard(
               fill: VisualTheme.veilOf(context),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   for (final line in const [
-                    ('Fresh', 'Just filed — never recalled cold.'),
-                    ('Shaky', 'You got there, but it took a while.'),
-                    ('Steady', 'Recalled without help.'),
-                    ('Locked', 'Instant, twice, on different days.'),
-                    ('Faded', 'Missed it — back to the front of the queue.'),
+                    ('Seed', 'Filed, not yet composed.'),
+                    ('Rough', 'Usable bones. Needs a pass.'),
+                    ('Tuned', 'You would send it after one check.'),
+                    ('Ready', 'You would send it as written.'),
+                    ('Shelved', 'Not this. Back of the queue.'),
                   ])
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -224,7 +225,7 @@ class _ConfigViewState extends State<ConfigView> {
                         children: [
                           SizedBox(
                             width: 74,
-                            child: TinyPill(
+                            child: InkChip(
                                 label: line.$1,
                                 color: VisualTheme.getConditionColor(line.$1)),
                           ),
@@ -241,17 +242,16 @@ class _ConfigViewState extends State<ConfigView> {
               ),
             ),
 
-            const SectionHead(title: 'Privacy'),
-            BentoTile(
+            const DeskHead(title: 'Privacy'),
+            SheetCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('No account. No tracking. No network calls.',
-                      style: VisualTheme.heading(16,
-                          color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                      style: VisualTheme.heading(16, color: VisualTheme.inkOf(context))),
                   const SizedBox(height: 6),
                   Text(
-                    'Missions, cues, pictures and drill history live in this app’s own storage. Camera and photo library are only used when you attach a picture to a cue.',
+                    'Workshops, recipes, pictures and spark history live in this app’s own storage. Camera and photo library are only used when you attach a mood picture to a recipe. Drafts are composed on the phone from your seed, form and tags — not sent to a server.',
                     style: VisualTheme.body(13.5, color: VisualTheme.mutedOf(context)),
                   ),
                 ],
@@ -290,23 +290,14 @@ class _Row extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            Container(
-              width: 42,
-              height: 42,
-              decoration: BoxDecoration(
-                color: tint.withValues(alpha: 0.14),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Icon(icon, size: 20, color: tint),
-            ),
+            Icon(icon, size: 22, color: tint),
             const SizedBox(width: 13),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(label,
-                      style: VisualTheme.heading(15.5,
-                          color: VisualTheme.inkOf(context), w: FontWeight.w700)),
+                      style: VisualTheme.heading(15.5, color: VisualTheme.inkOf(context))),
                   if (sub != null)
                     Text(sub!,
                         style: VisualTheme.body(12.5, color: VisualTheme.mutedOf(context))),

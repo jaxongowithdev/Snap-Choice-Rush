@@ -1,0 +1,22 @@
+---
+description: When generating a new app from this source, always create a unique icon and update the Xcode display name.
+alwaysApply: true
+---
+
+# New app identity (icon + Xcode name)
+
+Every time this codebase is turned into a **new** app (new name, bundle ID, listing), finish identity work in the same pass. Do not ship leftover name or icon from the previous product.
+
+## Always do
+
+1. **Generate a new app icon** that matches the new brand (palette, metaphor). Square, edge-to-edge, no rounded-corner mock, no transparency, no letters if they will muddy at 29px.
+2. **Replace every iOS App Icon slot** under `example/ios/Runner/Assets.xcassets/AppIcon.appiconset/` (including `1024.png` marketing size and all listed PNGs in `Contents.json`).
+3. **Update the Xcode app name** everywhere:
+   - `example/ios/Runner/Info.plist` → `CFBundleDisplayName` and `CFBundleName`
+   - `example/ios/Runner.xcodeproj/project.pbxproj` → `INFOPLIST_KEY_CFBundleDisplayName` (Debug, Release, Profile)
+4. Also set `PRODUCT_BUNDLE_IDENTIFIER`, camera/photo usage strings, and `INFOPLIST_KEY_LSApplicationCategoryType` to the new product.
+
+## Do not
+
+- Leave the previous app’s `1024.png` / small icons in place
+- Change listing copy but keep the old home-screen name or glyph

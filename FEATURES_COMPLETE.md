@@ -1,3 +1,3 @@
-# Orbit Recall — feature set
+# Quietforge — feature set
 
-Five-tab pill dock (Deck, Missions, Drill, Stats, Base), bento dashboard with progress rings, missions grouped by track, twelve cue types with anchors and photos, a flip-card drill room with weakest-first queueing and run scoring, five recall levels, starred drill deck, reassign flight log, search, JSON backup and restore, light/dark, offline SQLite (`orbit_recall.db`).
+Five-tab desk rail (Desk, Workshops, Spark, Ledger, Atelier), paper-sheet dashboard, workshops grouped by craft, twelve writing forms with seeds and photos, an on-device spark room with local compose + rewrite moves and keep scoring, five draft stages, pinned hearth, relocate log, search, JSON backup and restore, light/dark, offline SQLite (`quietforge.db`).
