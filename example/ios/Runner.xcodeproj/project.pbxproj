@@ -537,7 +537,7 @@
 				DEVELOPMENT_TEAM = NW8V36Y7RY;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Kettleleaf;
+				INFOPLIST_KEY_CFBundleDisplayName = "Snap Choice Rush";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -722,7 +722,7 @@
 				DEVELOPMENT_TEAM = NW8V36Y7RY;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Kettleleaf;
+				INFOPLIST_KEY_CFBundleDisplayName = "Snap Choice Rush";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -756,7 +756,7 @@
 				DEVELOPMENT_TEAM = NW8V36Y7RY;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Kettleleaf;
+				INFOPLIST_KEY_CFBundleDisplayName = "Snap Choice Rush";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
