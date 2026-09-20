@@ -48,6 +48,8 @@ class _UserScreenState extends State<UserScreen> {
   int _totalReaction = 0;
   late _Challenge _challenge;
 
+  int get _roundDuration => _mode == 'Speed Choice' ? 6000 : 12000;
+
   final List<_Challenge> _challenges = const [
     _Challenge(
         prompt: 'Choose the arrow\npointing: UP',
@@ -101,6 +103,7 @@ class _UserScreenState extends State<UserScreen> {
 
   void _startGame() {
     _timer?.cancel();
+    _page = _Page.game;
     _score = 0;
     _streak = 0;
     _round = 0;
@@ -111,9 +114,13 @@ class _UserScreenState extends State<UserScreen> {
 
   void _nextRound() {
     _timer?.cancel();
-    _challenge = _challenges[_random.nextInt(_challenges.length)];
+    // Give every new run an obvious, concrete first card. Subsequent cards
+    // remain shuffled so the game still feels fresh.
+    _challenge = _round == 0
+        ? _challenges[2]
+        : _challenges[_random.nextInt(_challenges.length)];
     _timeLeft = 1;
-    final duration = _mode == 'Speed Choice' ? 2200 : 3600;
+    final duration = _roundDuration;
     final started = DateTime.now();
     _timer = Timer.periodic(const Duration(milliseconds: 40), (timer) {
       if (!mounted) return;
@@ -127,8 +134,7 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   void _answer(int choice) {
-    final reaction =
-        ((_mode == 'Speed Choice' ? 2200 : 3600) * (1 - _timeLeft)).round();
+    final reaction = (_roundDuration * (1 - _timeLeft)).round();
     _timer?.cancel();
     if (choice == _challenge.correct) {
       setState(() {
